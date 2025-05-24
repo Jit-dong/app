@@ -15,7 +15,7 @@ export default function HelpPage() {
     // Basic form data handling, in a real app this would go to a backend
     const formData = new FormData(event.currentTarget);
     const feedback = formData.get('feedback_message');
-    
+
     if (feedback && feedback.toString().trim().length > 0) {
       toast({
         title: "反馈已提交",
@@ -39,7 +39,7 @@ export default function HelpPage() {
           <ArrowLeft className="mr-2 h-4 w-4" /> 返回设置
         </Button>
       </Link>
-      
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><FileQuestion className="h-6 w-6 text-accent" /> 常见问题 (FAQ)</CardTitle>
@@ -54,7 +54,7 @@ export default function HelpPage() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
-              <AccordionTrigger>芯片搜索结果不准确怎么办？</AccordionTrigger>
+              <AccordionTrigger>精准搜索结果不准确怎么办？</AccordionTrigger>
               <AccordionContent>
                 尝试使用更精确的关键词，或调整筛选条件。如果问题仍然存在，欢迎您通过下方的反馈渠道告知我们，帮助我们改进。
               </AccordionContent>
@@ -84,7 +84,7 @@ export default function HelpPage() {
           <form onSubmit={handleSubmitFeedback} className="space-y-4">
             <div>
               <Label htmlFor="feedback_message">您的反馈内容：</Label>
-              <Textarea 
+              <Textarea
                 id="feedback_message"
                 name="feedback_message"
                 placeholder="请详细描述您遇到的问题或您的宝贵建议..."

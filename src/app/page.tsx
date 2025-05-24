@@ -17,7 +17,7 @@ export default function HomePage() {
             value="chip-search"
             className="flex-1 flex flex-col items-center justify-center gap-1 p-2 text-xs sm:text-sm data-[state=active]:text-accent data-[state=active]:bg-accent/5 focus:outline-none rounded-none transition-none"
           >
-            <Search className="h-5 w-5" /> 芯片搜索
+            <Search className="h-5 w-5" /> 精准搜索
           </TabsTrigger>
           {/* <TabsTrigger
             value="find-alternatives"

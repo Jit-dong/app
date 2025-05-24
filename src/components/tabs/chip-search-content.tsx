@@ -15,7 +15,7 @@ import { Filter, SearchX } from "lucide-react";
 
 export default function ChipSearchContent() {
   const [searchResults, setSearchResults] = useState<Chip[]>([]);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const [currentQuery, setCurrentQuery] = useState("");
   const [currentFilters, setCurrentFilters] = useState<ChipFilters>({});
   const [isSheetOpen, setSheetOpen] = useState(false);
@@ -49,9 +49,9 @@ export default function ChipSearchContent() {
   const handleApplyFilters = (filters: ChipFilters) => {
     setCurrentFilters(filters);
     performSearch(currentQuery, filters);
-    setSheetOpen(false); 
+    setSheetOpen(false);
   };
-  
+
   const handleClearFilters = () => {
     const emptyFilters = {};
     setCurrentFilters(emptyFilters);
@@ -69,8 +69,8 @@ export default function ChipSearchContent() {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-full max-w-md sm:max-w-sm p-0">
-            <FilterPanel 
-              onApplyFilters={handleApplyFilters} 
+            <FilterPanel
+              onApplyFilters={handleApplyFilters}
               onClearFilters={handleClearFilters}
               initialFilters={currentFilters}
               setSheetOpen={setSheetOpen}
@@ -78,19 +78,19 @@ export default function ChipSearchContent() {
           </SheetContent>
         </Sheet>
       </div>
-      
+
       {isLoading ? (
         <div className="flex justify-center py-12">
-          <LoadingSpinner label="正在搜索芯片..." />
+          <LoadingSpinner label="正在精准搜索..." />
         </div>
       ) : searchResults.length > 0 ? (
         <div className="space-y-4"> {/* Changed from grid to space-y for list items */}
           {searchResults.map((chip, index) => (
             // Conditionally show "替代料: 99+" only for the first demo item for TPS5430 as per request
-            <ChipListItem 
-              key={chip.id} 
-              chip={chip} 
-              showAlternativeCount={chip.model === 'TPS5430' && chip.id === 'TPS5430-1'} 
+            <ChipListItem
+              key={chip.id}
+              chip={chip}
+              showAlternativeCount={chip.model === 'TPS5430' && chip.id === 'TPS5430-1'}
             />
           ))}
         </div>

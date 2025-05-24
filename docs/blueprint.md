@@ -2,8 +2,8 @@
 
 ## Core Features:
 
-- Integrated Home Interface: Home screen with prominent logo, core function tabs (Chip Search, Find Alternatives, Ask AI), and a versatile search bar.
-- Advanced Chip Search Results: Chip search results with advanced filtering options, clear model information display, and links to datasheets and alternatives.
+- Integrated Home Interface: Home screen with prominent logo, core function tabs (Precise Search, Find Alternatives, Ask AI), and a versatile search bar.
+- Advanced Precise Search Results: Precise search results with advanced filtering options, clear model information display, and links to datasheets and alternatives.
 - AI-Powered Chip Suggestion Tool: AI-powered chip suggestion tool that uses LLM reasoning. Input a text description of your requirements or a BOM to receive a component recommendation from the AI tool.
 - Detailed Chip Information Pages: Detailed chip information pages with lifecycle status, package type summaries, and direct links to manufacturers and distributors.
 - Comprehensive Alternative Component Listings: Comprehensive alternative component listings with filtering by alternative level, brand, and key parameter differences.
