@@ -11,7 +11,6 @@ import LoadingSpinner from "@/components/shared/loading-spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Filter, SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle } from "lucide-react";
 
 // 搜索模式类型定义
@@ -48,7 +47,6 @@ export default function ChipSearchContent() {
   const [searchMode, setSearchMode] = useState<SearchMode>('datasheet'); // 新增搜索模式状态
   const [hasSearched, setHasSearched] = useState(false); // 新增是否已搜索状态
   const [aiEnhanced, setAiEnhanced] = useState(false); // AI增强功能状态
-  const [showAiTooltip, setShowAiTooltip] = useState(false); // AI提示显示状态
 
   useEffect(() => {
     setIsLoading(true);
@@ -121,17 +119,6 @@ export default function ChipSearchContent() {
     if (currentQuery.trim() && hasSearched) {
       performSearch(currentQuery, currentFilters, searchMode, newAiState);
     }
-
-    // 隐藏提示
-    setShowAiTooltip(false);
-  };
-
-  const handleAiTooltip = () => {
-    setShowAiTooltip(!showAiTooltip);
-    // 3秒后自动隐藏提示
-    if (!showAiTooltip) {
-      setTimeout(() => setShowAiTooltip(false), 3000);
-    }
   };
 
   const handleApplyFilters = (filters: ChipFilters) => {
@@ -147,8 +134,7 @@ export default function ChipSearchContent() {
   };
 
   return (
-    <TooltipProvider>
-      <div className="space-y-4">
+    <div className="space-y-4">
         {/* 固定搜索输入区 */}
         <div className="space-y-3">
           <div className="flex flex-col sm:flex-row gap-2 items-center">
@@ -160,37 +146,27 @@ export default function ChipSearchContent() {
             />
 
             {/* AI增强功能按钮 */}
-            <Tooltip open={showAiTooltip} onOpenChange={setShowAiTooltip}>
-              <TooltipTrigger asChild>
-                <Button
-                  variant={aiEnhanced ? "default" : "outline"}
-                  size="sm"
-                  onClick={handleAiToggle}
-                  onMouseEnter={() => !aiEnhanced && setShowAiTooltip(true)}
-                  onMouseLeave={() => setShowAiTooltip(false)}
-                  className={`
-                    relative transition-all duration-200
-                    ${aiEnhanced
-                      ? 'bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white shadow-lg'
-                      : 'hover:bg-accent hover:text-accent-foreground'
-                    }
-                  `}
-                >
-                  <Sparkles className={`h-4 w-4 ${aiEnhanced ? 'animate-pulse' : ''}`} />
-                  {aiEnhanced && (
-                    <span className="absolute -top-1 -right-1 h-2 w-2 bg-green-400 rounded-full animate-pulse"></span>
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-xs">
-                <p className="text-sm">
-                  {aiEnhanced
-                    ? "AI增强已启用 - 获得更智能的搜索结果"
-                    : "启用AI增强搜索，获取更智能的结果和推荐"
-                  }
-                </p>
-              </TooltipContent>
-            </Tooltip>
+            <Button
+              variant={aiEnhanced ? "default" : "outline"}
+              size="sm"
+              onClick={handleAiToggle}
+              title={aiEnhanced
+                ? "AI增强已启用 - 获得更智能的搜索结果"
+                : "启用AI增强搜索，获取更智能的结果和推荐"
+              }
+              className={`
+                relative transition-all duration-200
+                ${aiEnhanced
+                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white shadow-lg'
+                  : 'hover:bg-accent hover:text-accent-foreground'
+                }
+              `}
+            >
+              <Sparkles className={`h-4 w-4 ${aiEnhanced ? 'animate-pulse' : ''}`} />
+              {aiEnhanced && (
+                <span className="absolute -top-1 -right-1 h-2 w-2 bg-green-400 rounded-full animate-pulse"></span>
+              )}
+            </Button>
 
             {(searchMode === 'datasheet' || searchMode === 'brand') && (
               <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
@@ -243,9 +219,9 @@ export default function ChipSearchContent() {
             {searchModes[searchMode].description}
           </p>
         </div>
-      </div>
+        </div>
 
-      {/* 内容展示区（动态变化） */}
+        {/* 内容展示区（动态变化） */}
       {isLoading ? (
         <div className="flex justify-center py-12">
           <LoadingSpinner label={`正在${searchModes[searchMode].label}...`} />
@@ -321,7 +297,6 @@ export default function ChipSearchContent() {
           </AlertDescription>
         </Alert>
       )}
-      </div>
-    </TooltipProvider>
+    </div>
   );
 }
