@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ChipSearchContent from "@/components/tabs/chip-search-content";
 // import FindAlternativesContent from "@/components/tabs/find-alternatives-content"; // Removed
-import AskAiContent from "@/components/tabs/ask-ai-content";
+import AskAiContent from "@/components/tabs/ask-ai-content-new";
 import CategoryQueryContent from "@/components/tabs/category-query-content";
 import { Search, Lightbulb, LayoutGrid } from "lucide-react"; // Removed Replace
 
