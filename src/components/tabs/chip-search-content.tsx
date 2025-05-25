@@ -145,28 +145,45 @@ export default function ChipSearchContent() {
               initialQuery={currentQuery}
             />
 
-            {/* AI增强功能按钮 */}
-            <Button
-              variant={aiEnhanced ? "default" : "outline"}
-              size="sm"
-              onClick={handleAiToggle}
-              title={aiEnhanced
-                ? "AI增强已启用 - 获得更智能的搜索结果"
-                : "启用AI增强搜索，获取更智能的结果和推荐"
-              }
-              className={`
-                relative transition-all duration-200
-                ${aiEnhanced
-                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white shadow-lg'
-                  : 'hover:bg-accent hover:text-accent-foreground'
+            {/* AI增强功能按钮 - 高级设计 */}
+            <div className="relative group">
+              <Button
+                variant={aiEnhanced ? "default" : "outline"}
+                size="sm"
+                onClick={handleAiToggle}
+                title={aiEnhanced
+                  ? "AI增强已启用 - 获得更智能的搜索结果"
+                  : "启用AI增强搜索，获取更智能的结果和推荐"
                 }
-              `}
-            >
-              <Sparkles className={`h-4 w-4 ${aiEnhanced ? 'animate-pulse' : ''}`} />
-              {aiEnhanced && (
-                <span className="absolute -top-1 -right-1 h-2 w-2 bg-green-400 rounded-full animate-pulse"></span>
+                className={`
+                  relative transition-all duration-300 transform hover:scale-105
+                  ${aiEnhanced
+                    ? 'bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 hover:from-purple-600 hover:via-blue-600 hover:to-cyan-600 text-white shadow-lg shadow-purple-500/25 border-0'
+                    : 'border-2 border-dashed border-purple-300 dark:border-purple-700 hover:border-purple-400 dark:hover:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950/20'
+                  }
+                `}
+              >
+                <Sparkles className={`h-4 w-4 transition-all duration-300 ${aiEnhanced ? 'animate-pulse text-white' : 'text-purple-500'}`} />
+                {!aiEnhanced && (
+                  <span className="ml-1 text-xs font-medium text-purple-600 dark:text-purple-400">AI</span>
+                )}
+                {aiEnhanced && (
+                  <>
+                    <span className="absolute -top-1 -right-1 h-2 w-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-cyan-400/20 rounded-md animate-pulse"></span>
+                  </>
+                )}
+              </Button>
+
+              {/* 悬浮提示 */}
+              {!aiEnhanced && (
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                  <div className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs px-2 py-1 rounded whitespace-nowrap">
+                    点击启用AI增强
+                  </div>
+                </div>
               )}
-            </Button>
+            </div>
 
             {(searchMode === 'datasheet' || searchMode === 'brand') && (
               <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
@@ -187,9 +204,9 @@ export default function ChipSearchContent() {
             )}
           </div>
 
-        {/* 搜索模式切换器 */}
+        {/* 搜索模式切换器 - 现代化设计 */}
         <div className="flex items-center justify-center">
-          <div className="inline-flex rounded-lg border border-border bg-background p-1">
+          <div className="inline-flex rounded-2xl bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900 p-1.5 shadow-lg border border-white/20 dark:border-gray-700/20 backdrop-blur-sm">
             {Object.entries(searchModes).map(([key, mode]) => {
               const IconComponent = mode.icon;
               const isActive = searchMode === key;
@@ -198,26 +215,34 @@ export default function ChipSearchContent() {
                   key={key}
                   onClick={() => handleModeChange(key as SearchMode)}
                   className={`
-                    inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all
+                    relative inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300
                     ${isActive
-                      ? 'bg-accent text-accent-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                      ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 scale-105'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white/50 dark:hover:bg-gray-700/50'
                     }
                   `}
                 >
-                  <IconComponent className="h-4 w-4" />
-                  {mode.label}
+                  <IconComponent className={`h-4 w-4 transition-colors ${isActive ? 'text-blue-600 dark:text-blue-400' : ''}`} />
+                  <span className="relative">
+                    {mode.label}
+                    {isActive && (
+                      <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+                    )}
+                  </span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* 当前模式描述 */}
+        {/* 当前模式描述 - 优化设计 */}
         <div className="text-center">
-          <p className="text-sm text-muted-foreground">
-            {searchModes[searchMode].description}
-          </p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-full border border-blue-100 dark:border-blue-800/30">
+            <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
+            <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
+              {searchModes[searchMode].description}
+            </p>
+          </div>
         </div>
         </div>
 
@@ -227,21 +252,85 @@ export default function ChipSearchContent() {
           <LoadingSpinner label={`正在${searchModes[searchMode].label}...`} />
         </div>
       ) : !hasSearched ? (
-        // 初始状态 - 显示提示信息或最近搜索
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <div className="mb-4">
-            {React.createElement(searchModes[searchMode].icon, {
-              className: "h-12 w-12 text-muted-foreground/50"
-            })}
+        // 初始状态 - 高级设计的引导界面
+        <div className="relative">
+          {/* 背景装饰 */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-orange-50/50 dark:from-blue-950/20 dark:via-purple-950/10 dark:to-orange-950/20 rounded-2xl"></div>
+          <div className="absolute top-4 right-4 w-32 h-32 bg-gradient-to-br from-blue-200/20 to-purple-200/20 dark:from-blue-800/20 dark:to-purple-800/20 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-4 left-4 w-24 h-24 bg-gradient-to-br from-orange-200/20 to-pink-200/20 dark:from-orange-800/20 dark:to-pink-800/20 rounded-full blur-xl"></div>
+
+          {/* 主要内容 */}
+          <div className="relative flex flex-col items-center justify-center py-16 px-6 text-center">
+            {/* 图标区域 */}
+            <div className="relative mb-8">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 mb-4">
+                {React.createElement(searchModes[searchMode].icon, {
+                  className: "h-10 w-10 text-white"
+                })}
+              </div>
+              {/* 装饰性小图标 */}
+              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
+                <Sparkles className="h-3 w-3 text-white" />
+              </div>
+            </div>
+
+            {/* 标题和描述 */}
+            <div className="space-y-4 max-w-lg">
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">
+                {searchModes[searchMode].label}
+              </h3>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                {searchMode === 'datasheet' && '输入芯片型号、制造商或特性关键词，快速查找详细资料'}
+                {searchMode === 'silkscreen' && '输入芯片表面的丝印标识，查找对应的型号'}
+                {searchMode === 'brand' && '输入品牌名称，查看该品牌的产品系列和热门型号'}
+              </p>
+            </div>
+
+            {/* 功能特色展示 */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12 w-full max-w-2xl">
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-white/20 dark:border-gray-700/20">
+                <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mb-3">
+                  <Zap className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-sm mb-1">极速搜索</h4>
+                <p className="text-xs text-muted-foreground">毫秒级响应，海量数据库</p>
+              </div>
+
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-white/20 dark:border-gray-700/20">
+                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-violet-600 rounded-lg flex items-center justify-center mb-3">
+                  <Sparkles className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-sm mb-1">AI 增强</h4>
+                <p className="text-xs text-muted-foreground">智能推荐，精准匹配</p>
+              </div>
+
+              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-4 border border-white/20 dark:border-gray-700/20">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center mb-3">
+                  <FileText className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-sm mb-1">详细资料</h4>
+                <p className="text-xs text-muted-foreground">完整规格，应用指南</p>
+              </div>
+            </div>
+
+            {/* 热门搜索提示 */}
+            <div className="mt-8 text-center">
+              <p className="text-sm text-muted-foreground mb-3">🔥 热门搜索</p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {['STM32', 'ESP32', 'TPS5430', 'LM358', 'AMS1117'].map((term) => (
+                  <button
+                    key={term}
+                    className="px-3 py-1 text-xs bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full transition-colors"
+                    onClick={() => {
+                      handleSearch(term);
+                    }}
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-          <h3 className="text-lg font-medium text-foreground mb-2">
-            {searchModes[searchMode].label}
-          </h3>
-          <p className="text-muted-foreground max-w-md">
-            {searchMode === 'datasheet' && '输入芯片型号、制造商或特性关键词，快速查找详细资料'}
-            {searchMode === 'silkscreen' && '输入芯片表面的丝印标识，查找对应的型号'}
-            {searchMode === 'brand' && '输入品牌名称，查看该品牌的产品系列和热门型号'}
-          </p>
         </div>
       ) : searchResults.length > 0 ? (
         <div className="space-y-4">
