@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -19,6 +19,11 @@ export default function SearchBar({
   className,
 }: SearchBarProps) {
   const [query, setQuery] = useState(initialQuery);
+
+  // 同步外部的 initialQuery 变化
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
