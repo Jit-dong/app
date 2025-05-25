@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import SearchBar from "@/components/shared/search-bar";
+import ChipListItem from "@/components/shared/chip-list-item";
+import LoadingSpinner from "@/components/shared/loading-spinner";
+import type { Chip } from "@/lib/types";
+import { searchChips } from "@/lib/placeholder-data";
 import {
   Search,
   Star,
@@ -15,10 +21,39 @@ import {
   Smartphone,
   Wifi,
   Battery,
-  Microchip
+  Microchip,
+  FileText,
+  RefreshCw,
+  Sparkles,
+  HelpCircle,
+  SearchX
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { LiveAdBanner, ProductAdBanner, PromotionAdBanner } from '@/components/shared/home-ad-banner';
+
+// 搜索模式类型定义
+type SearchMode = 'datasheet' | 'silkscreen' | 'brand';
+
+// 搜索模式配置
+const searchModes = {
+  datasheet: {
+    label: '查资料',
+    icon: FileText,
+    placeholder: '搜索芯片型号、制造商、特性...',
+    description: '查找芯片详细资料和规格参数'
+  },
+  silkscreen: {
+    label: '丝印反查',
+    icon: Zap,
+    placeholder: '输入芯片丝印查询型号',
+    description: '通过丝印标识查找对应的芯片型号'
+  },
+  brand: {
+    label: '查品牌',
+    icon: RefreshCw,
+    placeholder: '输入品牌名称查看产品线',
+    description: '查看品牌的产品系列和热门型号'
+  }
+};
 
 // 热门品牌数据
 const hotBrands = [
@@ -90,10 +125,67 @@ const hotSearchTerms = [
 
 export default function HomeContent() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<Chip[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentQuery, setCurrentQuery] = useState("");
+  const [searchMode, setSearchMode] = useState<SearchMode>('datasheet');
+  const [hasSearched, setHasSearched] = useState(false);
+  const [aiEnhanced, setAiEnhanced] = useState(false);
+  const [showAiTooltip, setShowAiTooltip] = useState(false);
+
+  const performSearch = (query: string, mode: SearchMode = searchMode, useAI: boolean = aiEnhanced) => {
+    setIsLoading(true);
+    setHasSearched(true);
+
+    // AI增强搜索需要更长时间
+    const searchDelay = useAI ? 1500 : 500;
+
+    setTimeout(() => {
+      // 根据搜索模式调用不同的搜索逻辑
+      let results: Chip[] = [];
+      switch (mode) {
+        case 'datasheet':
+          results = searchChips(query);
+          break;
+        case 'silkscreen':
+          results = searchChips(query);
+          break;
+        case 'brand':
+          results = searchChips(query);
+          break;
+        default:
+          results = searchChips(query);
+      }
+
+      if (useAI) {
+        console.log('AI增强搜索已启用');
+      }
+
+      setSearchResults(results);
+      setIsLoading(false);
+    }, searchDelay);
+  };
 
   const handleSearch = (query: string) => {
-    console.log('搜索:', query);
-    // 这里可以跳转到搜索页面或执行搜索逻辑
+    setCurrentQuery(query);
+    setSearchQuery(query);
+    performSearch(query, searchMode);
+  };
+
+  const handleModeChange = (mode: SearchMode) => {
+    setSearchMode(mode);
+    if (currentQuery.trim()) {
+      performSearch(currentQuery, mode);
+    }
+  };
+
+  const handleAiToggle = () => {
+    const newAiState = !aiEnhanced;
+    setAiEnhanced(newAiState);
+
+    if (currentQuery.trim() && hasSearched) {
+      performSearch(currentQuery, searchMode, newAiState);
+    }
   };
 
   const handleBrandClick = (brand: any) => {
@@ -119,49 +211,117 @@ export default function HomeContent() {
           </p>
         </div>
 
-        {/* 搜索框 */}
-        <div className="relative max-w-2xl mx-auto">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            placeholder="搜索芯片型号、品牌或功能..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-4 py-3 text-base"
-            onKeyPress={(e) => {
-              if (e.key === 'Enter' && searchQuery.trim()) {
-                handleSearch(searchQuery.trim());
-              }
-            }}
-          />
-          {searchQuery && (
-            <Button
-              onClick={() => handleSearch(searchQuery.trim())}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2"
-              size="sm"
-            >
-              搜索
-            </Button>
-          )}
-        </div>
-
-        {/* 热门搜索 */}
-        <div className="space-y-2">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
-            🔥 热门搜索
-          </h3>
-          <div className="flex flex-wrap justify-center gap-2">
-            {hotSearchTerms.map((term) => (
-              <button
-                key={term}
-                onClick={() => handleSearch(term)}
-                className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:border-blue-300 dark:hover:border-blue-700 border border-gray-200 dark:border-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
-              >
-                {term}
-              </button>
-            ))}
+        {/* 搜索模式切换器 */}
+        <div className="flex items-center justify-center">
+          <div className="inline-flex rounded-xl bg-white dark:bg-gray-800 p-1 shadow-md border border-gray-200 dark:border-gray-700">
+            {Object.entries(searchModes).map(([key, mode]) => {
+              const IconComponent = mode.icon;
+              const isActive = searchMode === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => handleModeChange(key as SearchMode)}
+                  className={`
+                    inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200
+                    ${isActive
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }
+                  `}
+                >
+                  <IconComponent className="h-4 w-4" />
+                  <span>{mode.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
+
+        {/* 当前模式描述 */}
+        <div className="text-center">
+          <p className="text-muted-foreground">
+            {searchModes[searchMode].description}
+          </p>
+        </div>
+
+        {/* 搜索框 */}
+        <div className="flex justify-center">
+          <SearchBar
+            onSearch={handleSearch}
+            className="w-full max-w-2xl"
+            placeholder={searchModes[searchMode].placeholder}
+            initialQuery={currentQuery}
+            aiEnhanced={aiEnhanced}
+            onAiToggle={handleAiToggle}
+            showAiTooltip={showAiTooltip}
+            onAiTooltipChange={setShowAiTooltip}
+          />
+        </div>
       </div>
+
+      {/* 搜索结果或默认内容 */}
+      {isLoading ? (
+        <div className="flex justify-center py-12">
+          <LoadingSpinner label={`正在${searchModes[searchMode].label}...`} />
+        </div>
+      ) : hasSearched ? (
+        searchResults.length > 0 ? (
+          <div className="space-y-4">
+            {/* 根据搜索模式显示不同的结果标题 */}
+            {searchMode === 'silkscreen' && currentQuery && (
+              <div className="text-sm text-muted-foreground mb-3">
+                丝印 <span className="font-medium">{currentQuery}</span> 可能对应的型号：
+              </div>
+            )}
+            {searchMode === 'brand' && currentQuery && (
+              <div className="text-sm text-muted-foreground mb-3">
+                <span className="font-medium">{currentQuery}</span> 品牌产品：
+              </div>
+            )}
+
+            {/* AI增强提示 */}
+            {aiEnhanced && (
+              <div className="flex items-center gap-2 text-sm text-purple-600 bg-purple-50 dark:bg-purple-950/20 p-2 rounded-lg mb-3">
+                <Sparkles className="h-4 w-4" />
+                <span>AI增强搜索已启用，结果已智能优化</span>
+              </div>
+            )}
+
+            {searchResults.map((chip, index) => (
+              <ChipListItem
+                key={chip.id}
+                chip={chip}
+                showAlternativeCount={
+                  searchMode === 'datasheet' &&
+                  chip.model === 'TPS5430' &&
+                  chip.id === 'TPS5430-1'
+                }
+              />
+            ))}
+          </div>
+        ) : (
+          <Alert variant="default" className="shadow-md">
+            <SearchX className="h-5 w-5" />
+            <AlertTitle>
+              {searchMode === 'datasheet' && '未找到芯片'}
+              {searchMode === 'silkscreen' && '未找到对应型号'}
+              {searchMode === 'brand' && '未找到品牌产品'}
+            </AlertTitle>
+            <AlertDescription>
+              {searchMode === 'datasheet' && '没有芯片符合您的搜索条件。请尝试不同的关键词。'}
+              {searchMode === 'silkscreen' && '未找到该丝印对应的型号。请检查丝印是否正确或尝试其他丝印。'}
+              {searchMode === 'brand' && '未找到该品牌的产品信息。请检查品牌名称是否正确或尝试其他品牌。'}
+              {aiEnhanced && (
+                <div className="mt-2 text-purple-600">
+                  💡 AI建议：尝试使用更通用的关键词或检查拼写
+                </div>
+              )}
+            </AlertDescription>
+          </Alert>
+        )
+      ) : (
+        // 默认内容：热门品牌和分类
+        <div className="space-y-6">
 
       {/* 热门品牌区域 */}
       <Card className="shadow-md">
@@ -216,12 +376,6 @@ export default function HomeContent() {
         </CardContent>
       </Card>
 
-      {/* 直播广告位 - 学习参考页面设计 */}
-      <LiveAdBanner
-        className="w-full"
-        onClose={() => console.log('直播广告被关闭')}
-      />
-
       {/* 产品分类区域 */}
       <Card className="shadow-md">
         <CardHeader className="py-4 px-4 border-b">
@@ -259,18 +413,29 @@ export default function HomeContent() {
         </CardContent>
       </Card>
 
-      {/* 产品广告位 */}
-      <ProductAdBanner
-        className="w-full"
-        onClose={() => console.log('产品广告被关闭')}
-      />
-
-      {/* 底部浮动促销广告 - 固定在页面底部 */}
-      <div className="fixed bottom-20 left-4 right-4 z-40">
-        <PromotionAdBanner
-          onClose={() => console.log('促销广告被关闭')}
-        />
-      </div>
+      {/* 热门搜索 - 移到最后 */}
+      <Card className="shadow-md">
+        <CardHeader className="py-4 px-4 border-b">
+          <CardTitle className="text-lg flex items-center gap-2">
+            🔥 热门搜索
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4">
+          <div className="flex flex-wrap gap-2">
+            {hotSearchTerms.map((term) => (
+              <button
+                key={term}
+                onClick={() => handleSearch(term)}
+                className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:border-blue-300 dark:hover:border-blue-700 border border-gray-200 dark:border-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
+              >
+                {term}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+        </div>
+      )}
     </div>
   );
 }
