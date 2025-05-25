@@ -3,15 +3,13 @@
 
 import React, { useState, useEffect } from "react";
 import SearchBar from "@/components/shared/search-bar";
-import FilterPanel, { type ChipFilters } from "@/components/shared/filter-panel";
 import ChipListItem from "@/components/shared/chip-list-item"; // Import new component
 import type { Chip } from "@/lib/types";
 import { searchChips } from "@/lib/placeholder-data";
 import LoadingSpinner from "@/components/shared/loading-spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Filter, SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle } from "lucide-react";
+import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle } from "lucide-react";
 
 // 搜索模式类型定义
 type SearchMode = 'datasheet' | 'silkscreen' | 'brand';
@@ -42,8 +40,7 @@ export default function ChipSearchContent() {
   const [searchResults, setSearchResults] = useState<Chip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuery, setCurrentQuery] = useState("");
-  const [currentFilters, setCurrentFilters] = useState<ChipFilters>({});
-  const [isSheetOpen, setSheetOpen] = useState(false);
+
   const [searchMode, setSearchMode] = useState<SearchMode>('datasheet'); // 新增搜索模式状态
   const [hasSearched, setHasSearched] = useState(false); // 新增是否已搜索状态
   const [aiEnhanced, setAiEnhanced] = useState(false); // AI增强功能状态
@@ -62,7 +59,7 @@ export default function ChipSearchContent() {
     }, 500);
   }, []);
 
-  const performSearch = (query: string, filters: ChipFilters, mode: SearchMode = searchMode, useAI: boolean = aiEnhanced) => {
+  const performSearch = (query: string, mode: SearchMode = searchMode, useAI: boolean = aiEnhanced) => {
     setIsLoading(true);
     setHasSearched(true);
 
@@ -74,18 +71,18 @@ export default function ChipSearchContent() {
       let results: Chip[] = [];
       switch (mode) {
         case 'datasheet':
-          results = searchChips(query, filters);
+          results = searchChips(query);
           break;
         case 'silkscreen':
           // 这里可以调用专门的丝印搜索API
-          results = searchChips(query, filters); // 暂时使用相同逻辑
+          results = searchChips(query); // 暂时使用相同逻辑
           break;
         case 'brand':
           // 这里可以调用专门的品牌搜索API
-          results = searchChips(query, filters); // 暂时使用相同逻辑
+          results = searchChips(query); // 暂时使用相同逻辑
           break;
         default:
-          results = searchChips(query, filters);
+          results = searchChips(query);
       }
 
       // 如果启用AI增强，可以对结果进行AI处理
@@ -101,14 +98,14 @@ export default function ChipSearchContent() {
 
   const handleSearch = (query: string) => {
     setCurrentQuery(query);
-    performSearch(query, currentFilters, searchMode);
+    performSearch(query, searchMode);
   };
 
   const handleModeChange = (mode: SearchMode) => {
     setSearchMode(mode);
     // 如果已经有搜索内容，重新搜索
     if (currentQuery.trim()) {
-      performSearch(currentQuery, currentFilters, mode);
+      performSearch(currentQuery, mode);
     }
   };
 
@@ -118,20 +115,8 @@ export default function ChipSearchContent() {
 
     // 如果已经有搜索内容，重新搜索以应用AI增强
     if (currentQuery.trim() && hasSearched) {
-      performSearch(currentQuery, currentFilters, searchMode, newAiState);
+      performSearch(currentQuery, searchMode, newAiState);
     }
-  };
-
-  const handleApplyFilters = (filters: ChipFilters) => {
-    setCurrentFilters(filters);
-    performSearch(currentQuery, filters);
-    setSheetOpen(false);
-  };
-
-  const handleClearFilters = () => {
-    const emptyFilters = {};
-    setCurrentFilters(emptyFilters);
-    performSearch(currentQuery, emptyFilters);
   };
 
   return (
@@ -169,11 +154,11 @@ export default function ChipSearchContent() {
           </p>
         </div>
 
-        {/* 搜索控制区 - 下移后的位置 */}
-        <div className="flex flex-col sm:flex-row gap-3 items-center">
+        {/* 搜索控制区 - 简化版本 */}
+        <div className="flex justify-center">
           <SearchBar
             onSearch={handleSearch}
-            className="flex-grow"
+            className="w-full max-w-2xl"
             placeholder={searchModes[searchMode].placeholder}
             initialQuery={currentQuery}
             aiEnhanced={aiEnhanced}
@@ -181,29 +166,6 @@ export default function ChipSearchContent() {
             showAiTooltip={showAiTooltip}
             onAiTooltipChange={setShowAiTooltip}
           />
-
-          {/* 筛选按钮 - 保留名称显示 */}
-          {(searchMode === 'datasheet' || searchMode === 'brand') && (
-            <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-              <SheetTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="px-4 py-3 rounded-xl border-2 hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
-                >
-                  <Filter className="mr-2 h-4 w-4" />
-                  更多筛选
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-full max-w-md sm:max-w-sm p-0">
-                <FilterPanel
-                  onApplyFilters={handleApplyFilters}
-                  onClearFilters={handleClearFilters}
-                  initialFilters={currentFilters}
-                  setSheetOpen={setSheetOpen}
-                />
-              </SheetContent>
-            </Sheet>
-          )}
         </div>
 
         {/* 内容展示区（动态变化） */}
@@ -321,7 +283,7 @@ export default function ChipSearchContent() {
             {searchMode === 'brand' && '未找到品牌产品'}
           </AlertTitle>
           <AlertDescription>
-            {searchMode === 'datasheet' && '没有芯片符合您的搜索条件。请尝试不同的关键词或调整您的筛选器。'}
+            {searchMode === 'datasheet' && '没有芯片符合您的搜索条件。请尝试不同的关键词。'}
             {searchMode === 'silkscreen' && '未找到该丝印对应的型号。请检查丝印是否正确或尝试其他丝印。'}
             {searchMode === 'brand' && '未找到该品牌的产品信息。请检查品牌名称是否正确或尝试其他品牌。'}
             {aiEnhanced && (
