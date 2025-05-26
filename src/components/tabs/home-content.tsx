@@ -154,13 +154,13 @@ export default function HomeContent() {
   };
 
   return (
-    <div className="space-y-8 p-4">
+    <div className="space-y-6 p-4">
       {/* 简洁的引导语 */}
-      <div className="text-center space-y-3">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+      <div className="text-center space-y-2">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
           芯片智能查询
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           快速查找芯片资料、丝印反查、品牌搜索、替代方案
         </p>
       </div>
@@ -191,23 +191,40 @@ export default function HomeContent() {
         </div>
       </div>
 
-      {/* 突出的搜索框 */}
+      {/* 高级突出的搜索框 */}
       <div className="flex justify-center">
-        <div className="w-full max-w-3xl">
-          <SearchBar
-            onSearch={handleSearch}
-            className="w-full shadow-xl border-2 border-orange-200 dark:border-orange-800 focus-within:border-orange-400 dark:focus-within:border-orange-600"
-            placeholder={searchModes[searchMode].placeholder}
-            initialQuery={currentQuery}
-            aiEnhanced={aiEnhanced}
-            onAiToggle={handleAiToggle}
-            showAiTooltip={showAiTooltip}
-            onAiTooltipChange={setShowAiTooltip}
-          />
-          {/* 当前模式描述 */}
-          <p className="text-center text-sm text-muted-foreground mt-2">
-            {searchModes[searchMode].description}
-          </p>
+        <div className="w-full max-w-4xl">
+          {/* 搜索框容器 - 使用渐变背景和发光效果 */}
+          <div className="relative p-4 bg-gradient-to-br from-orange-50 via-white to-blue-50 dark:from-orange-950/20 dark:via-gray-900 dark:to-blue-950/20 rounded-2xl shadow-2xl border border-orange-100 dark:border-orange-900/30">
+            {/* 发光边框效果 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 via-transparent to-blue-400/20 rounded-2xl blur-sm -z-10"></div>
+
+            {/* 搜索框 */}
+            <div className="relative">
+              <SearchBar
+                onSearch={handleSearch}
+                className="w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-lg rounded-xl focus-within:shadow-xl focus-within:scale-[1.02] transition-all duration-300 text-base py-3"
+                placeholder={searchModes[searchMode].placeholder}
+                initialQuery={currentQuery}
+                aiEnhanced={aiEnhanced}
+                onAiToggle={handleAiToggle}
+                showAiTooltip={showAiTooltip}
+                onAiTooltipChange={setShowAiTooltip}
+              />
+
+              {/* 装饰性元素 */}
+              <div className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full opacity-60 animate-pulse"></div>
+              <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full opacity-40 animate-pulse delay-1000"></div>
+            </div>
+
+            {/* 当前模式描述 */}
+            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-3 font-medium">
+              {searchModes[searchMode].description}
+            </p>
+
+            {/* 底部装饰线 */}
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-gradient-to-r from-orange-400 to-blue-400 rounded-full opacity-60"></div>
+          </div>
         </div>
       </div>
 
@@ -279,41 +296,41 @@ export default function HomeContent() {
           </Alert>
         )
       ) : (
-        // 默认内容：芯片商家广告位
-        <div className="space-y-6">
-          {/* 芯片商家广告位 - 3x4布局 */}
+        // 默认内容：热门品牌广告位
+        <div className="space-y-4">
+          {/* 热门品牌广告位 - 3x4布局 */}
           <Card className="shadow-lg">
-            <CardHeader className="py-4 px-6 border-b">
-              <CardTitle className="text-xl flex items-center gap-2 text-center justify-center">
-                <Microchip className="h-6 w-6 text-orange-500" />
-                合作芯片商家
+            <CardHeader className="py-3 px-4 border-b">
+              <CardTitle className="text-lg flex items-center gap-2 text-center justify-center">
+                <Star className="h-5 w-5 text-orange-500" />
+                热门品牌
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-6">
-              <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
                 {chipVendors.map((vendor, index) => (
                   <div
                     key={vendor.name}
                     onClick={() => handleVendorClick(vendor)}
                     className="group cursor-pointer"
                   >
-                    <div className="aspect-square flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-200 hover:shadow-lg group-hover:scale-105">
+                    <div className="aspect-square flex flex-col items-center justify-center p-3 bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-200 hover:shadow-lg group-hover:scale-105">
                       <div className={cn(
-                        "w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-sm mb-2",
+                        "w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-xs mb-1.5",
                         vendor.color
                       )}>
                         {vendor.logo}
                       </div>
-                      <p className="text-xs text-center text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-medium">
+                      <p className="text-xs text-center text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-medium leading-tight">
                         {vendor.name}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="text-center mt-6">
+              <div className="text-center mt-4">
                 <p className="text-sm text-muted-foreground">
-                  点击商家logo快速搜索相关产品
+                  点击品牌logo快速搜索相关产品
                 </p>
               </div>
             </CardContent>
