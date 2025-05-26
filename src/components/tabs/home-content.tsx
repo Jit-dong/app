@@ -155,21 +155,6 @@ export default function HomeContent() {
 
   return (
     <div className="space-y-6 p-4">
-      {/* 右上角功能介绍 */}
-      <div className="flex justify-end">
-        <div className="bg-gradient-to-r from-orange-50 to-blue-50 dark:from-orange-950/20 dark:to-blue-950/20 rounded-2xl p-4 shadow-lg border border-orange-100 dark:border-orange-900/30 max-w-md">
-          <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">
-            🔍 芯片智能查询
-          </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            快速查找芯片资料、丝印反查、品牌搜索、替代方案
-          </p>
-          <div className="mt-3 flex items-center text-xs text-orange-600 dark:text-orange-400">
-            <span className="w-2 h-2 bg-orange-500 rounded-full mr-2 animate-pulse"></span>
-            AI智能助手为您提供精准服务
-          </div>
-        </div>
-      </div>
 
       {/* 搜索模式切换器 - 只显示三个选项 */}
       <div className="flex items-center justify-center">
