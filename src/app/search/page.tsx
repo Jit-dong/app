@@ -5,7 +5,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Search } from 'lucide-react';
 import ChipSearchContent from '@/components/tabs/chip-search-content';
-import SearchBar from '@/components/shared/search-bar';
+import EnhancedSearchBar from '@/components/shared/enhanced-search-bar';
 import LoadingSpinner from '@/components/shared/loading-spinner';
 
 // 搜索模式类型定义
@@ -70,11 +70,12 @@ function SearchPageContent() {
             </Button>
 
             <div className="flex-1 max-w-2xl">
-              <SearchBar
+              <EnhancedSearchBar
                 onSearch={handleSearch}
                 initialQuery={currentQuery}
                 placeholder={`${searchModes[mode].label} - ${searchModes[mode].description}`}
                 className="w-full"
+                showSuggestions={true}
               />
             </div>
           </div>

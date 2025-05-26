@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import SearchBar from "@/components/shared/search-bar";
+import EnhancedSearchBar from "@/components/shared/enhanced-search-bar";
 import ChipListItem from "@/components/shared/chip-list-item";
 import LoadingSpinner from "@/components/shared/loading-spinner";
 import type { Chip } from "@/lib/types";
@@ -132,10 +132,11 @@ export default function HomeContent() {
             <CardContent className="relative p-5 space-y-3">
               {/* 搜索框区域 */}
               <div className="space-y-2">
-                <SearchBar
+                <EnhancedSearchBar
                   onSearch={handleSearch}
                   className="w-full"
                   placeholder={searchModes[searchMode].placeholder}
+                  showSuggestions={true}
                 />
 
 
