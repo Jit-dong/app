@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -61,20 +62,20 @@ const searchModes = {
   }
 };
 
-// 芯片商家广告位数据 (3x4布局)
+// 芯片商家广告位数据 (3x4布局) - 使用实际图片
 const chipVendors = [
-  { name: 'STMicroelectronics', shortName: 'ST', logo: 'ST', color: 'bg-blue-600' },
-  { name: 'Texas Instruments', shortName: 'TI', logo: 'TI', color: 'bg-red-600' },
-  { name: 'Espressif', shortName: 'Espressif', logo: 'ESP', color: 'bg-green-600' },
-  { name: 'Microchip', shortName: 'Microchip', logo: 'MCU', color: 'bg-orange-600' },
-  { name: 'Analog Devices', shortName: 'ADI', logo: 'ADI', color: 'bg-purple-600' },
-  { name: 'Infineon', shortName: 'Infineon', logo: 'IFX', color: 'bg-indigo-600' },
-  { name: 'NXP', shortName: 'NXP', logo: 'NXP', color: 'bg-teal-600' },
-  { name: 'Broadcom', shortName: 'Broadcom', logo: 'BCM', color: 'bg-pink-600' },
-  { name: 'Qualcomm', shortName: 'Qualcomm', logo: 'QC', color: 'bg-cyan-600' },
-  { name: 'Intel', shortName: 'Intel', logo: 'INTC', color: 'bg-gray-600' },
-  { name: 'AMD', shortName: 'AMD', logo: 'AMD', color: 'bg-red-500' },
-  { name: 'NVIDIA', shortName: 'NVIDIA', logo: 'NVDA', color: 'bg-green-500' },
+  { name: 'STMicroelectronics', shortName: 'ST', image: '/brands/image.png' },
+  { name: 'Texas Instruments', shortName: 'TI', image: '/brands/images.jpeg' },
+  { name: 'Espressif', shortName: 'Espressif', image: '/brands/images.png' },
+  { name: 'Microchip', shortName: 'Microchip', image: '/brands/images (1).jpeg' },
+  { name: 'Analog Devices', shortName: 'ADI', image: '/brands/images (1).png' },
+  { name: 'Infineon', shortName: 'Infineon', image: '/brands/images (2).png' },
+  { name: 'NXP', shortName: 'NXP', image: '/brands/images (3).png' },
+  { name: 'Broadcom', shortName: 'Broadcom', image: '/brands/images (4).png' },
+  { name: 'Qualcomm', shortName: 'Qualcomm', image: '/brands/下载.jpeg' },
+  { name: 'Intel', shortName: 'Intel', image: '/brands/下载.png' },
+  { name: 'AMD', shortName: 'AMD', image: '/brands/下载 (1).jpeg' },
+  { name: 'NVIDIA', shortName: 'NVIDIA', image: '/brands/下载 (1).png' },
 ];
 
 
@@ -314,11 +315,23 @@ export default function HomeContent() {
                     className="group cursor-pointer"
                   >
                     <div className="aspect-square flex flex-col items-center justify-center p-3 bg-gradient-to-br from-white via-orange-50/20 to-amber-50/10 dark:from-gray-800 dark:via-orange-950/10 dark:to-amber-950/5 rounded-2xl border border-orange-100/50 dark:border-orange-900/30 hover:border-orange-300/70 dark:hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl group-hover:scale-110 hover:-translate-y-1 backdrop-blur-sm">
-                      <div className={cn(
-                        "w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm mb-2 shadow-lg",
-                        vendor.color
-                      )}>
-                        {vendor.logo}
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-2 shadow-lg bg-white dark:bg-gray-700 overflow-hidden">
+                        <Image
+                          src={vendor.image}
+                          alt={vendor.name}
+                          width={48}
+                          height={48}
+                          className="w-full h-full object-contain rounded-lg"
+                          onError={(e) => {
+                            // 如果图片加载失败，显示品牌名称缩写
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const parent = target.parentElement;
+                            if (parent) {
+                              parent.innerHTML = `<span class="text-orange-600 font-bold text-sm">${vendor.shortName}</span>`;
+                            }
+                          }}
+                        />
                       </div>
                       <p className="text-xs text-center text-gray-700 dark:text-gray-300 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-semibold leading-tight">
                         {vendor.shortName}
