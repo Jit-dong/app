@@ -93,11 +93,38 @@ export const placeholderChips: Chip[] = [
     rohsCompliant: true,
   },
   {
+    id: 'TPS563201',
+    model: 'TPS563201',
+    manufacturer: '德州仪器-TI',
+    series: true,
+    category: '开关稳压器-DC/DC转换器',
+    description: '采用 SOT583 封装且具有 1% 精度、PG/SS 和 PFM/强制 PWM 的 4.2V 至 17V、3A 同步降压转换器',
+    applications: ['工业自动化', '通信设备', '测试测量设备', '医疗设备', '汽车电子', 'POL应用'],
+    datasheetUrl: '#',
+    automotiveGrade: true,
+    lifecycleStatus: 'Active',
+    packageTypes: ['SOT583'],
+    parameters: {
+      'Input Voltage Min': 4.2,
+      'Input Voltage Max': 17,
+      'Output Current Max': 3,
+      'Switching Frequency': '2.1 MHz',
+      'Accuracy': '1%',
+      'Efficiency': '95%',
+      'Operating Temperature Min': -40,
+      'Operating Temperature Max': 125,
+      'Interface Types': 'PG/SS'
+    },
+    tags: ['DC-DC', '降压转换器', '电源管理', '高精度', 'SOT583'],
+    rohsCompliant: true,
+    lowPower: false,
+  },
+  {
     id: 'STM32F407VGT6',
     model: 'STM32F407VGT6',
     description: '高性能 MCU，采用 ARM Cortex-M4 内核，1MB 闪存，192KB RAM，多种外设。',
     manufacturer: 'STMicroelectronics',
-    datasheetUrl: '#', 
+    datasheetUrl: '#',
     imageUrl: 'https://picsum.photos/seed/stm32f407/300/200',
     lifecycleStatus: 'Active',
     packageTypes: ['LQFP100'],
@@ -110,15 +137,15 @@ export const placeholderChips: Chip[] = [
       'Frequency': '168 MHz',
       'Flash': '1 MB',
       'RAM': '192 KB',
-      'Voltage Min': 1.8, 
-      'Voltage Max': 3.6, 
-      'Output Current Max': 0.1, 
+      'Voltage Min': 1.8,
+      'Voltage Max': 3.6,
+      'Output Current Max': 0.1,
       'Interface Types': 'SPI, I2C, UART, USB'
     },
-    tags: ['MCU', 'ARM', '高性能'], 
+    tags: ['MCU', 'ARM', '高性能'],
     category: '微控制器 (MCU) > 32位 MCU',
-    rohsCompliant: true, 
-    lowPower: false, 
+    rohsCompliant: true,
+    lowPower: false,
     automotiveGrade: true, // Keep for filter test
     applications: ['工业控制', '消费电子'],
   },
@@ -228,7 +255,7 @@ export function findAlternativesByChipId(chipId: string): AlternativeChip[] {
 
 export function searchChips(query: string, filters: ChipFilters = {}): Chip[] {
   const lowerQuery = query.toLowerCase();
-  
+
   return placeholderChips.filter(chip => {
     let matchesQuery = true;
     if (query) {
@@ -237,13 +264,13 @@ export function searchChips(query: string, filters: ChipFilters = {}): Chip[] {
                      chip.manufacturer.toLowerCase().includes(lowerQuery) ||
                      (chip.tags && chip.tags.some(tag => tag.toLowerCase().includes(lowerQuery)));
     }
-    
+
     if (!matchesQuery) return false;
 
     if (filters.category && filters.category !== "全部" && chip.category) {
       if (!chip.category.startsWith(filters.category.replace(/ \(全部\)$/, ''))) return false;
     }
-    
+
     if (filters.manufacturer && filters.manufacturer.length > 0) {
       if (!filters.manufacturer.includes(chip.manufacturer)) return false;
     }
@@ -268,7 +295,7 @@ export function searchChips(query: string, filters: ChipFilters = {}): Chip[] {
     if (filters.operatingVoltageMax !== undefined && (voltageMin === undefined || voltageMin > filters.operatingVoltageMax)) {
       return false;
     }
-    
+
     const chipOutputCurrentMaxParam = chip.parameters?.['Output Current Max'];
     const chipOutputCurrentMax = typeof chipOutputCurrentMaxParam === 'number' ? chipOutputCurrentMaxParam : undefined;
 
@@ -284,7 +311,7 @@ export function searchChips(query: string, filters: ChipFilters = {}): Chip[] {
     }
 
     if (filters.hasDatasheet && !chip.datasheetUrl) return false;
-    if (filters.automotiveGrade && !chip.automotiveGrade) return false; 
+    if (filters.automotiveGrade && !chip.automotiveGrade) return false;
     if (filters.rohsCompliant && !chip.rohsCompliant) return false;
     if (filters.lowPower && !chip.lowPower && (!chip.tags || !chip.tags.includes('Low Power'))) return false;
     if (filters.internalOscillator && !chip.internalOscillator) return false;
@@ -296,7 +323,7 @@ export function searchChips(query: string, filters: ChipFilters = {}): Chip[] {
     }
 
     return true;
-  }); 
+  });
   // Not slicing results for now, let the UI handle pagination or virtual scrolling if needed.
-  // .slice(0, 20); 
+  // .slice(0, 20);
 }

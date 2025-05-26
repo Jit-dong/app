@@ -22,13 +22,32 @@ export default function ChipDetailPage({ params }: ChipDetailPageProps) {
     notFound();
   }
 
-  // Data transformations specific to TPS5430 can stay here or be passed to client component
+  // Data transformations specific to different chips
   const isTPS5430 = chip.model === 'TPS5430';
-  const displayManufacturer = isTPS5430 ? '德州仪器-TI' : chip.manufacturer;
-  const displayCategory = isTPS5430 ? '开关稳压器-DC/DC转换器' : chip.category;
-  const displayDescription = isTPS5430 ? '5.5V 至 36V 输入、2A、500kHz 降压转换器' : chip.description;
+  const isTPS563201 = chip.model === 'TPS563201';
 
-  const featuresList = [
+  const displayManufacturer = (isTPS5430 || isTPS563201) ? '德州仪器-TI' : chip.manufacturer;
+  const displayCategory = (isTPS5430 || isTPS563201) ? '开关稳压器-DC/DC转换器' : chip.category;
+  const displayDescription = isTPS5430
+    ? '5.5V 至 36V 输入、2A、500kHz 降压转换器'
+    : isTPS563201
+    ? '采用 SOT583 封装且具有 1% 精度、PG/SS 和 PFM/强制 PWM 的 4.2V 至 17V、3A 同步降压转换器'
+    : chip.description;
+
+  const featuresList = isTPS563201 ? [
+    { text: "1% 输出电压精度" },
+    { text: "PG (Power Good) 信号" },
+    { text: "SS (Soft Start) 功能" },
+    { text: "PFM/强制PWM模式" },
+    { text: "SOT583小封装" },
+    { text: "宽输入电压范围：4.2V至17V" },
+    { text: "高效率转换：高达95%" },
+    { text: "过流保护" },
+    { text: "2.1MHz开关频率" },
+    { text: "3A输出电流" },
+    { text: "–40℃至125℃工作温度范围" },
+    { text: "同步降压拓扑" }
+  ] : [
     { text: "宽输入电压范围：", subItems: ["-TPS5430: 5.5伏至36伏", "-TPS5431: 5.5伏至23伏"] },
     { text: "高达3-A连续 (4-A峰值) 输出电流" },
     { text: "通过110-mΩ集成MOSFET开关实现高达95%的高效率" },

@@ -4,6 +4,7 @@ import type { Chip } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, Share2, FileText, Phone, ChevronRight, Square, Download, Mail, Info } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -72,7 +73,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
       });
     }
   };
-  
+
   return (
     <div className="space-y-6 pb-10">
       {/* 页面顶部导航栏 */}
@@ -175,7 +176,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
             </Link>
           ))}
         </section>
-        
+
         <Separator />
 
         {/* 详细信息切换标签区 */}
@@ -185,7 +186,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
             <TabsTrigger value="applications">典型应用</TabsTrigger>
             <TabsTrigger value="parameters">关键参数</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="features" className="mt-4">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
@@ -210,13 +211,45 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
           </TabsContent>
 
           <TabsContent value="applications" className="mt-4">
-            <div className="space-y-3">
+            <div className="space-y-4">
               <h3 className="text-lg font-semibold">典型应用</h3>
-              <p className="text-sm text-muted-foreground">此部分内容正在准备中。</p>
+
+              {/* 典型应用电路图 */}
+              {chip.model === 'TPS563201' && (
+                <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-xl p-4 border border-blue-200/30 dark:border-blue-800/30">
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3">典型应用电路</h4>
+                  <div className="flex justify-center">
+                    <Image
+                      src="/brands/dxyy.png"
+                      alt="TPS563201典型应用电路图"
+                      width={400}
+                      height={300}
+                      className="rounded-lg shadow-md bg-white p-2"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 text-center">
+                    TPS563201 典型应用电路图
+                  </p>
+                </div>
+              )}
+
+              {/* 应用领域列表 */}
               {chip.applications && chip.applications.length > 0 && (
-                <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
-                  {chip.applications.map((app, i) => <li key={i}>{app}</li>)}
-                </ul>
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">应用领域</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {chip.applications.map((app, i) => (
+                      <div key={i} className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span className="text-sm text-gray-700 dark:text-gray-300">{app}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {(!chip.applications || chip.applications.length === 0) && chip.model !== 'TPS563201' && (
+                <p className="text-sm text-muted-foreground">此部分内容正在准备中。</p>
               )}
             </div>
           </TabsContent>
