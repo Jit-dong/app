@@ -109,12 +109,12 @@ const hotBrands = [
 
 // 热门产品分类
 const hotCategories = [
-  { name: '微控制器', icon: Cpu, count: '2800+', color: 'bg-blue-500' },
-  { name: '传感器', icon: Zap, count: '1200+', color: 'bg-green-500' },
-  { name: '通信芯片', icon: Wifi, count: '800+', color: 'bg-purple-500' },
-  { name: '电源管理', icon: Battery, count: '950+', color: 'bg-orange-500' },
-  { name: '处理器', icon: Microchip, count: '600+', color: 'bg-red-500' },
-  { name: '移动芯片', icon: Smartphone, count: '400+', color: 'bg-indigo-500' },
+  { name: '微控制器', icon: Cpu, count: '2800+', color: 'bg-orange-500' },
+  { name: '传感器', icon: Zap, count: '1200+', color: 'bg-blue-500' },
+  { name: '通信芯片', icon: Wifi, count: '800+', color: 'bg-orange-400' },
+  { name: '电源管理', icon: Battery, count: '950+', color: 'bg-blue-400' },
+  { name: '处理器', icon: Microchip, count: '600+', color: 'bg-orange-600' },
+  { name: '移动芯片', icon: Smartphone, count: '400+', color: 'bg-blue-600' },
 ];
 
 // 热门搜索关键词
@@ -224,7 +224,7 @@ export default function HomeContent() {
                   className={`
                     inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200
                     ${isActive
-                      ? 'bg-blue-500 text-white shadow-sm'
+                      ? 'bg-orange-500 text-white shadow-sm'
                       : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }
                   `}
@@ -348,7 +348,7 @@ export default function HomeContent() {
                   <div className="flex items-center justify-between">
                     <div className="text-2xl">{brand.logo}</div>
                     {brand.hot && (
-                      <Badge variant="destructive" className="text-xs">
+                      <Badge className="text-xs bg-orange-500 hover:bg-orange-600 text-white border-0">
                         <TrendingUp className="h-3 w-3 mr-1" />
                         热门
                       </Badge>
@@ -380,7 +380,7 @@ export default function HomeContent() {
       <Card className="shadow-md">
         <CardHeader className="py-4 px-4 border-b">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Cpu className="h-5 w-5 text-blue-500" />
+            <Cpu className="h-5 w-5 text-orange-500" />
             热门分类
           </CardTitle>
         </CardHeader>
@@ -426,7 +426,7 @@ export default function HomeContent() {
               <button
                 key={term}
                 onClick={() => handleSearch(term)}
-                className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:border-blue-300 dark:hover:border-blue-700 border border-gray-200 dark:border-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
+                className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-orange-50 dark:hover:bg-orange-950/30 hover:border-orange-300 dark:hover:border-orange-700 border border-gray-200 dark:border-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 {term}
               </button>
