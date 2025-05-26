@@ -129,256 +129,234 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
       </div>
 
       <div className="px-4 py-4 space-y-4">
-        {/* 芯片基本信息 - 紧凑布局 */}
+        {/* 芯片标题和基本信息 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-          <div className="flex items-start gap-3">
-            <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
-              <Cpu className="h-6 w-6 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                    {chip.model}
-                  </h2>
-                  <p className="text-sm text-blue-600 dark:text-blue-400">
-                    {chip.displayManufacturer}
-                  </p>
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {chip.model}
+                </h1>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-green-600 dark:text-green-400">正在供货</span>
                 </div>
-                <Badge variant="secondary" className="text-xs">
-                  {chip.lifecycleStatus || 'Active'}
-                </Badge>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 line-clamp-2">
+              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
                 {chip.displayDescription}
               </p>
             </div>
+            <div className="flex flex-col gap-2 ml-4">
+              <Button variant="outline" size="sm" className="text-blue-600 border-blue-200">
+                <Info className="h-4 w-4 mr-1" />
+                通知
+              </Button>
+              <Button className="bg-red-600 hover:bg-red-700 text-white">
+                立即订购
+              </Button>
+            </div>
+          </div>
+
+          {/* 数据手册链接 */}
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center gap-2 text-sm">
+              <FileText className="h-4 w-4 text-blue-600" />
+              <span className="text-gray-600 dark:text-gray-400">数据表</span>
+            </div>
+            <div className="ml-6 space-y-1">
+              <div className="flex items-center gap-2 text-sm">
+                <FileText className="h-4 w-4 text-blue-600" />
+                <Link href="#" className="text-blue-600 hover:underline">
+                  TPS56320x 采用 SOT-23 封装的 4.5V 至 17V 输入、3A 同步降压转换器 数据表 (Rev. B)
+                </Link>
+                <span className="text-gray-500">PDF | HTML</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm ml-6">
+                <FileText className="h-4 w-4 text-blue-600" />
+                <Link href="#" className="text-blue-600 hover:underline">
+                  英语版 (Rev.B)
+                </Link>
+                <span className="text-gray-500">PDF | HTML</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 导航标签 */}
+          <div className="flex gap-6 border-b border-gray-200 dark:border-gray-700">
+            <button className="pb-2 text-sm font-medium text-gray-900 dark:text-gray-100 border-b-2 border-gray-900 dark:border-gray-100">
+              产品详情
+            </button>
+            <button className="pb-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+              技术文档
+            </button>
+            <button className="pb-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+              设计和开发
+            </button>
+            <button className="pb-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+              订购和质量
+            </button>
+            <button className="pb-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+              支持和培训
+            </button>
           </div>
         </div>
 
-        {/* 芯片产品功能模块 - 严格按照层级图设计 */}
+        {/* 产品详情主要内容 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
-                <Cpu className="h-4 w-4 text-white" />
-              </div>
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100">芯片产品</h3>
-            </div>
-          </div>
+          <div className="p-4">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">产品详情</h2>
 
-          <div className="p-4 space-y-3">
-            {/* 基本信息 */}
-            <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <Info className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">基本信息</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">产品描述、厂商、生命周期、封装信息、规格书</p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-gray-400" />
-            </div>
+            {/* 产品详情标签页 */}
+            <Tabs defaultValue="parameters" className="w-full">
+              <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg mb-4">
+                <TabsTrigger value="parameters" className="text-sm">
+                  参数
+                </TabsTrigger>
+                <TabsTrigger value="package" className="text-sm">
+                  封装 | 引脚 | 尺寸
+                </TabsTrigger>
+                <TabsTrigger value="features" className="text-sm">
+                  特性
+                </TabsTrigger>
+                <TabsTrigger value="description" className="text-sm">
+                  说明
+                </TabsTrigger>
+              </TabsList>
 
-            {/* 产品详情 */}
-            <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-950/30 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                  <BookOpen className="h-4 w-4 text-white" />
+              {/* 参数标签页 */}
+              <TabsContent value="parameters" className="mt-0">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Rating</span>
+                      <span className="font-medium">Catalog</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Topology</span>
+                      <span className="font-medium">Buck</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Iout (max) (A)</span>
+                      <span className="font-medium">3</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Vin (max) (V)</span>
+                      <span className="font-medium">17</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Vin (min) (V)</span>
+                      <span className="font-medium">4.5</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Vout (max) (V)</span>
+                      <span className="font-medium">7</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Vout (min) (V)</span>
+                      <span className="font-medium">0.76</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Features</span>
+                      <span className="font-medium text-right">Enable, Light Load Efficiency, Soft Start Fixed, Synchronous Rectification</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Operating temperature range (°C)</span>
+                      <span className="font-medium">-40 to 125</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Switching frequency (min) (kHz)</span>
+                      <span className="font-medium">580</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Switching frequency (max) (kHz)</span>
+                      <span className="font-medium">580</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Iq (typ) (μA)</span>
+                      <span className="font-medium">400</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Control mode</span>
+                      <span className="font-medium">D-CAP2</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Duty cycle (max) (%)</span>
+                      <span className="font-medium">80</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="text-gray-600 dark:text-gray-400">Type</span>
+                      <span className="font-medium">Converter</span>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">产品详情</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">特性、说明、典型应用、典型应用电路图、封装引脚图、功能框图</p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-gray-400" />
-            </div>
+              </TabsContent>
 
-            {/* 功能参数 */}
-            <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-950/30 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                  <Settings className="h-4 w-4 text-white" />
+              {/* 封装标签页 */}
+              <TabsContent value="package" className="mt-0">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <div className="font-medium text-blue-600">SOT-23-THIN (DDC)</div>
+                    <div className="text-center">6</div>
+                    <div className="text-right">8.12 mm² 2.9 x 2.8</div>
+                  </div>
+                  <div className="flex items-center gap-2 text-blue-600">
+                    <GitBranch className="h-4 w-4" />
+                    <Link href="#" className="hover:underline">
+                      查找其他 AC/DC 和 DC/DC 转换器（集成 FET）
+                    </Link>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">功能参数</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">拓扑架构、参数指标、保护功能、辅助功能</p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-gray-400" />
-            </div>
+              </TabsContent>
 
-            {/* 相似产品 */}
-            <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-950/30 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                  <GitBranch className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">相似产品</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">完全兼容、p2p兼容、功能相似、封装相同、国产品牌、国外品牌、相同品牌</p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-gray-400" />
-            </div>
-
-            {/* 技术文章 */}
-            <div className="flex items-center justify-between p-3 bg-teal-50 dark:bg-teal-950/20 rounded-lg hover:bg-teal-100 dark:hover:bg-teal-950/30 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
-                  <FileImage className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">技术文章</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">应用指南、产品介绍、测试报告等</p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-gray-400" />
-            </div>
-
-            {/* 参考设计 */}
-            <div className="flex items-center justify-between p-3 bg-indigo-50 dark:bg-indigo-950/20 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-950/30 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
-                  <Code className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">参考设计</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">参考设计名称、介绍、SCH、PCB、BOM、测试报告等</p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-gray-400" />
-            </div>
-
-            {/* 设计开发 */}
-            <div className="flex items-center justify-between p-3 bg-pink-50 dark:bg-pink-950/20 rounded-lg hover:bg-pink-100 dark:hover:bg-pink-950/30 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
-                  <Target className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">设计开发</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">CAD符号、封装、仿真模型</p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-gray-400" />
-            </div>
-
-            {/* 产品订购 */}
-            <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-950/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-950/30 transition-colors cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
-                  <ShoppingCart className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">产品订购</h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">器件网络号、生命周期、工作温度、应用等级、环保等级、湿敏等级、采购渠道、价格、库存、交期</p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-gray-400" />
-            </div>
-          </div>
-        </div>
-
-        {/* 详细信息切换标签区 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-          <Tabs defaultValue="features" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg m-4 mb-0">
-              <TabsTrigger value="features" className="text-sm">
-                特性
-              </TabsTrigger>
-              <TabsTrigger value="applications" className="text-sm">
-                典型应用
-              </TabsTrigger>
-              <TabsTrigger value="parameters" className="text-sm">
-                关键参数
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="features" className="p-4">
-              <div className="space-y-2">
-                {featuresList.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded">
-                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div className="flex-1">
+              {/* 特性标签页 */}
+              <TabsContent value="features" className="mt-0">
+                <div className="space-y-2">
+                  {featuresList.map((feature, index) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-gray-600 rounded-full mt-2 flex-shrink-0"></div>
                       <p className="text-sm text-gray-700 dark:text-gray-300">
                         {feature.text}
                       </p>
-                      {feature.subItems && feature.subItems.length > 0 && (
-                        <div className="mt-1 ml-3 space-y-1">
-                          {feature.subItems.map((subItem, subIndex) => (
-                            <div key={subIndex} className="flex items-start gap-1">
-                              <div className="w-1 h-1 bg-gray-400 rounded-full mt-1.5 flex-shrink-0"></div>
-                              <p className="text-xs text-gray-600 dark:text-gray-400">{subItem}</p>
-                            </div>
-                          ))}
-                        </div>
-                      )}
                     </div>
+                  ))}
+                  <div className="mt-4 flex items-center gap-2 text-blue-600">
+                    <GitBranch className="h-4 w-4" />
+                    <Link href="#" className="hover:underline">
+                      查找其他 AC/DC 和 DC/DC 转换器（集成 FET）
+                    </Link>
                   </div>
-                ))}
-              </div>
-            </TabsContent>
+                </div>
+              </TabsContent>
 
-            <TabsContent value="applications" className="p-4">
-              <div className="space-y-4">
-                {/* 典型应用电路图 */}
-                {chip.model === 'TPS563201' && (
-                  <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3 text-sm">典型应用电路</h4>
-                    <div className="flex justify-center">
-                      <Image
-                        src="/brands/dxyy.png"
-                        alt="TPS563201典型应用电路图"
-                        width={300}
-                        height={200}
-                        className="rounded-lg bg-white p-2"
-                      />
-                    </div>
+              {/* 说明标签页 */}
+              <TabsContent value="description" className="mt-0">
+                <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <p>
+                    TPS563201 和 TPS563208 是采用小外形尺寸晶体管 (SOT)-23 封装的简单易用型 3A 同步降压转换器。
+                  </p>
+                  <p>
+                    这些器件的设计初衷是使用尽可能少的外部元件即可运行，还可以实现低待机电流。
+                  </p>
+                  <p>
+                    这些开关模式电源 (SMPS) 器件采用 D-CAP2 控制拓扑，从而提供快速瞬态响应，并且在无需外部补偿元件的情况下支持专用聚合物等低效串联电阻 (ESR) 输出电容器以及超低 ESR 陶瓷电容器。
+                  </p>
+                  <p>
+                    TPS563201 可在脉冲跳跃模式下运行，从而能在轻载运行期间保持高效率。TPS563201 和 TPS563208 采用 6 引脚 1.6mm x 2.9mm SOT (DDC) 封装，额定结温范围为 –40°C 至 125°C。
+                  </p>
+                  <div className="mt-4 flex items-center gap-2 text-blue-600">
+                    <GitBranch className="h-4 w-4" />
+                    <Link href="#" className="hover:underline">
+                      查找其他 AC/DC 和 DC/DC 转换器（集成 FET）
+                    </Link>
                   </div>
-                )}
-
-                {/* 应用领域列表 */}
-                {chip.applications && chip.applications.length > 0 && (
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2 text-sm">应用领域</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {chip.applications.map((app, i) => (
-                        <div key={i} className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded text-sm">
-                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-                          <span className="text-gray-700 dark:text-gray-300">{app}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {(!chip.applications || chip.applications.length === 0) && chip.model !== 'TPS563201' && (
-                  <p className="text-gray-500 dark:text-gray-400 text-sm text-center py-4">此部分内容正在准备中</p>
-                )}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="parameters" className="p-4">
-              <div className="space-y-2">
-                {chip.parameters && Object.keys(chip.parameters).length > 0 ? (
-                  Object.entries(chip.parameters).map(([key, value]) => (
-                    <div key={key} className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded">
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{key}</span>
-                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {value !== undefined ? String(value) : '-'}
-                      </span>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 dark:text-gray-400 text-sm text-center py-4">此部分内容正在准备中或无可用参数</p>
-                )}
-              </div>
-            </TabsContent>
-          </Tabs>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
+
       </div>
     </div>
   );
