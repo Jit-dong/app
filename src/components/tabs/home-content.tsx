@@ -301,27 +301,32 @@ export default function HomeContent() {
           {/* 热门品牌广告位 - 3x4布局 */}
           <Card className="shadow-lg">
             <CardHeader className="py-3 px-4 border-b">
-              <CardTitle className="text-lg flex items-center gap-2 text-center justify-center">
-                <Star className="h-5 w-5 text-orange-500" />
-                热门品牌
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Star className="h-5 w-5 text-orange-500" />
+                  热门品牌
+                </CardTitle>
+                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                  查看更多 <ChevronRight className="ml-1 h-4 w-4" />
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="p-4">
-              <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-4 gap-3">
                 {chipVendors.map((vendor, index) => (
                   <div
                     key={vendor.name}
                     onClick={() => handleVendorClick(vendor)}
                     className="group cursor-pointer"
                   >
-                    <div className="aspect-square flex flex-col items-center justify-center p-3 bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-200 hover:shadow-lg group-hover:scale-105">
+                    <div className="aspect-square flex flex-col items-center justify-center p-2 bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-200 hover:shadow-lg group-hover:scale-105">
                       <div className={cn(
-                        "w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-xs mb-1.5",
+                        "w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs mb-1",
                         vendor.color
                       )}>
                         {vendor.logo}
                       </div>
-                      <p className="text-xs text-center text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-medium leading-tight">
+                      <p className="text-xs text-center text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-medium leading-tight line-clamp-2">
                         {vendor.name}
                       </p>
                     </div>

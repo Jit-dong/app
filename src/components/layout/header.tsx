@@ -14,7 +14,7 @@ export default function Header() {
               <span className="text-xl font-semibold text-foreground group-hover:text-foreground/90 transition-colors">
                 Junction Magic
               </span>
-              <p className="text-xs text-muted-foreground hidden sm:block">www.JunctionMagic.com</p>
+
             </div>
           </Link>
           <div className="flex items-center gap-2">
@@ -26,7 +26,7 @@ export default function Header() {
             </Link>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground text-center pb-1 sm:hidden">www.JunctionMagic.com</p>
+
       </div>
     </header>
   );
