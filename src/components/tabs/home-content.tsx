@@ -25,7 +25,7 @@ import {
   Microchip,
   FileText,
   RefreshCw,
-  Sparkles,
+
   HelpCircle,
   SearchX
 } from 'lucide-react';
@@ -87,15 +87,10 @@ export default function HomeContent() {
   const [currentQuery, setCurrentQuery] = useState("");
   const [searchMode, setSearchMode] = useState<SearchMode>('datasheet');
   const [hasSearched, setHasSearched] = useState(false);
-  const [aiEnhanced, setAiEnhanced] = useState(false);
-  const [showAiTooltip, setShowAiTooltip] = useState(false);
 
-  const performSearch = (query: string, mode: SearchMode = searchMode, useAI: boolean = aiEnhanced) => {
+  const performSearch = (query: string, mode: SearchMode = searchMode) => {
     setIsLoading(true);
     setHasSearched(true);
-
-    // AI增强搜索需要更长时间
-    const searchDelay = useAI ? 1500 : 500;
 
     setTimeout(() => {
       // 根据搜索模式调用不同的搜索逻辑
@@ -117,13 +112,9 @@ export default function HomeContent() {
           results = searchChips(query);
       }
 
-      if (useAI) {
-        console.log('AI增强搜索已启用');
-      }
-
       setSearchResults(results);
       setIsLoading(false);
-    }, searchDelay);
+    }, 500);
   };
 
   const handleSearch = (query: string) => {
@@ -136,15 +127,6 @@ export default function HomeContent() {
     setSearchMode(mode);
     if (currentQuery.trim()) {
       performSearch(currentQuery, mode);
-    }
-  };
-
-  const handleAiToggle = () => {
-    const newAiState = !aiEnhanced;
-    setAiEnhanced(newAiState);
-
-    if (currentQuery.trim() && hasSearched) {
-      performSearch(currentQuery, searchMode, newAiState);
     }
   };
 
@@ -169,26 +151,11 @@ export default function HomeContent() {
       {/* 整体搜索功能卡片 */}
       <div className="flex justify-center">
         <div className="w-full max-w-4xl">
-          <Card className={`backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden relative transition-all duration-700 ${
-            aiEnhanced
-              ? 'bg-gradient-to-br from-white via-purple-50/40 to-indigo-50/30 dark:from-gray-900 dark:via-purple-950/30 dark:to-indigo-950/20 border border-purple-300/40 dark:border-purple-700/30'
-              : 'bg-gradient-to-br from-white via-blue-50/30 to-slate-50/20 dark:from-gray-900 dark:via-blue-950/20 dark:to-slate-950/10 border border-blue-200/30 dark:border-blue-800/20'
-          }`}>
-            {/* 动态装饰背景 */}
-            {aiEnhanced ? (
-              <>
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-400/8 via-indigo-400/8 to-violet-400/8 animate-pulse"></div>
-                <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-purple-400/15 to-transparent rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-indigo-400/15 to-transparent rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-r from-violet-400/10 to-purple-400/10 rounded-full blur-2xl animate-pulse"></div>
-              </>
-            ) : (
-              <>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 via-slate-400/5 to-gray-400/5"></div>
-                <div className="absolute top-0 left-0 w-36 h-36 bg-gradient-to-br from-blue-400/8 to-transparent rounded-full blur-2xl"></div>
-                <div className="absolute bottom-0 right-0 w-28 h-28 bg-gradient-to-tl from-slate-400/8 to-transparent rounded-full blur-2xl"></div>
-              </>
-            )}
+          <Card className="backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden relative transition-all duration-700 bg-gradient-to-br from-white via-blue-50/30 to-slate-50/20 dark:from-gray-900 dark:via-blue-950/20 dark:to-slate-950/10 border border-blue-200/30 dark:border-blue-800/20">
+            {/* 装饰背景 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 via-slate-400/5 to-gray-400/5"></div>
+            <div className="absolute top-0 left-0 w-36 h-36 bg-gradient-to-br from-blue-400/8 to-transparent rounded-full blur-2xl"></div>
+            <div className="absolute bottom-0 right-0 w-28 h-28 bg-gradient-to-tl from-slate-400/8 to-transparent rounded-full blur-2xl"></div>
 
             <CardContent className="relative p-5 space-y-3">
               {/* 搜索框区域 */}
@@ -198,10 +165,6 @@ export default function HomeContent() {
                   className="w-full"
                   placeholder={searchModes[searchMode].placeholder}
                   initialQuery={currentQuery}
-                  aiEnhanced={aiEnhanced}
-                  onAiToggle={handleAiToggle}
-                  showAiTooltip={showAiTooltip}
-                  onAiTooltipChange={setShowAiTooltip}
                 />
 
 
@@ -284,14 +247,6 @@ export default function HomeContent() {
               </div>
             )}
 
-            {/* AI增强提示 */}
-            {aiEnhanced && (
-              <div className="flex items-center gap-2 text-sm text-purple-600 bg-purple-50 dark:bg-purple-950/20 p-2 rounded-lg mb-3">
-                <Sparkles className="h-4 w-4" />
-                <span>AI增强搜索已启用，结果已智能优化</span>
-              </div>
-            )}
-
             {searchResults.map((chip, index) => (
               <ChipListItem
                 key={chip.id}
@@ -318,11 +273,6 @@ export default function HomeContent() {
               {searchMode === 'silkscreen' && '未找到该丝印对应的型号。请检查丝印是否正确或尝试其他丝印。'}
               {searchMode === 'brand' && '未找到该品牌的产品信息。请检查品牌名称是否正确或尝试其他品牌。'}
               {searchMode === 'alternative' && '未找到该芯片的替代方案。请检查型号是否正确或尝试其他型号。'}
-              {aiEnhanced && (
-                <div className="mt-2 text-purple-600">
-                  💡 AI建议：尝试使用更通用的关键词或检查拼写
-                </div>
-              )}
             </AlertDescription>
           </Alert>
         )
