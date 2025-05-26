@@ -72,7 +72,7 @@ export default function SearchBar({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className={`
-              w-full text-base md:text-sm pr-28 pl-4 py-3
+              w-full text-base md:text-sm pr-4 pl-4 py-3
               border-2 rounded-xl transition-all duration-300
               ${aiEnhanced
                 ? 'border-purple-300 dark:border-purple-700 bg-purple-50/50 dark:bg-purple-950/20 focus:border-purple-500 dark:focus:border-purple-400'
@@ -82,44 +82,7 @@ export default function SearchBar({
             aria-label="搜索查询"
           />
 
-          {/* AI图标 - 集成在搜索框内，向右偏移 */}
-          {onAiToggle && (
-            <div className="absolute right-16 top-1/2 transform -translate-y-1/2">
-              <div className="relative group">
-                <button
-                  type="button"
-                  onClick={handleAiClick}
-                  className={`
-                    p-2.5 rounded-xl transition-all duration-300 transform hover:scale-110 shadow-md
-                    ${aiEnhanced
-                      ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/25'
-                      : 'bg-white/90 dark:bg-gray-800/90 text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-950/30 border border-purple-200/50 dark:border-purple-800/30'
-                    }
-                  `}
-                  title={aiEnhanced ? "AI增强已启用" : "启用AI增强搜索"}
-                >
-                  {aiEnhanced ? (
-                    <Sparkles className="h-4 w-4 animate-pulse" />
-                  ) : (
-                    <Brain className="h-4 w-4" />
-                  )}
-                  {aiEnhanced && (
-                    <span className="absolute -top-1 -right-1 h-2 w-2 bg-green-400 rounded-full animate-pulse"></span>
-                  )}
-                </button>
 
-                {/* AI Tooltip */}
-                {showAiTooltip && (
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-50">
-                    <div className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
-                      试试AI智能搜索，结果更精准！
-                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900 dark:border-t-gray-100"></div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* 搜索按钮 */}
@@ -137,6 +100,46 @@ export default function SearchBar({
           <Search className="h-4 w-4 mr-0 sm:mr-2" />
           <span className="hidden sm:inline">搜索</span>
         </Button>
+
+        {/* AI按钮 - 独立位置 */}
+        {onAiToggle && (
+          <div className="relative ml-2">
+            <Button
+              type="button"
+              onClick={handleAiClick}
+              className={`
+                px-4 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 relative
+                ${aiEnhanced
+                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/25 hover:from-purple-600 hover:to-blue-600'
+                  : 'bg-white/90 dark:bg-gray-800/90 text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-950/30 border-2 border-purple-200/50 dark:border-purple-800/30 hover:border-purple-300/70'
+                }
+              `}
+              title={aiEnhanced ? "AI增强已启用" : "启用AI增强搜索"}
+            >
+              {aiEnhanced ? (
+                <Sparkles className="h-4 w-4 mr-0 sm:mr-2 animate-pulse" />
+              ) : (
+                <Brain className="h-4 w-4 mr-0 sm:mr-2" />
+              )}
+              <span className="hidden sm:inline">
+                {aiEnhanced ? "AI已启用" : "启用AI"}
+              </span>
+              {aiEnhanced && (
+                <span className="absolute -top-1 -right-1 h-2 w-2 bg-green-400 rounded-full animate-pulse"></span>
+              )}
+            </Button>
+
+            {/* AI Tooltip */}
+            {showAiTooltip && (
+              <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-50">
+                <div className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
+                  试试AI智能搜索，结果更精准！
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900 dark:border-t-gray-100"></div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </form>
   );
