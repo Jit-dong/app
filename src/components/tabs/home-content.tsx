@@ -165,9 +165,36 @@ export default function HomeContent() {
         </p>
       </div>
 
-      {/* 搜索模式切换器 - 醒目按钮设计 */}
+      {/* 突出的搜索框 */}
+      <div className="flex justify-center">
+        <div className="w-full max-w-4xl">
+          {/* 搜索框容器 - 突出显示 */}
+          <div className="relative p-6 bg-gradient-to-br from-white via-orange-50/30 to-amber-50/20 dark:from-gray-900 dark:via-orange-950/20 dark:to-amber-950/10 rounded-2xl shadow-xl border-2 border-orange-200/50 dark:border-orange-800/30 backdrop-blur-sm">
+            {/* 搜索框 */}
+            <div className="relative">
+              <SearchBar
+                onSearch={handleSearch}
+                className="w-full shadow-lg"
+                placeholder={searchModes[searchMode].placeholder}
+                initialQuery={currentQuery}
+                aiEnhanced={aiEnhanced}
+                onAiToggle={handleAiToggle}
+                showAiTooltip={showAiTooltip}
+                onAiTooltipChange={setShowAiTooltip}
+              />
+            </div>
+
+            {/* 当前模式描述 */}
+            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4 font-medium">
+              {searchModes[searchMode].description}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 搜索模式切换器 - 与搜索框和谐统一 */}
       <div className="flex items-center justify-center">
-        <div className="inline-flex rounded-2xl bg-gradient-to-r from-orange-100/80 via-amber-50/60 to-yellow-50/40 dark:from-orange-950/40 dark:via-amber-950/30 dark:to-yellow-950/20 backdrop-blur-md p-2 shadow-2xl border-2 border-orange-200/50 dark:border-orange-800/30">
+        <div className="inline-flex rounded-2xl bg-gradient-to-br from-white via-orange-50/30 to-amber-50/20 dark:from-gray-900 dark:via-orange-950/20 dark:to-amber-950/10 backdrop-blur-sm p-2 shadow-xl border-2 border-orange-200/50 dark:border-orange-800/30">
           {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
             const IconComponent = mode.icon;
             const isActive = searchMode === key;
@@ -176,65 +203,21 @@ export default function HomeContent() {
                 key={key}
                 onClick={() => handleModeChange(key as SearchMode)}
                 className={`
-                  inline-flex items-center gap-3 rounded-xl px-8 py-4 text-sm font-bold transition-all duration-300 transform relative overflow-hidden
+                  inline-flex items-center gap-3 rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-300 transform relative overflow-hidden
                   ${isActive
-                    ? 'bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 text-white shadow-2xl scale-110 ring-2 ring-orange-300/50 ring-offset-2 ring-offset-orange-50'
-                    : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 dark:hover:from-orange-950/20 dark:hover:to-amber-950/20 hover:scale-105 hover:shadow-xl border-2 border-orange-100/50 dark:border-orange-900/30 hover:border-orange-300/70'
+                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg scale-105 border-2 border-orange-400/50'
+                    : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 hover:scale-102 hover:shadow-md border-2 border-transparent hover:border-orange-200/50'
                   }
                 `}
               >
-                <IconComponent className={`h-5 w-5 ${isActive ? 'drop-shadow-sm' : ''}`} />
+                <IconComponent className={`h-4 w-4 ${isActive ? 'drop-shadow-sm' : ''}`} />
                 <span className="relative z-10">{mode.label}</span>
                 {isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-amber-400/20 animate-pulse"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400/10 to-amber-400/10 animate-pulse"></div>
                 )}
               </button>
             );
           })}
-        </div>
-      </div>
-
-      {/* 优雅的搜索框 */}
-      <div className="flex justify-center">
-        <div className="w-full max-w-4xl">
-          {/* 搜索框容器 - 温暖优雅的设计 */}
-          <div className="relative p-6 bg-gradient-to-br from-orange-50/80 via-amber-50/60 to-yellow-50/40 dark:from-orange-950/30 dark:via-amber-950/20 dark:to-yellow-950/10 rounded-3xl shadow-2xl border border-orange-100/50 dark:border-orange-900/30 backdrop-blur-sm">
-            {/* 柔和的光晕效果 */}
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-200/30 via-amber-200/20 to-yellow-200/30 rounded-3xl blur-xl -z-10"></div>
-
-            {/* 顶部装饰元素 */}
-            <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-orange-300 to-amber-300 rounded-full opacity-70"></div>
-
-            {/* 搜索框 */}
-            <div className="relative">
-              <SearchBar
-                onSearch={handleSearch}
-                className="w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border-0 shadow-xl rounded-2xl focus-within:shadow-2xl focus-within:scale-[1.01] transition-all duration-500 text-base py-4 ring-1 ring-orange-100/50 dark:ring-orange-900/30 focus-within:ring-orange-300/50"
-                placeholder={searchModes[searchMode].placeholder}
-                initialQuery={currentQuery}
-                aiEnhanced={aiEnhanced}
-                onAiToggle={handleAiToggle}
-                showAiTooltip={showAiTooltip}
-                onAiTooltipChange={setShowAiTooltip}
-              />
-
-              {/* 优雅的装饰线条 */}
-              <div className="absolute top-1/2 -left-1 transform -translate-y-1/2 w-0.5 h-12 bg-gradient-to-b from-orange-300 to-amber-300 rounded-full opacity-40"></div>
-              <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-0.5 h-12 bg-gradient-to-b from-amber-300 to-yellow-300 rounded-full opacity-40"></div>
-
-              {/* 角落装饰 */}
-              <div className="absolute -top-2 -left-2 w-3 h-3 border-l-2 border-t-2 border-orange-300/40 rounded-tl-lg"></div>
-              <div className="absolute -bottom-2 -right-2 w-3 h-3 border-r-2 border-b-2 border-amber-300/40 rounded-br-lg"></div>
-            </div>
-
-            {/* 当前模式描述 */}
-            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4 font-medium">
-              {searchModes[searchMode].description}
-            </p>
-
-            {/* 底部优雅装饰 */}
-            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-orange-300/50 to-transparent rounded-full"></div>
-          </div>
         </div>
       </div>
 
