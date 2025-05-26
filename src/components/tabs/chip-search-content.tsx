@@ -139,31 +139,33 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
   return (
     <div className="space-y-6">
-        {/* 搜索模式切换器 - 顶部显示 */}
-        <div className="flex items-center justify-center">
-          <div className="inline-flex rounded-xl bg-white dark:bg-gray-800 p-1 shadow-md border border-gray-200 dark:border-gray-700">
-            {Object.entries(searchModes).map(([key, mode]) => {
-              const IconComponent = mode.icon;
-              const isActive = searchMode === key;
-              return (
-                <button
-                  key={key}
-                  onClick={() => handleModeChange(key as SearchMode)}
-                  className={`
-                    inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200
-                    ${isActive
-                      ? 'bg-blue-500 text-white shadow-sm'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }
-                  `}
-                >
-                  <IconComponent className="h-4 w-4" />
-                  <span>{mode.label}</span>
-                </button>
-              );
-            })}
+        {/* 搜索模式切换器 - 只在非隐藏状态下显示 */}
+        {!hideSearchBar && (
+          <div className="flex items-center justify-center">
+            <div className="inline-flex rounded-xl bg-white dark:bg-gray-800 p-1 shadow-md border border-gray-200 dark:border-gray-700">
+              {Object.entries(searchModes).map(([key, mode]) => {
+                const IconComponent = mode.icon;
+                const isActive = searchMode === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => handleModeChange(key as SearchMode)}
+                    className={`
+                      inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200
+                      ${isActive
+                        ? 'bg-blue-500 text-white shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      }
+                    `}
+                  >
+                    <IconComponent className="h-4 w-4" />
+                    <span>{mode.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* 当前模式描述 */}
         {!hideSearchBar && (
