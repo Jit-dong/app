@@ -154,11 +154,20 @@ export default function HomeContent() {
   };
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="space-y-8 p-4">
+      {/* Slogan */}
+      <div className="text-center">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent mb-2">
+          芯片难题，魔力化解
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 text-sm">
+          专业的芯片查询与技术支持平台
+        </p>
+      </div>
 
-      {/* 搜索模式切换器 - 只显示三个选项 */}
+      {/* 搜索模式切换器 - 毛玻璃效果 */}
       <div className="flex items-center justify-center">
-        <div className="inline-flex rounded-xl bg-white dark:bg-gray-800 p-1 shadow-lg border border-gray-200 dark:border-gray-700">
+        <div className="inline-flex rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-1.5 shadow-xl border border-white/20 dark:border-gray-700/30">
           {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
             const IconComponent = mode.icon;
             const isActive = searchMode === key;
@@ -167,10 +176,10 @@ export default function HomeContent() {
                 key={key}
                 onClick={() => handleModeChange(key as SearchMode)}
                 className={`
-                  inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-medium transition-all duration-200
+                  inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold transition-all duration-300 transform
                   ${isActive
-                    ? 'bg-orange-500 text-white shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-white shadow-lg scale-105 backdrop-blur-sm'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-white/50 dark:hover:bg-gray-700/50 hover:scale-102 hover:shadow-md backdrop-blur-sm'
                   }
                 `}
               >
@@ -182,19 +191,22 @@ export default function HomeContent() {
         </div>
       </div>
 
-      {/* 高级突出的搜索框 */}
+      {/* 优雅的搜索框 */}
       <div className="flex justify-center">
         <div className="w-full max-w-4xl">
-          {/* 搜索框容器 - 使用渐变背景和发光效果 */}
-          <div className="relative p-4 bg-gradient-to-br from-orange-50 via-white to-blue-50 dark:from-orange-950/20 dark:via-gray-900 dark:to-blue-950/20 rounded-2xl shadow-2xl border border-orange-100 dark:border-orange-900/30">
-            {/* 发光边框效果 */}
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 via-transparent to-blue-400/20 rounded-2xl blur-sm -z-10"></div>
+          {/* 搜索框容器 - 温暖优雅的设计 */}
+          <div className="relative p-6 bg-gradient-to-br from-orange-50/80 via-amber-50/60 to-yellow-50/40 dark:from-orange-950/30 dark:via-amber-950/20 dark:to-yellow-950/10 rounded-3xl shadow-2xl border border-orange-100/50 dark:border-orange-900/30 backdrop-blur-sm">
+            {/* 柔和的光晕效果 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-200/30 via-amber-200/20 to-yellow-200/30 rounded-3xl blur-xl -z-10"></div>
+
+            {/* 顶部装饰元素 */}
+            <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-orange-300 to-amber-300 rounded-full opacity-70"></div>
 
             {/* 搜索框 */}
             <div className="relative">
               <SearchBar
                 onSearch={handleSearch}
-                className="w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-lg rounded-xl focus-within:shadow-xl focus-within:scale-[1.02] transition-all duration-300 text-base py-3"
+                className="w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border-0 shadow-xl rounded-2xl focus-within:shadow-2xl focus-within:scale-[1.01] transition-all duration-500 text-base py-4 ring-1 ring-orange-100/50 dark:ring-orange-900/30 focus-within:ring-orange-300/50"
                 placeholder={searchModes[searchMode].placeholder}
                 initialQuery={currentQuery}
                 aiEnhanced={aiEnhanced}
@@ -203,18 +215,22 @@ export default function HomeContent() {
                 onAiTooltipChange={setShowAiTooltip}
               />
 
-              {/* 装饰性元素 */}
-              <div className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full opacity-60 animate-pulse"></div>
-              <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full opacity-40 animate-pulse delay-1000"></div>
+              {/* 优雅的装饰元素 */}
+              <div className="absolute -top-3 -right-3 w-6 h-6 bg-gradient-to-br from-orange-300 to-amber-400 rounded-full opacity-20 animate-pulse"></div>
+              <div className="absolute -bottom-3 -left-3 w-4 h-4 bg-gradient-to-br from-amber-300 to-yellow-400 rounded-full opacity-15 animate-pulse delay-700"></div>
+
+              {/* 侧边装饰线 */}
+              <div className="absolute top-1/2 -left-1 transform -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-orange-300 to-amber-300 rounded-full opacity-30"></div>
+              <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-amber-300 to-yellow-300 rounded-full opacity-30"></div>
             </div>
 
             {/* 当前模式描述 */}
-            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-3 font-medium">
+            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4 font-medium">
               {searchModes[searchMode].description}
             </p>
 
-            {/* 底部装饰线 */}
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-gradient-to-r from-orange-400 to-blue-400 rounded-full opacity-60"></div>
+            {/* 底部优雅装饰 */}
+            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-orange-300/50 to-transparent rounded-full"></div>
           </div>
         </div>
       </div>
@@ -288,21 +304,21 @@ export default function HomeContent() {
         )
       ) : (
         // 默认内容：热门品牌广告位
-        <div className="space-y-4">
-          {/* 热门品牌广告位 - 3x4布局 */}
-          <Card className="shadow-lg">
-            <CardHeader className="py-3 px-4 border-b">
+        <div className="space-y-6">
+          {/* 热门品牌广告位 - 温暖优雅设计 */}
+          <Card className="shadow-xl bg-gradient-to-br from-white via-orange-50/30 to-amber-50/20 dark:from-gray-900 dark:via-orange-950/20 dark:to-amber-950/10 border-orange-100/50 dark:border-orange-900/30 backdrop-blur-sm">
+            <CardHeader className="py-4 px-6 border-b border-orange-100/50 dark:border-orange-900/30">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Star className="h-5 w-5 text-orange-500" />
+                <CardTitle className="text-xl flex items-center gap-3 bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent font-bold">
+                  <Star className="h-6 w-6 text-orange-500" />
                   热门品牌
                 </CardTitle>
-                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                <Button variant="ghost" size="sm" className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-all duration-300">
                   查看更多 <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="grid grid-cols-4 gap-3">
                 {chipVendors.map((vendor, index) => (
                   <div
@@ -310,24 +326,25 @@ export default function HomeContent() {
                     onClick={() => handleVendorClick(vendor)}
                     className="group cursor-pointer"
                   >
-                    <div className="aspect-square flex flex-col items-center justify-center p-2 bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-200 hover:shadow-lg group-hover:scale-105">
+                    <div className="aspect-square flex flex-col items-center justify-center p-3 bg-gradient-to-br from-white via-orange-50/20 to-amber-50/10 dark:from-gray-800 dark:via-orange-950/10 dark:to-amber-950/5 rounded-2xl border border-orange-100/50 dark:border-orange-900/30 hover:border-orange-300/70 dark:hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl group-hover:scale-110 hover:-translate-y-1 backdrop-blur-sm">
                       <div className={cn(
-                        "w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs mb-1",
+                        "w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm mb-2 shadow-lg",
                         vendor.color
                       )}>
                         {vendor.logo}
                       </div>
-                      <p className="text-xs text-center text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-medium leading-tight">
+                      <p className="text-xs text-center text-gray-700 dark:text-gray-300 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-semibold leading-tight">
                         {vendor.shortName}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="text-center mt-4">
-                <p className="text-sm text-muted-foreground">
+              <div className="text-center mt-6">
+                <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                   点击品牌logo快速搜索相关产品
                 </p>
+                <div className="mt-2 w-16 h-0.5 bg-gradient-to-r from-orange-300 to-amber-300 rounded-full mx-auto opacity-60"></div>
               </div>
             </CardContent>
           </Card>
