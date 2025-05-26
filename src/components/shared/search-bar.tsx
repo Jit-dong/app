@@ -63,83 +63,104 @@ export default function SearchBar({
 
   return (
     <form onSubmit={handleSubmit} className={`relative w-full ${className}`}>
-      <div className="relative flex items-center">
-        {/* 搜索输入框 */}
-        <div className="relative flex-1">
-          <Input
-            type="search"
-            placeholder={dynamicPlaceholder}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className={`
-              w-full text-base md:text-sm pr-4 pl-4 py-3
-              border-2 rounded-xl transition-all duration-300
-              ${aiEnhanced
-                ? 'border-purple-300 dark:border-purple-700 bg-purple-50/50 dark:bg-purple-950/20 focus:border-purple-500 dark:focus:border-purple-400'
-                : 'border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400'
-              }
-            `}
-            aria-label="搜索查询"
-          />
+      {/* 艺术品级搜索容器 */}
+      <div className="relative group">
+        {/* 背景光晕效果 */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 rounded-2xl blur-sm opacity-30 group-hover:opacity-50 transition-all duration-500"></div>
 
+        {/* 主搜索容器 */}
+        <div className="relative bg-white dark:bg-gray-900 rounded-2xl border-2 border-orange-200/50 dark:border-orange-800/30 shadow-xl backdrop-blur-sm overflow-hidden">
+          {/* 内部渐变装饰 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-50/30 via-amber-50/20 to-yellow-50/30 dark:from-orange-950/20 dark:via-amber-950/10 dark:to-yellow-950/20"></div>
 
-        </div>
+          {/* 搜索内容区 */}
+          <div className="relative flex items-center p-2">
+            {/* 搜索图标装饰 */}
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/50 dark:to-amber-900/50 ml-2">
+              <Search className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+            </div>
 
-        {/* 搜索按钮 */}
-        <Button
-          type="submit"
-          className={`
-            ml-2 px-4 py-3 rounded-xl transition-all duration-300
-            ${aiEnhanced
-              ? 'bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600'
-              : 'bg-blue-500 hover:bg-blue-600'
-            }
-          `}
-          aria-label="搜索"
-        >
-          <Search className="h-4 w-4 mr-0 sm:mr-2" />
-          <span className="hidden sm:inline">搜索</span>
-        </Button>
+            {/* 搜索输入框 */}
+            <div className="flex-1 mx-3">
+              <Input
+                type="search"
+                placeholder={dynamicPlaceholder}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className={`
+                  w-full text-base font-medium border-0 bg-transparent focus:ring-0 focus:outline-none
+                  placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:font-normal
+                  ${aiEnhanced
+                    ? 'text-purple-700 dark:text-purple-300 placeholder:text-purple-400 dark:placeholder:text-purple-500'
+                    : 'text-gray-800 dark:text-gray-200'
+                  }
+                `}
+                aria-label="搜索查询"
+              />
+            </div>
 
-        {/* AI按钮 - 独立位置 */}
-        {onAiToggle && (
-          <div className="relative ml-2">
+            {/* 分隔线 */}
+            <div className="w-px h-8 bg-gradient-to-b from-transparent via-orange-300/50 to-transparent dark:via-orange-700/50"></div>
+
+            {/* 搜索按钮 */}
             <Button
-              type="button"
-              onClick={handleAiClick}
+              type="submit"
               className={`
-                px-4 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 relative
+                mx-2 px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg
                 ${aiEnhanced
-                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/25 hover:from-purple-600 hover:to-blue-600'
-                  : 'bg-white/90 dark:bg-gray-800/90 text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-950/30 border-2 border-purple-200/50 dark:border-purple-800/30 hover:border-purple-300/70'
+                  ? 'bg-gradient-to-r from-purple-500 via-purple-600 to-blue-600 hover:from-purple-600 hover:via-purple-700 hover:to-blue-700 text-white shadow-purple-500/25'
+                  : 'bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:via-orange-700 hover:to-amber-700 text-white shadow-orange-500/25'
                 }
               `}
-              title={aiEnhanced ? "AI增强已启用" : "启用AI增强搜索"}
+              aria-label="搜索"
             >
-              {aiEnhanced ? (
-                <Sparkles className="h-4 w-4 mr-0 sm:mr-2 animate-pulse" />
-              ) : (
-                <Brain className="h-4 w-4 mr-0 sm:mr-2" />
-              )}
-              <span className="hidden sm:inline">
-                {aiEnhanced ? "AI已启用" : "启用AI"}
-              </span>
-              {aiEnhanced && (
-                <span className="absolute -top-1 -right-1 h-2 w-2 bg-green-400 rounded-full animate-pulse"></span>
-              )}
+              <span className="text-sm font-bold">搜索</span>
             </Button>
 
-            {/* AI Tooltip */}
-            {showAiTooltip && (
-              <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-50">
-                <div className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
-                  试试AI智能搜索，结果更精准！
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900 dark:border-t-gray-100"></div>
-                </div>
+            {/* AI按钮 - 独立位置 */}
+            {onAiToggle && (
+              <div className="relative">
+                <Button
+                  type="button"
+                  onClick={handleAiClick}
+                  className={`
+                    px-4 py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 relative shadow-lg mr-2
+                    ${aiEnhanced
+                      ? 'bg-gradient-to-r from-purple-500 via-purple-600 to-blue-600 text-white shadow-purple-500/25 hover:from-purple-600 hover:via-purple-700 hover:to-blue-700'
+                      : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 text-purple-600 dark:text-purple-400 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-950/50 dark:hover:to-purple-900/50 border border-purple-200/50 dark:border-purple-800/30'
+                    }
+                  `}
+                  title={aiEnhanced ? "AI增强已启用" : "启用AI增强搜索"}
+                >
+                  {aiEnhanced ? (
+                    <Sparkles className="h-4 w-4 animate-pulse" />
+                  ) : (
+                    <Brain className="h-4 w-4" />
+                  )}
+                  {aiEnhanced && (
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-400 rounded-full animate-pulse border-2 border-white dark:border-gray-900"></span>
+                  )}
+                </Button>
+
+                {/* AI Tooltip */}
+                {showAiTooltip && (
+                  <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 z-50">
+                    <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm px-4 py-3 rounded-xl whitespace-nowrap shadow-2xl border border-purple-400/30">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 animate-pulse" />
+                        <span className="font-medium">试试AI智能搜索，结果更精准！</span>
+                      </div>
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-purple-600"></div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
-        )}
+
+          {/* 底部装饰线 */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 opacity-60"></div>
+        </div>
       </div>
     </form>
   );

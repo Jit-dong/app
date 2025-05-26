@@ -169,12 +169,12 @@ export default function HomeContent() {
       <div className="flex justify-center">
         <div className="w-full max-w-4xl">
           <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-2xl border-2 border-orange-100/50 dark:border-orange-900/30 rounded-3xl overflow-hidden">
-            <CardContent className="p-8 space-y-6">
+            <CardContent className="p-6 space-y-5">
               {/* 搜索框区域 */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <SearchBar
                   onSearch={handleSearch}
-                  className="w-full shadow-lg"
+                  className="w-full"
                   placeholder={searchModes[searchMode].placeholder}
                   initialQuery={currentQuery}
                   aiEnhanced={aiEnhanced}
