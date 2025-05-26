@@ -21,7 +21,7 @@ AI驱动的电子元件规格和建议助手
 
 ### 1. 克隆项目
 ```bash
-git clone https://github.com/Jit-dong/app.git
+git clone https://codeup.aliyun.com/67f693658330212176aeda55/FE/demo-fe.git
 cd app
 ```
 
