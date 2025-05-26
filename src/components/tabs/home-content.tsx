@@ -31,7 +31,7 @@ import {
 import { cn } from '@/lib/utils';
 
 // 搜索模式类型定义
-type SearchMode = 'datasheet' | 'silkscreen' | 'brand';
+type SearchMode = 'datasheet' | 'silkscreen' | 'brand' | 'alternative';
 
 // 搜索模式配置
 const searchModes = {
@@ -52,76 +52,32 @@ const searchModes = {
     icon: RefreshCw,
     placeholder: '输入品牌名称查看产品线',
     description: '查看品牌的产品系列和热门型号'
+  },
+  alternative: {
+    label: '查替代',
+    icon: Microchip,
+    placeholder: '输入芯片型号查找替代品',
+    description: '查找芯片的替代型号和兼容产品'
   }
 };
 
-// 热门品牌数据
-const hotBrands = [
-  {
-    name: 'STMicroelectronics',
-    logo: '🔷',
-    products: '1200+',
-    hot: true,
-    category: '微控制器',
-    description: '全球领先的半导体解决方案供应商'
-  },
-  {
-    name: 'Texas Instruments',
-    logo: '🔶',
-    products: '980+',
-    hot: true,
-    category: '模拟芯片',
-    description: '模拟和嵌入式处理技术领导者'
-  },
-  {
-    name: 'Espressif',
-    logo: '🟢',
-    products: '45+',
-    hot: true,
-    category: 'WiFi芯片',
-    description: 'ESP32系列WiFi+蓝牙芯片专家'
-  },
-  {
-    name: 'Microchip',
-    logo: '🔴',
-    products: '750+',
-    hot: false,
-    category: 'MCU',
-    description: 'PIC和AVR微控制器制造商'
-  },
-  {
-    name: 'Analog Devices',
-    logo: '🟡',
-    products: '650+',
-    hot: false,
-    category: '模拟器件',
-    description: '高性能模拟、混合信号处理专家'
-  },
-  {
-    name: 'Infineon',
-    logo: '🟣',
-    products: '420+',
-    hot: false,
-    category: '功率器件',
-    description: '功率半导体和安全解决方案'
-  },
+// 芯片商家广告位数据 (3x4布局)
+const chipVendors = [
+  { name: 'STMicroelectronics', logo: 'ST', color: 'bg-blue-600' },
+  { name: 'Texas Instruments', logo: 'TI', color: 'bg-red-600' },
+  { name: 'Espressif', logo: 'ESP', color: 'bg-green-600' },
+  { name: 'Microchip', logo: 'MCU', color: 'bg-orange-600' },
+  { name: 'Analog Devices', logo: 'ADI', color: 'bg-purple-600' },
+  { name: 'Infineon', logo: 'IFX', color: 'bg-indigo-600' },
+  { name: 'NXP', logo: 'NXP', color: 'bg-teal-600' },
+  { name: 'Broadcom', logo: 'BCM', color: 'bg-pink-600' },
+  { name: 'Qualcomm', logo: 'QC', color: 'bg-cyan-600' },
+  { name: 'Intel', logo: 'INTC', color: 'bg-gray-600' },
+  { name: 'AMD', logo: 'AMD', color: 'bg-red-500' },
+  { name: 'NVIDIA', logo: 'NVDA', color: 'bg-green-500' },
 ];
 
-// 热门产品分类
-const hotCategories = [
-  { name: '微控制器', icon: Cpu, count: '2800+', color: 'bg-orange-500' },
-  { name: '传感器', icon: Zap, count: '1200+', color: 'bg-blue-500' },
-  { name: '通信芯片', icon: Wifi, count: '800+', color: 'bg-orange-400' },
-  { name: '电源管理', icon: Battery, count: '950+', color: 'bg-blue-400' },
-  { name: '处理器', icon: Microchip, count: '600+', color: 'bg-orange-600' },
-  { name: '移动芯片', icon: Smartphone, count: '400+', color: 'bg-blue-600' },
-];
 
-// 热门搜索关键词
-const hotSearchTerms = [
-  'STM32F407', 'ESP32', 'TPS5430', 'LM358', 'AMS1117', 'ATmega328P',
-  'NE555', 'LM2596', 'CH340', 'ESP8266', 'STM32F103', 'Arduino'
-];
 
 export default function HomeContent() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -151,6 +107,9 @@ export default function HomeContent() {
           results = searchChips(query);
           break;
         case 'brand':
+          results = searchChips(query);
+          break;
+        case 'alternative':
           results = searchChips(query);
           break;
         default:
@@ -188,67 +147,56 @@ export default function HomeContent() {
     }
   };
 
-  const handleBrandClick = (brand: any) => {
-    console.log('点击品牌:', brand.name);
-    // 这里可以跳转到品牌页面
-  };
-
-  const handleCategoryClick = (category: any) => {
-    console.log('点击分类:', category.name);
-    // 这里可以跳转到分类页面
+  const handleVendorClick = (vendor: any) => {
+    console.log('点击商家:', vendor.name);
+    // 这里可以跳转到商家页面或执行搜索
+    handleSearch(vendor.name);
   };
 
   return (
-    <div className="space-y-6 p-4">
-      {/* 顶部搜索区域 */}
-      <div className="space-y-4">
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            芯片查询助手
-          </h1>
-          <p className="text-muted-foreground">
-            快速查找芯片资料、替代品和技术参数
-          </p>
-        </div>
+    <div className="space-y-8 p-4">
+      {/* 简洁的引导语 */}
+      <div className="text-center space-y-3">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          芯片智能查询
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          快速查找芯片资料、丝印反查、品牌搜索、替代方案
+        </p>
+      </div>
 
-        {/* 搜索模式切换器 */}
-        <div className="flex items-center justify-center">
-          <div className="inline-flex rounded-xl bg-white dark:bg-gray-800 p-1 shadow-md border border-gray-200 dark:border-gray-700">
-            {Object.entries(searchModes).map(([key, mode]) => {
-              const IconComponent = mode.icon;
-              const isActive = searchMode === key;
-              return (
-                <button
-                  key={key}
-                  onClick={() => handleModeChange(key as SearchMode)}
-                  className={`
-                    inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200
-                    ${isActive
-                      ? 'bg-orange-500 text-white shadow-sm'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }
-                  `}
-                >
-                  <IconComponent className="h-4 w-4" />
-                  <span>{mode.label}</span>
-                </button>
-              );
-            })}
-          </div>
+      {/* 搜索模式切换器 - 只显示三个选项 */}
+      <div className="flex items-center justify-center">
+        <div className="inline-flex rounded-xl bg-white dark:bg-gray-800 p-1 shadow-lg border border-gray-200 dark:border-gray-700">
+          {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
+            const IconComponent = mode.icon;
+            const isActive = searchMode === key;
+            return (
+              <button
+                key={key}
+                onClick={() => handleModeChange(key as SearchMode)}
+                className={`
+                  inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-medium transition-all duration-200
+                  ${isActive
+                    ? 'bg-orange-500 text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  }
+                `}
+              >
+                <IconComponent className="h-4 w-4" />
+                <span>{mode.label}</span>
+              </button>
+            );
+          })}
         </div>
+      </div>
 
-        {/* 当前模式描述 */}
-        <div className="text-center">
-          <p className="text-muted-foreground">
-            {searchModes[searchMode].description}
-          </p>
-        </div>
-
-        {/* 搜索框 */}
-        <div className="flex justify-center">
+      {/* 突出的搜索框 */}
+      <div className="flex justify-center">
+        <div className="w-full max-w-3xl">
           <SearchBar
             onSearch={handleSearch}
-            className="w-full max-w-2xl"
+            className="w-full shadow-xl border-2 border-orange-200 dark:border-orange-800 focus-within:border-orange-400 dark:focus-within:border-orange-600"
             placeholder={searchModes[searchMode].placeholder}
             initialQuery={currentQuery}
             aiEnhanced={aiEnhanced}
@@ -256,6 +204,10 @@ export default function HomeContent() {
             showAiTooltip={showAiTooltip}
             onAiTooltipChange={setShowAiTooltip}
           />
+          {/* 当前模式描述 */}
+          <p className="text-center text-sm text-muted-foreground mt-2">
+            {searchModes[searchMode].description}
+          </p>
         </div>
       </div>
 
@@ -276,6 +228,11 @@ export default function HomeContent() {
             {searchMode === 'brand' && currentQuery && (
               <div className="text-sm text-muted-foreground mb-3">
                 <span className="font-medium">{currentQuery}</span> 品牌产品：
+              </div>
+            )}
+            {searchMode === 'alternative' && currentQuery && (
+              <div className="text-sm text-muted-foreground mb-3">
+                <span className="font-medium">{currentQuery}</span> 的替代方案：
               </div>
             )}
 
@@ -306,11 +263,13 @@ export default function HomeContent() {
               {searchMode === 'datasheet' && '未找到芯片'}
               {searchMode === 'silkscreen' && '未找到对应型号'}
               {searchMode === 'brand' && '未找到品牌产品'}
+              {searchMode === 'alternative' && '未找到替代方案'}
             </AlertTitle>
             <AlertDescription>
               {searchMode === 'datasheet' && '没有芯片符合您的搜索条件。请尝试不同的关键词。'}
               {searchMode === 'silkscreen' && '未找到该丝印对应的型号。请检查丝印是否正确或尝试其他丝印。'}
               {searchMode === 'brand' && '未找到该品牌的产品信息。请检查品牌名称是否正确或尝试其他品牌。'}
+              {searchMode === 'alternative' && '未找到该芯片的替代方案。请检查型号是否正确或尝试其他型号。'}
               {aiEnhanced && (
                 <div className="mt-2 text-purple-600">
                   💡 AI建议：尝试使用更通用的关键词或检查拼写
@@ -320,120 +279,45 @@ export default function HomeContent() {
           </Alert>
         )
       ) : (
-        // 默认内容：热门品牌和分类
+        // 默认内容：芯片商家广告位
         <div className="space-y-6">
-
-      {/* 热门品牌区域 */}
-      <Card className="shadow-md">
-        <CardHeader className="py-4 px-4 border-b">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Star className="h-5 w-5 text-yellow-500" />
-              热门品牌
-            </CardTitle>
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              更多 <ChevronRight className="ml-1 h-4 w-4" />
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="p-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {hotBrands.map((brand, index) => (
-              <div
-                key={brand.name}
-                onClick={() => handleBrandClick(brand)}
-                className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 cursor-pointer group"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="text-2xl">{brand.logo}</div>
-                    {brand.hot && (
-                      <Badge className="text-xs bg-orange-500 hover:bg-orange-600 text-white border-0">
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        热门
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="font-medium text-sm leading-tight group-hover:text-accent transition-colors">
-                      {brand.name}
-                    </h4>
-                    <p className="text-xs text-muted-foreground">{brand.category}</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
-                      {brand.description}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                        {brand.products} 产品
-                      </span>
-                      <ChevronRight className="h-3 w-3 text-muted-foreground group-hover:text-accent transition-colors" />
+          {/* 芯片商家广告位 - 3x4布局 */}
+          <Card className="shadow-lg">
+            <CardHeader className="py-4 px-6 border-b">
+              <CardTitle className="text-xl flex items-center gap-2 text-center justify-center">
+                <Microchip className="h-6 w-6 text-orange-500" />
+                合作芯片商家
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
+                {chipVendors.map((vendor, index) => (
+                  <div
+                    key={vendor.name}
+                    onClick={() => handleVendorClick(vendor)}
+                    className="group cursor-pointer"
+                  >
+                    <div className="aspect-square flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-200 hover:shadow-lg group-hover:scale-105">
+                      <div className={cn(
+                        "w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-sm mb-2",
+                        vendor.color
+                      )}>
+                        {vendor.logo}
+                      </div>
+                      <p className="text-xs text-center text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-medium">
+                        {vendor.name}
+                      </p>
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 产品分类区域 */}
-      <Card className="shadow-md">
-        <CardHeader className="py-4 px-4 border-b">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Cpu className="h-5 w-5 text-orange-500" />
-            热门分类
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {hotCategories.map((category, index) => {
-              const IconComponent = category.icon;
-              return (
-                <div
-                  key={category.name}
-                  onClick={() => handleCategoryClick(category)}
-                  className="p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 cursor-pointer group"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={cn("p-2 rounded-lg", category.color)}>
-                      <IconComponent className="h-4 w-4 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-sm group-hover:text-accent transition-colors">
-                        {category.name}
-                      </h4>
-                      <p className="text-xs text-muted-foreground">{category.count}</p>
-                    </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-accent transition-colors" />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 热门搜索 - 移到最后 */}
-      <Card className="shadow-md">
-        <CardHeader className="py-4 px-4 border-b">
-          <CardTitle className="text-lg flex items-center gap-2">
-            🔥 热门搜索
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-4">
-          <div className="flex flex-wrap gap-2">
-            {hotSearchTerms.map((term) => (
-              <button
-                key={term}
-                onClick={() => handleSearch(term)}
-                className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-orange-50 dark:hover:bg-orange-950/30 hover:border-orange-300 dark:hover:border-orange-700 border border-gray-200 dark:border-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
-              >
-                {term}
-              </button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              <div className="text-center mt-6">
+                <p className="text-sm text-muted-foreground">
+                  点击商家logo快速搜索相关产品
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>
