@@ -167,92 +167,131 @@ export default function AiChipAssistantModal({ isOpen, onOpenChange }: AiChipAss
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[520px] p-0 flex flex-col h-[75vh] max-h-[650px] overflow-hidden">
-        <DialogHeader className="p-5 border-b bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 dark:from-blue-950/30 dark:via-purple-950/30 dark:to-indigo-950/30">
-          <DialogTitle className="flex items-center gap-3 text-lg font-semibold">
-            <div className="p-2 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg">
-              <Sparkles className="h-5 w-5" />
+      <DialogContent className="sm:max-w-[600px] p-0 flex flex-col h-[80vh] max-h-[700px] overflow-hidden border-0 shadow-2xl bg-gradient-to-br from-white via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-blue-950/30 dark:to-purple-950/20">
+        <DialogHeader className="p-6 border-b border-blue-200/40 dark:border-blue-800/40 bg-gradient-to-r from-blue-50/80 via-purple-50/60 to-indigo-50/80 dark:from-blue-950/40 dark:via-purple-950/40 dark:to-indigo-950/40 backdrop-blur-sm">
+          <DialogTitle className="flex items-center gap-4 text-xl font-bold">
+            <div className="relative">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 text-white shadow-xl">
+                <Sparkles className="h-6 w-6" />
+              </div>
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full border-2 border-white dark:border-gray-900 shadow-sm animate-pulse"></div>
             </div>
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              AI 智能芯片分类顾问
-            </span>
+            <div className="flex flex-col">
+              <span className="bg-gradient-to-r from-blue-700 via-purple-700 to-indigo-700 dark:from-blue-400 dark:via-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                AI 智能芯片分类顾问
+              </span>
+              <span className="text-sm font-normal text-gray-600 dark:text-gray-300 mt-1">
+                小智 • 在线为您服务
+              </span>
+            </div>
           </DialogTitle>
         </DialogHeader>
 
-        <ScrollArea className="flex-grow p-5 space-y-5 bg-gradient-to-b from-gray-50/30 to-white dark:from-gray-900/30 dark:to-gray-950" ref={chatAreaRef}>
+        <ScrollArea className="flex-grow p-6 space-y-6 bg-gradient-to-b from-gray-50/20 via-white/50 to-blue-50/20 dark:from-gray-900/20 dark:via-gray-950/50 dark:to-blue-950/20" ref={chatAreaRef}>
           {messages.map((msg) => (
             <div
               key={msg.id}
               className={cn(
-                "flex items-end gap-3 mb-4 max-w-[88%] animate-in slide-in-from-bottom-2 duration-300",
+                "flex items-end gap-4 mb-6 max-w-[90%] animate-in slide-in-from-bottom-3 duration-500",
                 msg.sender === 'user' ? "ml-auto flex-row-reverse" : "mr-auto"
               )}
             >
               {msg.sender === 'ai' && (
-                <div className="p-2.5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg self-end mb-1 shrink-0 ring-2 ring-blue-200 dark:ring-blue-800">
-                  <Cpu size={20} />
+                <div className="relative">
+                  <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 text-white shadow-xl self-end mb-1 shrink-0 ring-3 ring-blue-200/50 dark:ring-blue-800/50">
+                    <Cpu size={22} />
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full border-2 border-white dark:border-gray-900"></div>
                 </div>
               )}
               {msg.sender === 'user' && (
-                <div className="p-2.5 rounded-full bg-gradient-to-br from-orange-400 to-red-500 text-white shadow-lg self-end mb-1 shrink-0 ring-2 ring-orange-200 dark:ring-orange-800">
-                  <User size={18} />
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 text-white shadow-xl self-end mb-1 shrink-0 ring-3 ring-orange-200/50 dark:ring-orange-800/50">
+                  <User size={20} />
                 </div>
               )}
               <div
                 className={cn(
-                  "px-4 py-3 rounded-2xl text-sm shadow-lg backdrop-blur-sm border",
+                  "px-5 py-4 rounded-2xl text-sm shadow-xl backdrop-blur-sm border-2 relative",
                   msg.sender === 'user'
-                    ? "bg-gradient-to-br from-orange-500 to-red-500 text-white rounded-br-md shadow-orange-200/50 dark:shadow-orange-900/50 border-orange-300/50"
-                    : "bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/50 dark:to-purple-950/50 text-gray-800 dark:text-gray-200 rounded-bl-md shadow-blue-200/50 dark:shadow-blue-900/50 border-blue-200/50 dark:border-blue-800/50"
+                    ? "bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 text-white rounded-br-lg shadow-orange-300/30 dark:shadow-orange-900/30 border-orange-400/30"
+                    : "bg-gradient-to-br from-white via-blue-50/80 to-purple-50/60 dark:from-blue-950/60 dark:via-purple-950/40 dark:to-indigo-950/60 text-gray-800 dark:text-gray-200 rounded-bl-lg shadow-blue-300/30 dark:shadow-blue-900/30 border-blue-300/30 dark:border-blue-700/30"
                 )}
               >
+                {/* 消息气泡尾巴 */}
                 <div className={cn(
-                  "prose prose-sm max-w-none",
+                  "absolute w-0 h-0 border-solid",
                   msg.sender === 'user'
-                    ? "prose-invert [&_p]:text-white [&_strong]:text-white [&_li]:text-white"
-                    : "prose-gray dark:prose-invert [&_p]:text-gray-800 dark:[&_p]:text-gray-200 [&_strong]:text-blue-700 dark:[&_strong]:text-blue-300 [&_li]:text-gray-700 dark:[&_li]:text-gray-300"
+                    ? "bottom-0 right-0 border-l-[12px] border-l-transparent border-t-[12px] border-t-orange-500"
+                    : "bottom-0 left-0 border-r-[12px] border-r-transparent border-t-[12px] border-t-white dark:border-t-blue-950/60"
+                )}></div>
+
+                <div className={cn(
+                  "prose prose-sm max-w-none leading-relaxed",
+                  msg.sender === 'user'
+                    ? "prose-invert [&_p]:text-white [&_strong]:text-white [&_li]:text-white [&_p]:font-medium"
+                    : "prose-gray dark:prose-invert [&_p]:text-gray-800 dark:[&_p]:text-gray-200 [&_strong]:text-blue-700 dark:[&_strong]:text-blue-300 [&_li]:text-gray-700 dark:[&_li]:text-gray-300 [&_p]:font-medium"
                 )}>
-                  {typeof msg.text === 'string' ? <p className="whitespace-pre-wrap break-words leading-relaxed">{msg.text}</p> : msg.text}
+                  {typeof msg.text === 'string' ? <p className="whitespace-pre-wrap break-words">{msg.text}</p> : msg.text}
                 </div>
               </div>
             </div>
           ))}
           {isAiThinking && (
-            <div className="flex items-end gap-3 mb-4 mr-auto max-w-[88%] animate-in slide-in-from-bottom-2 duration-300">
-              <div className="p-2.5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg self-end mb-1 shrink-0 ring-2 ring-blue-200 dark:ring-blue-800">
-                <Cpu size={20} />
+            <div className="flex items-end gap-4 mb-6 mr-auto max-w-[90%] animate-in slide-in-from-bottom-3 duration-500">
+              <div className="relative">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 text-white shadow-xl self-end mb-1 shrink-0 ring-3 ring-blue-200/50 dark:ring-blue-800/50">
+                  <Cpu size={22} />
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
               </div>
-              <div className="px-4 py-3 rounded-2xl text-sm shadow-lg backdrop-blur-sm border bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/50 dark:to-purple-950/50 text-gray-800 dark:text-gray-200 rounded-bl-md shadow-blue-200/50 dark:shadow-blue-900/50 border-blue-200/50 dark:border-blue-800/50">
-                <div className="flex items-center gap-2">
-                  <LoadingSpinner size={16} className="text-blue-600 dark:text-blue-400" />
-                  <span className="text-blue-700 dark:text-blue-300 font-medium">小智思考中...</span>
+              <div className="px-5 py-4 rounded-2xl text-sm shadow-xl backdrop-blur-sm border-2 relative bg-gradient-to-br from-white via-blue-50/80 to-purple-50/60 dark:from-blue-950/60 dark:via-purple-950/40 dark:to-indigo-950/60 text-gray-800 dark:text-gray-200 rounded-bl-lg shadow-blue-300/30 dark:shadow-blue-900/30 border-blue-300/30 dark:border-blue-700/30">
+                {/* 消息气泡尾巴 */}
+                <div className="absolute bottom-0 left-0 w-0 h-0 border-solid border-r-[12px] border-r-transparent border-t-[12px] border-t-white dark:border-t-blue-950/60"></div>
+
+                <div className="flex items-center gap-3">
+                  <LoadingSpinner size={18} className="text-blue-600 dark:text-blue-400" />
+                  <span className="text-blue-700 dark:text-blue-300 font-semibold">小智正在思考...</span>
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                  </div>
                 </div>
               </div>
             </div>
           )}
         </ScrollArea>
 
-        <div className="p-4 border-t bg-gradient-to-r from-gray-50 to-blue-50/30 dark:from-gray-900 dark:to-blue-950/30 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
+        <div className="p-5 border-t border-blue-200/40 dark:border-blue-800/40 bg-gradient-to-r from-gray-50/80 via-blue-50/60 to-purple-50/40 dark:from-gray-900/80 dark:via-blue-950/60 dark:to-purple-950/40 backdrop-blur-sm">
+          <div className="flex items-center gap-4">
             <div className="relative flex-grow">
               <Input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && !isAiThinking && handleSendMessage()}
-                placeholder="描述您的芯片需求或分类..."
-                className="h-11 pl-4 pr-12 rounded-xl border-2 border-blue-200/50 dark:border-blue-800/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm focus:border-blue-400 dark:focus:border-blue-600 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-200 text-sm placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                placeholder="描述您的芯片需求或分类问题..."
+                className="h-12 pl-5 pr-4 rounded-2xl border-2 border-blue-300/60 dark:border-blue-700/60 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm focus:border-blue-500 dark:focus:border-blue-500 focus:ring-3 focus:ring-blue-200/50 dark:focus:ring-blue-800/50 transition-all duration-300 text-sm font-medium placeholder:text-gray-500 dark:placeholder:text-gray-400 shadow-lg focus:shadow-xl"
                 disabled={isAiThinking}
               />
+              {/* 输入框装饰 */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-purple-500/5 pointer-events-none"></div>
             </div>
             <Button
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isAiThinking}
-              className="h-11 px-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-12 px-5 rounded-2xl bg-gradient-to-r from-blue-500 via-purple-600 to-indigo-600 hover:from-blue-600 hover:via-purple-700 hover:to-indigo-700 text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-lg transform hover:scale-105 active:scale-95"
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-5 w-5" />
               <span className="sr-only">发送</span>
             </Button>
+          </div>
+
+          {/* 底部提示 */}
+          <div className="mt-3 text-center">
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+              💡 小智可以帮您快速定位芯片分类，提高选型效率
+            </p>
           </div>
         </div>
       </DialogContent>
