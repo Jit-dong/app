@@ -63,18 +63,18 @@ const searchModes = {
 
 // 芯片商家广告位数据 (3x4布局)
 const chipVendors = [
-  { name: 'STMicroelectronics', logo: 'ST', color: 'bg-blue-600' },
-  { name: 'Texas Instruments', logo: 'TI', color: 'bg-red-600' },
-  { name: 'Espressif', logo: 'ESP', color: 'bg-green-600' },
-  { name: 'Microchip', logo: 'MCU', color: 'bg-orange-600' },
-  { name: 'Analog Devices', logo: 'ADI', color: 'bg-purple-600' },
-  { name: 'Infineon', logo: 'IFX', color: 'bg-indigo-600' },
-  { name: 'NXP', logo: 'NXP', color: 'bg-teal-600' },
-  { name: 'Broadcom', logo: 'BCM', color: 'bg-pink-600' },
-  { name: 'Qualcomm', logo: 'QC', color: 'bg-cyan-600' },
-  { name: 'Intel', logo: 'INTC', color: 'bg-gray-600' },
-  { name: 'AMD', logo: 'AMD', color: 'bg-red-500' },
-  { name: 'NVIDIA', logo: 'NVDA', color: 'bg-green-500' },
+  { name: 'STMicroelectronics', shortName: 'ST', logo: 'ST', color: 'bg-blue-600' },
+  { name: 'Texas Instruments', shortName: 'TI', logo: 'TI', color: 'bg-red-600' },
+  { name: 'Espressif', shortName: 'Espressif', logo: 'ESP', color: 'bg-green-600' },
+  { name: 'Microchip', shortName: 'Microchip', logo: 'MCU', color: 'bg-orange-600' },
+  { name: 'Analog Devices', shortName: 'ADI', logo: 'ADI', color: 'bg-purple-600' },
+  { name: 'Infineon', shortName: 'Infineon', logo: 'IFX', color: 'bg-indigo-600' },
+  { name: 'NXP', shortName: 'NXP', logo: 'NXP', color: 'bg-teal-600' },
+  { name: 'Broadcom', shortName: 'Broadcom', logo: 'BCM', color: 'bg-pink-600' },
+  { name: 'Qualcomm', shortName: 'Qualcomm', logo: 'QC', color: 'bg-cyan-600' },
+  { name: 'Intel', shortName: 'Intel', logo: 'INTC', color: 'bg-gray-600' },
+  { name: 'AMD', shortName: 'AMD', logo: 'AMD', color: 'bg-red-500' },
+  { name: 'NVIDIA', shortName: 'NVIDIA', logo: 'NVDA', color: 'bg-green-500' },
 ];
 
 
@@ -155,14 +155,20 @@ export default function HomeContent() {
 
   return (
     <div className="space-y-6 p-4">
-      {/* 简洁的引导语 */}
-      <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          芯片智能查询
-        </h1>
-        <p className="text-base text-muted-foreground">
-          快速查找芯片资料、丝印反查、品牌搜索、替代方案
-        </p>
+      {/* 右上角功能介绍 */}
+      <div className="flex justify-end">
+        <div className="bg-gradient-to-r from-orange-50 to-blue-50 dark:from-orange-950/20 dark:to-blue-950/20 rounded-2xl p-4 shadow-lg border border-orange-100 dark:border-orange-900/30 max-w-md">
+          <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">
+            🔍 芯片智能查询
+          </h1>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            快速查找芯片资料、丝印反查、品牌搜索、替代方案
+          </p>
+          <div className="mt-3 flex items-center text-xs text-orange-600 dark:text-orange-400">
+            <span className="w-2 h-2 bg-orange-500 rounded-full mr-2 animate-pulse"></span>
+            AI智能助手为您提供精准服务
+          </div>
+        </div>
       </div>
 
       {/* 搜索模式切换器 - 只显示三个选项 */}
@@ -326,8 +332,8 @@ export default function HomeContent() {
                       )}>
                         {vendor.logo}
                       </div>
-                      <p className="text-xs text-center text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-medium leading-tight line-clamp-2">
-                        {vendor.name}
+                      <p className="text-xs text-center text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-medium leading-tight">
+                        {vendor.shortName}
                       </p>
                     </div>
                   </div>

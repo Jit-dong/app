@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Logo from './logo';
 import { Button } from '@/components/ui/button';
-import { User } from 'lucide-react';
+import { User, QrCode } from 'lucide-react';
 
 export default function Header() {
   return (
@@ -19,6 +19,9 @@ export default function Header() {
           </Link>
           <div className="flex items-center gap-2">
             {/* Navigation items can be added here if needed outside of tabs */}
+            <Button variant="ghost" size="icon" aria-label="扫码功能">
+              <QrCode className="h-5 w-5" />
+            </Button>
             <Link href="/settings" passHref legacyBehavior>
               <Button variant="ghost" size="icon" aria-label="个人信息设置">
                 <User className="h-5 w-5" />
