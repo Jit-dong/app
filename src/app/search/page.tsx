@@ -95,8 +95,8 @@ function SearchPageContent() {
           </div>
         )}
 
-        {/* 使用现有的搜索组件，传递搜索参数 */}
-        <ChipSearchContent initialQuery={query} initialMode={mode} />
+        {/* 使用现有的搜索组件，传递搜索参数并隐藏搜索框 */}
+        <ChipSearchContent initialQuery={query} initialMode={mode} hideSearchBar={true} />
       </div>
     </div>
   );

@@ -45,9 +45,10 @@ const searchModes = {
 interface ChipSearchContentProps {
   initialQuery?: string;
   initialMode?: SearchMode;
+  hideSearchBar?: boolean; // 是否隐藏搜索框
 }
 
-export default function ChipSearchContent({ initialQuery = '', initialMode = 'datasheet' }: ChipSearchContentProps) {
+export default function ChipSearchContent({ initialQuery = '', initialMode = 'datasheet', hideSearchBar = false }: ChipSearchContentProps) {
   const [searchResults, setSearchResults] = useState<Chip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuery, setCurrentQuery] = useState(initialQuery);
@@ -165,25 +166,29 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
         </div>
 
         {/* 当前模式描述 */}
-        <div className="text-center">
-          <p className="text-muted-foreground">
-            {searchModes[searchMode].description}
-          </p>
-        </div>
+        {!hideSearchBar && (
+          <div className="text-center">
+            <p className="text-muted-foreground">
+              {searchModes[searchMode].description}
+            </p>
+          </div>
+        )}
 
         {/* 搜索控制区 - 简化版本 */}
-        <div className="flex justify-center">
-          <SearchBar
-            onSearch={handleSearch}
-            className="w-full max-w-2xl"
-            placeholder={searchModes[searchMode].placeholder}
-            initialQuery={currentQuery}
-            aiEnhanced={aiEnhanced}
-            onAiToggle={handleAiToggle}
-            showAiTooltip={showAiTooltip}
-            onAiTooltipChange={setShowAiTooltip}
-          />
-        </div>
+        {!hideSearchBar && (
+          <div className="flex justify-center">
+            <SearchBar
+              onSearch={handleSearch}
+              className="w-full max-w-2xl"
+              placeholder={searchModes[searchMode].placeholder}
+              initialQuery={currentQuery}
+              aiEnhanced={aiEnhanced}
+              onAiToggle={handleAiToggle}
+              showAiTooltip={showAiTooltip}
+              onAiTooltipChange={setShowAiTooltip}
+            />
+          </div>
+        )}
 
         {/* 内容展示区（动态变化） */}
         {isLoading ? (
