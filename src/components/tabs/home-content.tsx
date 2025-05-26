@@ -169,10 +169,15 @@ export default function HomeContent() {
       {/* 整体搜索功能卡片 */}
       <div className="flex justify-center">
         <div className="w-full max-w-4xl">
-          <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-2xl border-2 border-orange-100/50 dark:border-orange-900/30 rounded-3xl overflow-hidden">
-            <CardContent className="p-6 space-y-4">
+          <Card className="bg-gradient-to-br from-white via-purple-50/30 to-pink-50/20 dark:from-gray-900 dark:via-purple-950/20 dark:to-pink-950/10 backdrop-blur-xl shadow-2xl border border-purple-200/30 dark:border-purple-800/20 rounded-3xl overflow-hidden relative">
+            {/* 艺术装饰背景 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 via-purple-400/5 to-pink-400/5 animate-pulse"></div>
+            <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-transparent rounded-full blur-2xl"></div>
+            <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-pink-400/10 to-transparent rounded-full blur-2xl"></div>
+
+            <CardContent className="relative p-5 space-y-3">
               {/* 搜索框区域 */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <SearchBar
                   onSearch={handleSearch}
                   className="w-full"
@@ -185,14 +190,14 @@ export default function HomeContent() {
                 />
 
                 {/* 当前模式描述 */}
-                <p className="text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <p className="text-center text-xs text-purple-600/80 dark:text-purple-400/80 font-medium">
                   {searchModes[searchMode].description}
                 </p>
               </div>
 
-              {/* 搜索模式切换器 - 和谐尺寸设计 */}
+              {/* 艺术风格搜索模式切换器 */}
               <div className="flex items-center justify-center">
-                <div className="inline-flex gap-2 p-1">
+                <div className="inline-flex gap-1.5 p-1 bg-gradient-to-r from-blue-100/50 via-purple-100/50 to-pink-100/50 dark:from-blue-950/30 dark:via-purple-950/30 dark:to-pink-950/30 rounded-2xl border border-purple-200/30 dark:border-purple-800/20 backdrop-blur-sm">
                   {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
                     const IconComponent = mode.icon;
                     const isActive = searchMode === key;
@@ -201,17 +206,17 @@ export default function HomeContent() {
                         key={key}
                         onClick={() => handleModeChange(key as SearchMode)}
                         className={`
-                          inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-300 transform relative overflow-hidden
+                          inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all duration-500 transform relative overflow-hidden
                           ${isActive
-                            ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg border-2 border-orange-400/50 scale-102'
-                            : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50/70 dark:hover:bg-orange-950/30 hover:scale-101 shadow-md border-2 border-gray-200/50 dark:border-gray-700/50 hover:border-orange-300/50 dark:hover:border-orange-600/50'
+                            ? 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25 scale-105 border border-purple-300/50'
+                            : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gradient-to-r hover:from-blue-50/80 hover:via-purple-50/80 hover:to-pink-50/80 dark:hover:from-blue-950/50 dark:hover:via-purple-950/50 dark:hover:to-pink-950/50 hover:scale-102 shadow-sm border border-transparent hover:border-purple-200/50'
                           }
                         `}
                       >
-                        <IconComponent className={`h-4 w-4 ${isActive ? 'drop-shadow-sm' : ''}`} />
+                        <IconComponent className={`h-3.5 w-3.5 ${isActive ? 'drop-shadow-sm' : ''}`} />
                         <span className="relative z-10">{mode.label}</span>
                         {isActive && (
-                          <div className="absolute inset-0 bg-gradient-to-r from-orange-400/10 to-amber-400/10 animate-pulse"></div>
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 animate-pulse"></div>
                         )}
                       </button>
                     );
@@ -315,12 +320,12 @@ export default function HomeContent() {
                     className="group cursor-pointer"
                   >
                     <div className="aspect-square flex flex-col items-center justify-center p-3 bg-gradient-to-br from-white via-orange-50/20 to-amber-50/10 dark:from-gray-800 dark:via-orange-950/10 dark:to-amber-950/5 rounded-2xl border border-orange-100/50 dark:border-orange-900/30 hover:border-orange-300/70 dark:hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl group-hover:scale-110 hover:-translate-y-1 backdrop-blur-sm">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-2 shadow-lg bg-white dark:bg-gray-700 overflow-hidden">
+                      <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-2 shadow-lg bg-white dark:bg-gray-700 overflow-hidden">
                         <Image
                           src={vendor.image}
                           alt={vendor.name}
-                          width={48}
-                          height={48}
+                          width={64}
+                          height={64}
                           className="w-full h-full object-contain rounded-lg"
                           onError={(e) => {
                             // 如果图片加载失败，显示品牌名称缩写
