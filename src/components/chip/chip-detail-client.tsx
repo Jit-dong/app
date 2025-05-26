@@ -201,12 +201,190 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
           </div>
         </div>
 
-        {/* 产品详情主要内容 */}
+        {/* 芯片产品功能模块 - 严格按照层级图设计 */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
+                <Cpu className="h-4 w-4 text-white" />
+              </div>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100">芯片产品</h3>
+            </div>
+          </div>
+
+          <div className="p-4 space-y-3">
+            {/* 基本信息 */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <Info className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">基本信息</h4>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </div>
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
+                  <div>• 产品描述、厂商、生命周期</div>
+                  <div>• 封装信息、规格书</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 产品详情 */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/20 hover:bg-green-100 dark:hover:bg-green-950/30 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                    <BookOpen className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">产品详情</h4>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </div>
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
+                  <div>• 特性、说明、典型应用</div>
+                  <div>• 典型应用电路图、封装引脚图、功能框图</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 功能参数 */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-950/20 hover:bg-purple-100 dark:hover:bg-purple-950/30 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                    <Settings className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">功能参数</h4>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </div>
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                  • 拓扑架构、参数指标、保护功能、辅助功能
+                </div>
+              </div>
+            </div>
+
+            {/* 相似产品 */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 hover:bg-orange-100 dark:hover:bg-orange-950/30 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                    <GitBranch className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">相似产品</h4>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </div>
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
+                  <div>• 完全兼容、p2p兼容、功能相似、封装相同</div>
+                  <div>• 国产品牌、国外品牌、相同品牌</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 技术文章 */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-teal-50 dark:bg-teal-950/20 hover:bg-teal-100 dark:hover:bg-teal-950/30 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
+                    <FileImage className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">技术文章</h4>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </div>
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                  • 应用指南、产品介绍、测试报告等
+                </div>
+              </div>
+            </div>
+
+            {/* 参考设计 */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-indigo-50 dark:bg-indigo-950/20 hover:bg-indigo-100 dark:hover:bg-indigo-950/30 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                    <Code className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">参考设计</h4>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </div>
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                  • 参考设计名称、介绍、SCH、PCB、BOM、测试报告等
+                </div>
+              </div>
+            </div>
+
+            {/* 设计开发 */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-pink-50 dark:bg-pink-950/20 hover:bg-pink-100 dark:hover:bg-pink-950/30 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
+                    <Target className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">设计开发</h4>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </div>
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                  • CAD符号、封装、仿真模型
+                </div>
+              </div>
+            </div>
+
+            {/* 产品订购 */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-950/20 hover:bg-red-100 dark:hover:bg-red-950/30 transition-colors cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                    <ShoppingCart className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">产品订购</h4>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </div>
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
+                  <div>• 器件网络号、生命周期、工作温度、应用等级、环保等级</div>
+                  <div>• 采购渠道、价格、库存、交期</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 详细信息展示区域 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
           <div className="p-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">产品详情</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">详细信息</h2>
 
-            {/* 产品详情标签页 */}
+            {/* 详细信息标签页 */}
             <Tabs defaultValue="parameters" className="w-full">
               <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg mb-4">
                 <TabsTrigger value="parameters" className="text-sm">
