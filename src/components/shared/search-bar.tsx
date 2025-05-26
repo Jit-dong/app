@@ -88,11 +88,11 @@ export default function SearchBar({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className={`
-                  w-full text-base font-medium border-0 bg-transparent focus:ring-0 focus:outline-none
-                  placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:font-normal
+                  w-full text-base font-semibold border-0 bg-transparent focus:ring-0 focus:outline-none
+                  placeholder:text-gray-600 dark:placeholder:text-gray-300 placeholder:font-medium
                   ${aiEnhanced
-                    ? 'text-purple-700 dark:text-purple-300 placeholder:text-purple-400 dark:placeholder:text-purple-500'
-                    : 'text-gray-800 dark:text-gray-200'
+                    ? 'text-purple-800 dark:text-purple-200 placeholder:text-purple-500 dark:placeholder:text-purple-400'
+                    : 'text-gray-900 dark:text-gray-100'
                   }
                 `}
                 aria-label="搜索查询"
