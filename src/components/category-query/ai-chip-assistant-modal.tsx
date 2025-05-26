@@ -56,9 +56,9 @@ export default function AiChipAssistantModal({ isOpen, onOpenChange }: AiChipAss
               <p>好的，根据您的需求：12V输入、3V/6A输出，用于LED驱动，且关注12周内到货周期。</p>
               <p className="mt-1">基于输入输出电压关系 (12V输入降至3V输出)，这通常需要一个 **降压 (Buck) 拓扑** 的LED驱动方案。</p>
               <p className="mt-1">在我们的分类系统中，您可以主要关注以下路径：</p>
-              <ul className="list-disc list-inside mt-1 text-xs space-y-0.5 bg-muted/50 p-2 rounded-md">
-                <li><strong>电源管理</strong> &gt; <strong>LED照明-DC/DC</strong> &gt; (进一步筛选降压型或特定电流/电压范围)</li>
-                <li><strong>电源管理</strong> &gt; <strong>DC-DC稳压器</strong> &gt; <strong>降压型转换器</strong> (如果找不到专用的LED驱动，一些通用降压IC也可配置)</li>
+              <ul className="list-disc list-inside mt-2 text-xs space-y-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 p-3 rounded-lg border border-blue-200/30 dark:border-blue-800/30">
+                <li><strong className="text-blue-700 dark:text-blue-300">电源管理</strong> <span className="text-gray-500">→</span> <strong className="text-purple-700 dark:text-purple-300">LED照明-DC/DC</strong> <span className="text-gray-500">→</span> <span className="text-gray-600 dark:text-gray-400">(进一步筛选降压型或特定电流/电压范围)</span></li>
+                <li><strong className="text-blue-700 dark:text-blue-300">电源管理</strong> <span className="text-gray-500">→</span> <strong className="text-purple-700 dark:text-purple-300">DC-DC稳压器</strong> <span className="text-gray-500">→</span> <strong className="text-indigo-700 dark:text-indigo-300">降压型转换器</strong> <span className="text-gray-600 dark:text-gray-400">(如果找不到专用的LED驱动，一些通用降压IC也可配置)</span></li>
               </ul>
               <p className="mt-1 text-xs">对于6A的输出电流，这是比较大的电流，您需要关注芯片的散热和效率。对于12周的到货周期，建议您在选型后，通过我们的供应商查询工具确认具体型号的实时供货情况。</p>
             </div>
@@ -71,10 +71,19 @@ export default function AiChipAssistantModal({ isOpen, onOpenChange }: AiChipAss
           text: (
             <div>
                 <p className="mt-2 font-semibold">为什么在这里找 (AI分类助手)？</p>
-                <ul className="list-disc list-inside text-xs space-y-0.5">
-                    <li><strong>专家知识引导：</strong> 我能根据您的技术描述，结合内置的芯片知识库，帮您判断所需的技术拓扑（如Buck、Boost等），并引导您到最相关的产品分类。</li>
-                    <li><strong>精准定位：</strong> 避免您在海量分类中迷失方向，直接缩小选型范围。</li>
-                    <li><strong>效率提升：</strong> 快速理解您的核心需求，节省您逐级浏览分类的时间。</li>
+                <ul className="list-none text-xs space-y-2 mt-2">
+                    <li className="flex items-start gap-2 p-2 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-lg border border-emerald-200/30 dark:border-emerald-800/30">
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold">🎯</span>
+                      <div><strong className="text-emerald-700 dark:text-emerald-300">专家知识引导：</strong> <span className="text-gray-700 dark:text-gray-300">我能根据您的技术描述，结合内置的芯片知识库，帮您判断所需的技术拓扑（如Buck、Boost等），并引导您到最相关的产品分类。</span></div>
+                    </li>
+                    <li className="flex items-start gap-2 p-2 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 rounded-lg border border-blue-200/30 dark:border-blue-800/30">
+                      <span className="text-blue-600 dark:text-blue-400 font-bold">🔍</span>
+                      <div><strong className="text-blue-700 dark:text-blue-300">精准定位：</strong> <span className="text-gray-700 dark:text-gray-300">避免您在海量分类中迷失方向，直接缩小选型范围。</span></div>
+                    </li>
+                    <li className="flex items-start gap-2 p-2 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 rounded-lg border border-purple-200/30 dark:border-purple-800/30">
+                      <span className="text-purple-600 dark:text-purple-400 font-bold">⚡</span>
+                      <div><strong className="text-purple-700 dark:text-purple-300">效率提升：</strong> <span className="text-gray-700 dark:text-gray-300">快速理解您的核心需求，节省您逐级浏览分类的时间。</span></div>
+                    </li>
                 </ul>
                 <p className="mt-3 text-sm font-medium">以上为使用示例。现在，请您开始提问，我会尽力协助您在“产品分类查询”模块中找到方向。</p>
             </div>
@@ -85,7 +94,7 @@ export default function AiChipAssistantModal({ isOpen, onOpenChange }: AiChipAss
     }
     if (!isOpen) {
       // Optionally reset messages when modal is closed, or persist if desired
-      // setMessages([]); 
+      // setMessages([]);
       setInputValue('');
     }
   }, [isOpen, messages.length]);
@@ -116,10 +125,19 @@ export default function AiChipAssistantModal({ isOpen, onOpenChange }: AiChipAss
           <div>
             <p>好的，针对您的LED驱动需求（12V输入，3V输出），我判断您需要一个降压（Buck）拓扑的解决方案。</p>
             <p className="mt-1">在我们的“产品分类查询”中，您可以这样查找：</p>
-            <ol className="list-decimal list-inside text-xs space-y-0.5 mt-1">
-              <li>一级分类选择: <strong>电源管理</strong></li>
-              <li>二级分类选择: <strong>LED照明-DC/DC</strong> 或 <strong>DC-DC稳压器</strong></li>
-              <li>三级分类选择 (如果选择DC-DC稳压器): <strong>降压型转换器</strong></li>
+            <ol className="list-none text-xs space-y-1.5 mt-2">
+              <li className="flex items-center gap-2 p-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-lg border border-blue-200/30 dark:border-blue-800/30">
+                <span className="flex items-center justify-center w-5 h-5 bg-blue-500 text-white text-xs font-bold rounded-full">1</span>
+                <span>一级分类选择: <strong className="text-blue-700 dark:text-blue-300">电源管理</strong></span>
+              </li>
+              <li className="flex items-center gap-2 p-2 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 rounded-lg border border-purple-200/30 dark:border-purple-800/30">
+                <span className="flex items-center justify-center w-5 h-5 bg-purple-500 text-white text-xs font-bold rounded-full">2</span>
+                <span>二级分类选择: <strong className="text-purple-700 dark:text-purple-300">LED照明-DC/DC</strong> 或 <strong className="text-purple-700 dark:text-purple-300">DC-DC稳压器</strong></span>
+              </li>
+              <li className="flex items-center gap-2 p-2 bg-gradient-to-r from-indigo-50 to-cyan-50 dark:from-indigo-950/30 dark:to-cyan-950/30 rounded-lg border border-indigo-200/30 dark:border-indigo-800/30">
+                <span className="flex items-center justify-center w-5 h-5 bg-indigo-500 text-white text-xs font-bold rounded-full">3</span>
+                <span>三级分类选择 (如果选择DC-DC稳压器): <strong className="text-indigo-700 dark:text-indigo-300">降压型转换器</strong></span>
+              </li>
             </ol>
             <p className="mt-1 text-xs">请注意，6A的电流较大，选型时请特别关注芯片的散热能力和最大输出电流。您还提到了12周到货，这个需要在具体型号选定后查询供应商库存。</p>
           </div>
@@ -149,63 +167,89 @@ export default function AiChipAssistantModal({ isOpen, onOpenChange }: AiChipAss
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] p-0 flex flex-col h-[70vh] max-h-[600px]">
-        <DialogHeader className="p-4 border-b">
-          <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-accent" />
-            AI 智能芯片分类顾问
+      <DialogContent className="sm:max-w-[520px] p-0 flex flex-col h-[75vh] max-h-[650px] overflow-hidden">
+        <DialogHeader className="p-5 border-b bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 dark:from-blue-950/30 dark:via-purple-950/30 dark:to-indigo-950/30">
+          <DialogTitle className="flex items-center gap-3 text-lg font-semibold">
+            <div className="p-2 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              AI 智能芯片分类顾问
+            </span>
           </DialogTitle>
         </DialogHeader>
-        
-        <ScrollArea className="flex-grow p-4 space-y-4" ref={chatAreaRef}>
+
+        <ScrollArea className="flex-grow p-5 space-y-5 bg-gradient-to-b from-gray-50/30 to-white dark:from-gray-900/30 dark:to-gray-950" ref={chatAreaRef}>
           {messages.map((msg) => (
             <div
               key={msg.id}
               className={cn(
-                "flex items-end gap-2 mb-3 max-w-[85%]",
+                "flex items-end gap-3 mb-4 max-w-[88%] animate-in slide-in-from-bottom-2 duration-300",
                 msg.sender === 'user' ? "ml-auto flex-row-reverse" : "mr-auto"
               )}
             >
-              {msg.sender === 'ai' && <AiAvatar iconSize={24} containerClassName="self-end mb-0.5 shrink-0" />}
+              {msg.sender === 'ai' && (
+                <div className="p-2.5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg self-end mb-1 shrink-0 ring-2 ring-blue-200 dark:ring-blue-800">
+                  <Cpu size={20} />
+                </div>
+              )}
               {msg.sender === 'user' && (
-                <div className="p-2 rounded-full bg-muted text-muted-foreground self-end mb-0.5 shrink-0">
+                <div className="p-2.5 rounded-full bg-gradient-to-br from-orange-400 to-red-500 text-white shadow-lg self-end mb-1 shrink-0 ring-2 ring-orange-200 dark:ring-orange-800">
                   <User size={18} />
                 </div>
               )}
               <div
                 className={cn(
-                  "p-2.5 rounded-lg text-sm shadow-sm",
+                  "px-4 py-3 rounded-2xl text-sm shadow-lg backdrop-blur-sm border",
                   msg.sender === 'user'
-                    ? "bg-accent text-accent-foreground rounded-br-none"
-                    : "bg-card border text-card-foreground rounded-bl-none"
+                    ? "bg-gradient-to-br from-orange-500 to-red-500 text-white rounded-br-md shadow-orange-200/50 dark:shadow-orange-900/50 border-orange-300/50"
+                    : "bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/50 dark:to-purple-950/50 text-gray-800 dark:text-gray-200 rounded-bl-md shadow-blue-200/50 dark:shadow-blue-900/50 border-blue-200/50 dark:border-blue-800/50"
                 )}
               >
-                {typeof msg.text === 'string' ? <p className="whitespace-pre-wrap break-words">{msg.text}</p> : msg.text}
+                <div className={cn(
+                  "prose prose-sm max-w-none",
+                  msg.sender === 'user'
+                    ? "prose-invert [&_p]:text-white [&_strong]:text-white [&_li]:text-white"
+                    : "prose-gray dark:prose-invert [&_p]:text-gray-800 dark:[&_p]:text-gray-200 [&_strong]:text-blue-700 dark:[&_strong]:text-blue-300 [&_li]:text-gray-700 dark:[&_li]:text-gray-300"
+                )}>
+                  {typeof msg.text === 'string' ? <p className="whitespace-pre-wrap break-words leading-relaxed">{msg.text}</p> : msg.text}
+                </div>
               </div>
             </div>
           ))}
           {isAiThinking && (
-            <div className="flex items-end gap-2 mb-3 mr-auto max-w-[85%]">
-                <AiAvatar iconSize={24} containerClassName="self-end mb-0.5 shrink-0" />
-                <div className="p-2.5 rounded-lg text-sm shadow-sm bg-card border text-card-foreground rounded-bl-none">
-                    <LoadingSpinner size={16} label="小智思考中..." />
+            <div className="flex items-end gap-3 mb-4 mr-auto max-w-[88%] animate-in slide-in-from-bottom-2 duration-300">
+              <div className="p-2.5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg self-end mb-1 shrink-0 ring-2 ring-blue-200 dark:ring-blue-800">
+                <Cpu size={20} />
+              </div>
+              <div className="px-4 py-3 rounded-2xl text-sm shadow-lg backdrop-blur-sm border bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/50 dark:to-purple-950/50 text-gray-800 dark:text-gray-200 rounded-bl-md shadow-blue-200/50 dark:shadow-blue-900/50 border-blue-200/50 dark:border-blue-800/50">
+                <div className="flex items-center gap-2">
+                  <LoadingSpinner size={16} className="text-blue-600 dark:text-blue-400" />
+                  <span className="text-blue-700 dark:text-blue-300 font-medium">小智思考中...</span>
                 </div>
+              </div>
             </div>
           )}
         </ScrollArea>
 
-        <div className="p-3 border-t bg-muted/30">
-          <div className="flex items-center gap-2">
-            <Input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && !isAiThinking && handleSendMessage()}
-              placeholder="描述您的芯片需求或分类..."
-              className="flex-grow h-10"
-              disabled={isAiThinking}
-            />
-            <Button onClick={handleSendMessage} disabled={!inputValue.trim() || isAiThinking} className="h-10">
+        <div className="p-4 border-t bg-gradient-to-r from-gray-50 to-blue-50/30 dark:from-gray-900 dark:to-blue-950/30 backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <div className="relative flex-grow">
+              <Input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && !isAiThinking && handleSendMessage()}
+                placeholder="描述您的芯片需求或分类..."
+                className="h-11 pl-4 pr-12 rounded-xl border-2 border-blue-200/50 dark:border-blue-800/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm focus:border-blue-400 dark:focus:border-blue-600 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 transition-all duration-200 text-sm placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                disabled={isAiThinking}
+              />
+            </div>
+            <Button
+              onClick={handleSendMessage}
+              disabled={!inputValue.trim() || isAiThinking}
+              className="h-11 px-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <Send className="h-4 w-4" />
               <span className="sr-only">发送</span>
             </Button>

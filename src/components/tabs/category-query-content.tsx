@@ -205,7 +205,7 @@ export default function CategoryQueryContent() {
         </CardHeader>
         <CardContent className="p-4">
           {/* 品牌卡片横向滚动列表 */}
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {[
               { name: 'STMicroelectronics', logo: '🔷', products: '1200+', hot: true },
               { name: 'Texas Instruments', logo: '🔶', products: '980+', hot: false },
@@ -216,22 +216,10 @@ export default function CategoryQueryContent() {
             ].map((brand, index) => (
               <div
                 key={brand.name}
-                className="flex-shrink-0 w-32 p-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 cursor-pointer group"
+                className="flex-shrink-0 w-16 h-16 p-1 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 cursor-pointer group flex items-center justify-center"
               >
-                <div className="text-center space-y-2">
-                  <div className="text-2xl">{brand.logo}</div>
-                  <div className="space-y-1">
-                    <h4 className="font-medium text-xs leading-tight group-hover:text-accent transition-colors">
-                      {brand.name}
-                    </h4>
-                    <p className="text-xs text-muted-foreground">{brand.products}</p>
-                    {brand.hot && (
-                      <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full text-xs">
-                        <TrendingUp className="h-3 w-3" />
-                        热门
-                      </div>
-                    )}
-                  </div>
+                <div className="text-center">
+                  <div className="text-4xl group-hover:scale-110 transition-transform duration-200">{brand.logo}</div>
                 </div>
               </div>
             ))}

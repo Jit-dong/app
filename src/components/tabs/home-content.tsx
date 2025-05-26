@@ -293,21 +293,21 @@ export default function HomeContent() {
               </div>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-4 gap-2">
                 {chipVendors.map((vendor, index) => (
                   <div
                     key={vendor.name}
                     onClick={() => handleVendorClick(vendor)}
                     className="group cursor-pointer"
                   >
-                    <div className="aspect-[4/3] flex flex-col items-center justify-center p-3 bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-3xl border border-blue-100/40 dark:border-blue-900/20 hover:border-blue-300/60 dark:hover:border-blue-600/40 transition-all duration-500 hover:shadow-2xl group-hover:scale-110 hover:-translate-y-2 backdrop-blur-sm">
-                      <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-2 shadow-lg bg-white dark:bg-gray-700 overflow-hidden border border-gray-100/60 dark:border-gray-600/60 group-hover:shadow-xl transition-all duration-500">
+                    <div className="aspect-square flex items-center justify-center p-1 bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-xl border border-blue-100/40 dark:border-blue-900/20 hover:border-blue-300/60 dark:hover:border-blue-600/40 transition-all duration-500 hover:shadow-2xl group-hover:scale-110 hover:-translate-y-2 backdrop-blur-sm">
+                      <div className="w-full h-full rounded-lg flex items-center justify-center shadow-lg bg-white dark:bg-gray-700 overflow-hidden border border-gray-100/60 dark:border-gray-600/60 group-hover:shadow-xl transition-all duration-500">
                         <Image
                           src={vendor.image}
                           alt={vendor.name}
                           width={80}
                           height={80}
-                          className="w-18 h-18 object-contain rounded-xl p-1 group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform duration-500"
                           onError={(e) => {
                             // 如果图片加载失败，显示品牌名称缩写
                             const target = e.target as HTMLImageElement;
@@ -319,9 +319,6 @@ export default function HomeContent() {
                           }}
                         />
                       </div>
-                      <p className="text-xs text-center text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-500 font-medium leading-tight px-1">
-                        {vendor.shortName}
-                      </p>
                     </div>
                   </div>
                 ))}
