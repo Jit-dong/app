@@ -169,11 +169,26 @@ export default function HomeContent() {
       {/* 整体搜索功能卡片 */}
       <div className="flex justify-center">
         <div className="w-full max-w-4xl">
-          <Card className="bg-gradient-to-br from-white via-purple-50/30 to-pink-50/20 dark:from-gray-900 dark:via-purple-950/20 dark:to-pink-950/10 backdrop-blur-xl shadow-2xl border border-purple-200/30 dark:border-purple-800/20 rounded-3xl overflow-hidden relative">
-            {/* 艺术装饰背景 */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 via-purple-400/5 to-pink-400/5 animate-pulse"></div>
-            <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-transparent rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-pink-400/10 to-transparent rounded-full blur-2xl"></div>
+          <Card className={`backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden relative transition-all duration-700 ${
+            aiEnhanced
+              ? 'bg-gradient-to-br from-white via-purple-50/40 to-indigo-50/30 dark:from-gray-900 dark:via-purple-950/30 dark:to-indigo-950/20 border border-purple-300/40 dark:border-purple-700/30'
+              : 'bg-gradient-to-br from-white via-blue-50/30 to-slate-50/20 dark:from-gray-900 dark:via-blue-950/20 dark:to-slate-950/10 border border-blue-200/30 dark:border-blue-800/20'
+          }`}>
+            {/* 动态装饰背景 */}
+            {aiEnhanced ? (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400/8 via-indigo-400/8 to-violet-400/8 animate-pulse"></div>
+                <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-purple-400/15 to-transparent rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-indigo-400/15 to-transparent rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-r from-violet-400/10 to-purple-400/10 rounded-full blur-2xl animate-pulse"></div>
+              </>
+            ) : (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 via-slate-400/5 to-gray-400/5"></div>
+                <div className="absolute top-0 left-0 w-36 h-36 bg-gradient-to-br from-blue-400/8 to-transparent rounded-full blur-2xl"></div>
+                <div className="absolute bottom-0 right-0 w-28 h-28 bg-gradient-to-tl from-slate-400/8 to-transparent rounded-full blur-2xl"></div>
+              </>
+            )}
 
             <CardContent className="relative p-5 space-y-3">
               {/* 搜索框区域 */}
@@ -190,14 +205,22 @@ export default function HomeContent() {
                 />
 
                 {/* 当前模式描述 */}
-                <p className="text-center text-xs text-purple-600/80 dark:text-purple-400/80 font-medium">
+                <p className={`text-center text-xs font-medium transition-colors duration-500 ${
+                  aiEnhanced
+                    ? 'text-purple-600/90 dark:text-purple-400/90'
+                    : 'text-blue-600/80 dark:text-blue-400/80'
+                }`}>
                   {searchModes[searchMode].description}
                 </p>
               </div>
 
-              {/* 艺术风格搜索模式切换器 */}
+              {/* 国际化风格搜索模式切换器 */}
               <div className="flex items-center justify-center">
-                <div className="inline-flex gap-1.5 p-1 bg-gradient-to-r from-blue-100/50 via-purple-100/50 to-pink-100/50 dark:from-blue-950/30 dark:via-purple-950/30 dark:to-pink-950/30 rounded-2xl border border-purple-200/30 dark:border-purple-800/20 backdrop-blur-sm">
+                <div className={`inline-flex gap-1.5 p-1.5 rounded-2xl backdrop-blur-sm transition-all duration-500 ${
+                  aiEnhanced
+                    ? 'bg-gradient-to-r from-purple-100/60 via-indigo-100/60 to-violet-100/60 dark:from-purple-950/40 dark:via-indigo-950/40 dark:to-violet-950/40 border border-purple-200/40 dark:border-purple-700/30'
+                    : 'bg-gradient-to-r from-blue-100/50 via-slate-100/50 to-gray-100/50 dark:from-blue-950/30 dark:via-slate-950/30 dark:to-gray-950/30 border border-blue-200/30 dark:border-blue-800/20'
+                }`}>
                   {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
                     const IconComponent = mode.icon;
                     const isActive = searchMode === key;
@@ -206,17 +229,25 @@ export default function HomeContent() {
                         key={key}
                         onClick={() => handleModeChange(key as SearchMode)}
                         className={`
-                          inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all duration-500 transform relative overflow-hidden
+                          inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-500 transform relative overflow-hidden
                           ${isActive
-                            ? 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25 scale-105 border border-purple-300/50'
-                            : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gradient-to-r hover:from-blue-50/80 hover:via-purple-50/80 hover:to-pink-50/80 dark:hover:from-blue-950/50 dark:hover:via-purple-950/50 dark:hover:to-pink-950/50 hover:scale-102 shadow-sm border border-transparent hover:border-purple-200/50'
+                            ? aiEnhanced
+                              ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-600 text-white shadow-lg shadow-purple-500/30 scale-105 border border-purple-400/50'
+                              : 'bg-gradient-to-r from-blue-600 via-blue-700 to-slate-700 text-white shadow-lg shadow-blue-500/25 scale-105 border border-blue-400/50'
+                            : aiEnhanced
+                              ? 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gradient-to-r hover:from-purple-50/80 hover:via-indigo-50/80 hover:to-violet-50/80 dark:hover:from-purple-950/50 dark:hover:via-indigo-950/50 dark:hover:to-violet-950/50 hover:scale-102 shadow-sm border border-transparent hover:border-purple-200/50'
+                              : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gradient-to-r hover:from-blue-50/80 hover:via-slate-50/80 hover:to-gray-50/80 dark:hover:from-blue-950/50 dark:hover:via-slate-950/50 dark:hover:to-gray-950/50 hover:scale-102 shadow-sm border border-transparent hover:border-blue-200/50'
                           }
                         `}
                       >
-                        <IconComponent className={`h-3.5 w-3.5 ${isActive ? 'drop-shadow-sm' : ''}`} />
+                        <IconComponent className={`h-4 w-4 ${isActive ? 'drop-shadow-sm' : ''}`} />
                         <span className="relative z-10">{mode.label}</span>
                         {isActive && (
-                          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 animate-pulse"></div>
+                          <div className={`absolute inset-0 animate-pulse ${
+                            aiEnhanced
+                              ? 'bg-gradient-to-r from-purple-400/20 via-indigo-400/20 to-violet-400/20'
+                              : 'bg-gradient-to-r from-blue-400/15 via-slate-400/15 to-gray-400/15'
+                          }`}></div>
                         )}
                       </button>
                     );
@@ -298,15 +329,15 @@ export default function HomeContent() {
       ) : (
         // 默认内容：热门品牌广告位
         <div className="space-y-6">
-          {/* 热门品牌广告位 - 温暖优雅设计 */}
-          <Card className="shadow-xl bg-gradient-to-br from-white via-orange-50/30 to-amber-50/20 dark:from-gray-900 dark:via-orange-950/20 dark:to-amber-950/10 border-orange-100/50 dark:border-orange-900/30 backdrop-blur-sm">
-            <CardHeader className="py-4 px-6 border-b border-orange-100/50 dark:border-orange-900/30">
+          {/* 热门品牌 - 国际化专业设计 */}
+          <Card className="shadow-2xl bg-gradient-to-br from-white via-blue-50/20 to-slate-50/15 dark:from-gray-900 dark:via-blue-950/15 dark:to-slate-950/10 border border-blue-100/40 dark:border-blue-900/20 backdrop-blur-md rounded-3xl">
+            <CardHeader className="py-5 px-6 border-b border-blue-100/40 dark:border-blue-900/20">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl flex items-center gap-3 bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent font-bold">
-                  <Star className="h-6 w-6 text-orange-500" />
+                <CardTitle className="text-xl flex items-center gap-3 bg-gradient-to-r from-blue-600 to-slate-700 bg-clip-text text-transparent font-bold">
+                  <Star className="h-6 w-6 text-blue-500" />
                   热门品牌
                 </CardTitle>
-                <Button variant="ghost" size="sm" className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-all duration-300">
+                <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all duration-500 rounded-xl">
                   查看更多 <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
               </div>
@@ -319,37 +350,37 @@ export default function HomeContent() {
                     onClick={() => handleVendorClick(vendor)}
                     className="group cursor-pointer"
                   >
-                    <div className="aspect-square flex flex-col items-center justify-center p-3 bg-gradient-to-br from-white via-orange-50/20 to-amber-50/10 dark:from-gray-800 dark:via-orange-950/10 dark:to-amber-950/5 rounded-2xl border border-orange-100/50 dark:border-orange-900/30 hover:border-orange-300/70 dark:hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl group-hover:scale-110 hover:-translate-y-1 backdrop-blur-sm">
-                      <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-2 shadow-lg bg-white dark:bg-gray-700 overflow-hidden">
+                    <div className="aspect-square flex flex-col items-center justify-center p-4 bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-3xl border border-blue-100/40 dark:border-blue-900/20 hover:border-blue-300/60 dark:hover:border-blue-600/40 transition-all duration-500 hover:shadow-2xl group-hover:scale-110 hover:-translate-y-2 backdrop-blur-sm">
+                      <div className="w-24 h-24 rounded-3xl flex items-center justify-center mb-3 shadow-xl bg-white dark:bg-gray-700 overflow-hidden border border-gray-100/60 dark:border-gray-600/60 group-hover:shadow-2xl transition-all duration-500">
                         <Image
                           src={vendor.image}
                           alt={vendor.name}
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-contain rounded-lg"
+                          width={96}
+                          height={96}
+                          className="w-22 h-22 object-contain rounded-2xl p-1.5 group-hover:scale-105 transition-transform duration-500"
                           onError={(e) => {
                             // 如果图片加载失败，显示品牌名称缩写
                             const target = e.target as HTMLImageElement;
                             target.style.display = 'none';
                             const parent = target.parentElement;
                             if (parent) {
-                              parent.innerHTML = `<span class="text-orange-600 font-bold text-sm">${vendor.shortName}</span>`;
+                              parent.innerHTML = `<span class="text-blue-600 font-bold text-lg">${vendor.shortName}</span>`;
                             }
                           }}
                         />
                       </div>
-                      <p className="text-xs text-center text-gray-700 dark:text-gray-300 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors font-semibold leading-tight">
+                      <p className="text-xs text-center text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-500 font-semibold leading-tight">
                         {vendor.shortName}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="text-center mt-6">
+              <div className="text-center mt-8">
                 <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                   点击品牌logo快速搜索相关产品
                 </p>
-                <div className="mt-2 w-16 h-0.5 bg-gradient-to-r from-orange-300 to-amber-300 rounded-full mx-auto opacity-60"></div>
+                <div className="mt-3 w-20 h-0.5 bg-gradient-to-r from-blue-300 to-slate-400 rounded-full mx-auto opacity-60"></div>
               </div>
             </CardContent>
           </Card>
