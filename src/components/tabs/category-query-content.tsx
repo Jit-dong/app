@@ -203,9 +203,9 @@ export default function CategoryQueryContent() {
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="p-3">
           {/* 品牌卡片横向滚动列表 */}
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-1 overflow-x-auto pb-2 scrollbar-hide">
             {[
               { name: 'STMicroelectronics', logo: '🔷', products: '1200+', hot: true },
               { name: 'Texas Instruments', logo: '🔶', products: '980+', hot: false },
@@ -216,10 +216,10 @@ export default function CategoryQueryContent() {
             ].map((brand, index) => (
               <div
                 key={brand.name}
-                className="flex-shrink-0 w-16 h-16 p-1 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 cursor-pointer group flex items-center justify-center"
+                className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-md border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 cursor-pointer group flex items-center justify-center"
               >
                 <div className="text-center">
-                  <div className="text-4xl group-hover:scale-110 transition-transform duration-200">{brand.logo}</div>
+                  <div className="text-3xl group-hover:scale-110 transition-transform duration-200">{brand.logo}</div>
                 </div>
               </div>
             ))}

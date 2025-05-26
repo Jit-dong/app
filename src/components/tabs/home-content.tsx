@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -81,59 +82,30 @@ const chipVendors = [
 
 
 export default function HomeContent() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<Chip[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentQuery, setCurrentQuery] = useState("");
+  const router = useRouter();
   const [searchMode, setSearchMode] = useState<SearchMode>('datasheet');
-  const [hasSearched, setHasSearched] = useState(false);
-
-  const performSearch = (query: string, mode: SearchMode = searchMode) => {
-    setIsLoading(true);
-    setHasSearched(true);
-
-    setTimeout(() => {
-      // 根据搜索模式调用不同的搜索逻辑
-      let results: Chip[] = [];
-      switch (mode) {
-        case 'datasheet':
-          results = searchChips(query);
-          break;
-        case 'silkscreen':
-          results = searchChips(query);
-          break;
-        case 'brand':
-          results = searchChips(query);
-          break;
-        case 'alternative':
-          results = searchChips(query);
-          break;
-        default:
-          results = searchChips(query);
-      }
-
-      setSearchResults(results);
-      setIsLoading(false);
-    }, 500);
-  };
 
   const handleSearch = (query: string) => {
-    setCurrentQuery(query);
-    setSearchQuery(query);
-    performSearch(query, searchMode);
+    if (query.trim()) {
+      // 跳转到搜索结果页面
+      const params = new URLSearchParams();
+      params.set('q', query);
+      params.set('mode', searchMode);
+      router.push(`/search?${params.toString()}`);
+    }
   };
 
   const handleModeChange = (mode: SearchMode) => {
     setSearchMode(mode);
-    if (currentQuery.trim()) {
-      performSearch(currentQuery, mode);
-    }
   };
 
   const handleVendorClick = (vendor: any) => {
     console.log('点击商家:', vendor.name);
-    // 这里可以跳转到商家页面或执行搜索
-    handleSearch(vendor.name);
+    // 跳转到品牌搜索页面
+    const params = new URLSearchParams();
+    params.set('q', vendor.name);
+    params.set('mode', 'brand');
+    router.push(`/search?${params.toString()}`);
   };
 
   return (
@@ -164,7 +136,6 @@ export default function HomeContent() {
                   onSearch={handleSearch}
                   className="w-full"
                   placeholder={searchModes[searchMode].placeholder}
-                  initialQuery={currentQuery}
                 />
 
 
@@ -222,117 +193,61 @@ export default function HomeContent() {
         </div>
       </div>
 
-      {/* 搜索结果或默认内容 */}
-      {isLoading ? (
-        <div className="flex justify-center py-12">
-          <LoadingSpinner label={`正在${searchModes[searchMode].label}...`} />
-        </div>
-      ) : hasSearched ? (
-        searchResults.length > 0 ? (
-          <div className="space-y-4">
-            {/* 根据搜索模式显示不同的结果标题 */}
-            {searchMode === 'silkscreen' && currentQuery && (
-              <div className="text-sm text-muted-foreground mb-3">
-                丝印 <span className="font-medium">{currentQuery}</span> 可能对应的型号：
-              </div>
-            )}
-            {searchMode === 'brand' && currentQuery && (
-              <div className="text-sm text-muted-foreground mb-3">
-                <span className="font-medium">{currentQuery}</span> 品牌产品：
-              </div>
-            )}
-            {searchMode === 'alternative' && currentQuery && (
-              <div className="text-sm text-muted-foreground mb-3">
-                <span className="font-medium">{currentQuery}</span> 的替代方案：
-              </div>
-            )}
-
-            {searchResults.map((chip, index) => (
-              <ChipListItem
-                key={chip.id}
-                chip={chip}
-                showAlternativeCount={
-                  searchMode === 'datasheet' &&
-                  chip.model === 'TPS5430' &&
-                  chip.id === 'TPS5430-1'
-                }
-              />
-            ))}
-          </div>
-        ) : (
-          <Alert variant="default" className="shadow-md">
-            <SearchX className="h-5 w-5" />
-            <AlertTitle>
-              {searchMode === 'datasheet' && '未找到芯片'}
-              {searchMode === 'silkscreen' && '未找到对应型号'}
-              {searchMode === 'brand' && '未找到品牌产品'}
-              {searchMode === 'alternative' && '未找到替代方案'}
-            </AlertTitle>
-            <AlertDescription>
-              {searchMode === 'datasheet' && '没有芯片符合您的搜索条件。请尝试不同的关键词。'}
-              {searchMode === 'silkscreen' && '未找到该丝印对应的型号。请检查丝印是否正确或尝试其他丝印。'}
-              {searchMode === 'brand' && '未找到该品牌的产品信息。请检查品牌名称是否正确或尝试其他品牌。'}
-              {searchMode === 'alternative' && '未找到该芯片的替代方案。请检查型号是否正确或尝试其他型号。'}
-            </AlertDescription>
-          </Alert>
-        )
-      ) : (
-        // 默认内容：热门品牌广告位
-        <div className="space-y-6">
-          {/* 热门品牌 - 国际化专业设计 */}
-          <Card className="shadow-2xl bg-gradient-to-br from-white via-blue-50/20 to-slate-50/15 dark:from-gray-900 dark:via-blue-950/15 dark:to-slate-950/10 border border-blue-100/40 dark:border-blue-900/20 backdrop-blur-md rounded-3xl">
-            <CardHeader className="py-5 px-6 border-b border-blue-100/40 dark:border-blue-900/20">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-xl flex items-center gap-3 bg-gradient-to-r from-blue-600 to-slate-700 bg-clip-text text-transparent font-bold">
-                  <Star className="h-6 w-6 text-blue-500" />
-                  热门品牌
-                </CardTitle>
-                <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all duration-500 rounded-xl">
-                  查看更多 <ChevronRight className="ml-1 h-4 w-4" />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="grid grid-cols-4 gap-2">
-                {chipVendors.map((vendor, index) => (
-                  <div
-                    key={vendor.name}
-                    onClick={() => handleVendorClick(vendor)}
-                    className="group cursor-pointer"
-                  >
-                    <div className="aspect-square flex items-center justify-center p-1 bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-xl border border-blue-100/40 dark:border-blue-900/20 hover:border-blue-300/60 dark:hover:border-blue-600/40 transition-all duration-500 hover:shadow-2xl group-hover:scale-110 hover:-translate-y-2 backdrop-blur-sm">
-                      <div className="w-full h-full rounded-lg flex items-center justify-center shadow-lg bg-white dark:bg-gray-700 overflow-hidden border border-gray-100/60 dark:border-gray-600/60 group-hover:shadow-xl transition-all duration-500">
-                        <Image
-                          src={vendor.image}
-                          alt={vendor.name}
-                          width={80}
-                          height={80}
-                          className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform duration-500"
-                          onError={(e) => {
-                            // 如果图片加载失败，显示品牌名称缩写
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                            const parent = target.parentElement;
-                            if (parent) {
-                              parent.innerHTML = `<span class="text-blue-600 font-bold text-lg">${vendor.shortName}</span>`;
-                            }
-                          }}
-                        />
-                      </div>
+      {/* 默认内容：热门品牌广告位 */}
+      <div className="space-y-6">
+        {/* 热门品牌 - 国际化专业设计 */}
+        <Card className="shadow-2xl bg-gradient-to-br from-white via-blue-50/20 to-slate-50/15 dark:from-gray-900 dark:via-blue-950/15 dark:to-slate-950/10 border border-blue-100/40 dark:border-blue-900/20 backdrop-blur-md rounded-3xl">
+          <CardHeader className="py-5 px-6 border-b border-blue-100/40 dark:border-blue-900/20">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-xl flex items-center gap-3 bg-gradient-to-r from-blue-600 to-slate-700 bg-clip-text text-transparent font-bold">
+                <Star className="h-6 w-6 text-blue-500" />
+                热门品牌
+              </CardTitle>
+              <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all duration-500 rounded-xl">
+                查看更多 <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4">
+            <div className="grid grid-cols-4 gap-1">
+              {chipVendors.map((vendor, index) => (
+                <div
+                  key={vendor.name}
+                  onClick={() => handleVendorClick(vendor)}
+                  className="group cursor-pointer"
+                >
+                  <div className="aspect-square flex items-center justify-center bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-lg border border-blue-100/40 dark:border-blue-900/20 hover:border-blue-300/60 dark:hover:border-blue-600/40 transition-all duration-500 hover:shadow-2xl group-hover:scale-110 hover:-translate-y-2 backdrop-blur-sm">
+                    <div className="w-full h-full rounded-md flex items-center justify-center shadow-lg bg-white dark:bg-gray-700 overflow-hidden border border-gray-100/60 dark:border-gray-600/60 group-hover:shadow-xl transition-all duration-500">
+                      <Image
+                        src={vendor.image}
+                        alt={vendor.name}
+                        width={80}
+                        height={80}
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          // 如果图片加载失败，显示品牌名称缩写
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `<span class="text-blue-600 font-bold text-lg">${vendor.shortName}</span>`;
+                          }
+                        }}
+                      />
                     </div>
                   </div>
-                ))}
-              </div>
-              <div className="text-center mt-8">
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-                  点击品牌logo快速搜索相关产品
-                </p>
-                <div className="mt-3 w-20 h-0.5 bg-gradient-to-r from-blue-300 to-slate-400 rounded-full mx-auto opacity-60"></div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-8">
+              <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                点击品牌logo快速搜索相关产品
+              </p>
+              <div className="mt-3 w-20 h-0.5 bg-gradient-to-r from-blue-300 to-slate-400 rounded-full mx-auto opacity-60"></div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

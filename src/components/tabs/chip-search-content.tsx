@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle } from "lucide-react";
 
 // 搜索模式类型定义
-type SearchMode = 'datasheet' | 'silkscreen' | 'brand';
+type SearchMode = 'datasheet' | 'silkscreen' | 'brand' | 'alternative';
 
 // 搜索模式配置
 const searchModes = {
@@ -33,31 +33,48 @@ const searchModes = {
     icon: RefreshCw,
     placeholder: '输入品牌名称查看产品线',
     description: '查看品牌的产品系列和热门型号'
+  },
+  alternative: {
+    label: '查替代',
+    icon: RefreshCw,
+    placeholder: '输入芯片型号查找替代品',
+    description: '查找芯片的替代型号和兼容产品'
   }
 };
 
-export default function ChipSearchContent() {
+interface ChipSearchContentProps {
+  initialQuery?: string;
+  initialMode?: SearchMode;
+}
+
+export default function ChipSearchContent({ initialQuery = '', initialMode = 'datasheet' }: ChipSearchContentProps) {
   const [searchResults, setSearchResults] = useState<Chip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentQuery, setCurrentQuery] = useState("");
+  const [currentQuery, setCurrentQuery] = useState(initialQuery);
 
-  const [searchMode, setSearchMode] = useState<SearchMode>('datasheet'); // 新增搜索模式状态
-  const [hasSearched, setHasSearched] = useState(false); // 新增是否已搜索状态
+  const [searchMode, setSearchMode] = useState<SearchMode>(initialMode); // 使用传入的初始模式
+  const [hasSearched, setHasSearched] = useState(!!initialQuery); // 如果有初始查询，则标记为已搜索
   const [aiEnhanced, setAiEnhanced] = useState(false); // AI增强功能状态
   const [showAiTooltip, setShowAiTooltip] = useState(false); // AI提示显示状态
 
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
-      // For demo purposes, ensure TPS5430 items are shown initially if query is empty
-      const initialResults = searchChips("", {});
-      // Prioritize TPS5430 items for demo if present
-      const tpsDemoItems = initialResults.filter(c => c.model === 'TPS5430');
-      const otherItems = initialResults.filter(c => c.model !== 'TPS5430');
-      setSearchResults([...tpsDemoItems, ...otherItems]);
+      if (initialQuery) {
+        // 如果有初始查询，执行搜索
+        const results = searchChips(initialQuery);
+        setSearchResults(results);
+      } else {
+        // 否则显示默认结果
+        const initialResults = searchChips("", {});
+        // Prioritize TPS5430 items for demo if present
+        const tpsDemoItems = initialResults.filter(c => c.model === 'TPS5430');
+        const otherItems = initialResults.filter(c => c.model !== 'TPS5430');
+        setSearchResults([...tpsDemoItems, ...otherItems]);
+      }
       setIsLoading(false);
     }, 500);
-  }, []);
+  }, [initialQuery]);
 
   const performSearch = (query: string, mode: SearchMode = searchMode, useAI: boolean = aiEnhanced) => {
     setIsLoading(true);
