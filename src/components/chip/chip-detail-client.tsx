@@ -213,27 +213,6 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
           </div>
 
           <div className="p-4 space-y-3">
-            {/* 基本信息 */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-              <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                    <Info className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">基本信息</h4>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                  <div>• 产品描述、厂商、生命周期</div>
-                  <div>• 封装信息、规格书</div>
-                </div>
-              </div>
-            </div>
-
             {/* 产品详情 */}
             <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
               <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/20 hover:bg-green-100 dark:hover:bg-green-950/30 transition-colors cursor-pointer">
