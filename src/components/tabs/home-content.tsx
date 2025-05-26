@@ -189,21 +189,12 @@ export default function HomeContent() {
                 </p>
               </div>
 
-              {/* 分隔线 */}
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-orange-200/50 dark:border-orange-800/30"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white/80 dark:bg-gray-900/80 text-gray-500 dark:text-gray-400 font-medium">
-                    选择搜索模式
-                  </span>
-                </div>
-              </div>
+              {/* 简洁分隔线 */}
+              <div className="w-full border-t border-orange-200/30 dark:border-orange-800/20"></div>
 
-              {/* 搜索模式切换器 */}
+              {/* 搜索模式切换器 - 突出按钮边框 */}
               <div className="flex items-center justify-center">
-                <div className="inline-flex rounded-2xl bg-gradient-to-r from-orange-50/50 to-amber-50/30 dark:from-orange-950/30 dark:to-amber-950/20 p-2 border border-orange-200/30 dark:border-orange-800/30">
+                <div className="inline-flex gap-3 p-1">
                   {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
                     const IconComponent = mode.icon;
                     const isActive = searchMode === key;
@@ -212,14 +203,14 @@ export default function HomeContent() {
                         key={key}
                         onClick={() => handleModeChange(key as SearchMode)}
                         className={`
-                          inline-flex items-center gap-3 rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-300 transform relative overflow-hidden
+                          inline-flex items-center gap-3 rounded-xl px-6 py-3.5 text-sm font-bold transition-all duration-300 transform relative overflow-hidden
                           ${isActive
-                            ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg scale-105'
-                            : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50/70 dark:hover:bg-orange-950/30 hover:scale-102 hover:shadow-md'
+                            ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-xl border-2 border-orange-400 ring-2 ring-orange-300/50 ring-offset-2 ring-offset-white dark:ring-offset-gray-900 scale-105'
+                            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/30 hover:scale-102 shadow-lg border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-xl'
                           }
                         `}
                       >
-                        <IconComponent className={`h-4 w-4 ${isActive ? 'drop-shadow-sm' : ''}`} />
+                        <IconComponent className={`h-5 w-5 ${isActive ? 'drop-shadow-sm' : ''}`} />
                         <span className="relative z-10">{mode.label}</span>
                         {isActive && (
                           <div className="absolute inset-0 bg-gradient-to-r from-orange-400/10 to-amber-400/10 animate-pulse"></div>
