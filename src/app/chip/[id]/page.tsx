@@ -15,8 +15,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function ChipDetailPage({ params }: ChipDetailPageProps) {
-  const chip: Chip | undefined = findChipById(params.id);
+export default async function ChipDetailPage({ params }: ChipDetailPageProps) {
+  const { id } = await params;
+  const chip: Chip | undefined = findChipById(id);
 
   if (!chip) {
     notFound();
