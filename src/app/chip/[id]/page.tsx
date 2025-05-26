@@ -1,11 +1,18 @@
 
-import { findChipById } from '@/lib/placeholder-data';
+import { findChipById, placeholderChips } from '@/lib/placeholder-data';
 import type { Chip } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import ChipDetailClient from '@/components/chip/chip-detail-client';
 
 interface ChipDetailPageProps {
   params: { id: string };
+}
+
+// Generate static params for all available chips
+export async function generateStaticParams() {
+  return placeholderChips.map((chip) => ({
+    id: chip.id,
+  }));
 }
 
 export default function ChipDetailPage({ params }: ChipDetailPageProps) {

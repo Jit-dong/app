@@ -62,20 +62,20 @@ const searchModes = {
   }
 };
 
-// 芯片商家广告位数据 (3x4布局) - 使用实际图片
+// 芯片商家广告位数据 (3x4布局) - 使用现有的图片文件
 const chipVendors = [
-  { name: 'STMicroelectronics', shortName: 'ST', image: '/brands/image.png' },
-  { name: 'Texas Instruments', shortName: 'TI', image: '/brands/images.jpeg' },
-  { name: 'Espressif', shortName: 'Espressif', image: '/brands/images.png' },
-  { name: 'Microchip', shortName: 'Microchip', image: '/brands/images (1).jpeg' },
-  { name: 'Analog Devices', shortName: 'ADI', image: '/brands/images (1).png' },
-  { name: 'Infineon', shortName: 'Infineon', image: '/brands/images (2).png' },
-  { name: 'NXP', shortName: 'NXP', image: '/brands/images (3).png' },
-  { name: 'Broadcom', shortName: 'Broadcom', image: '/brands/images (4).png' },
-  { name: 'Qualcomm', shortName: 'Qualcomm', image: '/brands/下载.jpeg' },
-  { name: 'Intel', shortName: 'Intel', image: '/brands/下载.png' },
-  { name: 'AMD', shortName: 'AMD', image: '/brands/下载 (1).jpeg' },
-  { name: 'NVIDIA', shortName: 'NVIDIA', image: '/brands/下载 (1).png' },
+  { name: 'STMicroelectronics', shortName: 'ST', image: '/brands/ST.png' },
+  { name: 'Texas Instruments', shortName: 'TI', image: '/brands/TI.png' },
+  { name: 'Microchip', shortName: 'Microchip', image: '/brands/MICROCHIP.png' },
+  { name: 'Infineon', shortName: 'Infineon', image: '/brands/ Infineon.png' },
+  { name: 'NXP', shortName: 'NXP', image: '/brands/NXP.png' },
+  { name: 'Maxim', shortName: 'MAX', image: '/brands/MAX.png' },
+  { name: 'Vishay', shortName: 'VISHAY', image: '/brands/VISHAY.png' },
+  { name: 'Intersil', shortName: 'Intersil', image: '/brands/Intersil.png' },
+  { name: 'Fujitsu', shortName: 'Fujitsu', image: '/brands/ Fujitsu.png' },
+  { name: 'Toshiba', shortName: 'Toshiba', image: '/brands/Toshiba.png' },
+  { name: 'JRC', shortName: 'JRC', image: '/brands/JRC.png' },
+  { name: 'NTE', shortName: 'NTE', image: '/brands/NTE.png' },
 ];
 
 
@@ -204,50 +204,50 @@ export default function HomeContent() {
                   onAiTooltipChange={setShowAiTooltip}
                 />
 
-                {/* 当前模式描述 */}
-                <p className={`text-center text-xs font-medium transition-colors duration-500 ${
-                  aiEnhanced
-                    ? 'text-purple-600/90 dark:text-purple-400/90'
-                    : 'text-blue-600/80 dark:text-blue-400/80'
-                }`}>
-                  {searchModes[searchMode].description}
-                </p>
+
               </div>
 
-              {/* 国际化风格搜索模式切换器 */}
+              {/* 彩色搜索模式切换器 */}
               <div className="flex items-center justify-center">
-                <div className={`inline-flex gap-1.5 p-1.5 rounded-2xl backdrop-blur-sm transition-all duration-500 ${
-                  aiEnhanced
-                    ? 'bg-gradient-to-r from-purple-100/60 via-indigo-100/60 to-violet-100/60 dark:from-purple-950/40 dark:via-indigo-950/40 dark:to-violet-950/40 border border-purple-200/40 dark:border-purple-700/30'
-                    : 'bg-gradient-to-r from-blue-100/50 via-slate-100/50 to-gray-100/50 dark:from-blue-950/30 dark:via-slate-950/30 dark:to-gray-950/30 border border-blue-200/30 dark:border-blue-800/20'
-                }`}>
+                <div className="inline-flex gap-4 p-2">
                   {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
                     const IconComponent = mode.icon;
                     const isActive = searchMode === key;
+
+                    // 为每个按钮定义独特的颜色
+                    const buttonColors = {
+                      precise: {
+                        active: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30',
+                        inactive: 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50 text-blue-600 dark:text-blue-400 hover:from-blue-100 hover:to-blue-200 dark:hover:from-blue-900/70 dark:hover:to-blue-800/70 border border-blue-200/50 dark:border-blue-800/30'
+                      },
+                      silkscreen: {
+                        active: 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30',
+                        inactive: 'bg-gradient-to-r from-green-50 to-emerald-100 dark:from-green-950/50 dark:to-emerald-900/50 text-green-600 dark:text-green-400 hover:from-green-100 hover:to-emerald-200 dark:hover:from-green-900/70 dark:hover:to-emerald-800/70 border border-green-200/50 dark:border-green-800/30'
+                      },
+                      brand: {
+                        active: 'bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-lg shadow-purple-500/30',
+                        inactive: 'bg-gradient-to-r from-purple-50 to-violet-100 dark:from-purple-950/50 dark:to-violet-900/50 text-purple-600 dark:text-purple-400 hover:from-purple-100 hover:to-violet-200 dark:hover:from-purple-900/70 dark:hover:to-violet-800/70 border border-purple-200/50 dark:border-purple-800/30'
+                      }
+                    };
+
+                    const colorScheme = buttonColors[key as keyof typeof buttonColors] || buttonColors.precise;
+
                     return (
                       <button
                         key={key}
                         onClick={() => handleModeChange(key as SearchMode)}
                         className={`
-                          inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-500 transform relative overflow-hidden
+                          inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-500 transform relative overflow-hidden
                           ${isActive
-                            ? aiEnhanced
-                              ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-600 text-white shadow-lg shadow-purple-500/30 scale-105 border border-purple-400/50'
-                              : 'bg-gradient-to-r from-blue-600 via-blue-700 to-slate-700 text-white shadow-lg shadow-blue-500/25 scale-105 border border-blue-400/50'
-                            : aiEnhanced
-                              ? 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gradient-to-r hover:from-purple-50/80 hover:via-indigo-50/80 hover:to-violet-50/80 dark:hover:from-purple-950/50 dark:hover:via-indigo-950/50 dark:hover:to-violet-950/50 hover:scale-102 shadow-sm border border-transparent hover:border-purple-200/50'
-                              : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gradient-to-r hover:from-blue-50/80 hover:via-slate-50/80 hover:to-gray-50/80 dark:hover:from-blue-950/50 dark:hover:via-slate-950/50 dark:hover:to-gray-950/50 hover:scale-102 shadow-sm border border-transparent hover:border-blue-200/50'
+                            ? `${colorScheme.active} scale-105`
+                            : `${colorScheme.inactive} hover:scale-102 shadow-sm`
                           }
                         `}
                       >
                         <IconComponent className={`h-4 w-4 ${isActive ? 'drop-shadow-sm' : ''}`} />
                         <span className="relative z-10">{mode.label}</span>
                         {isActive && (
-                          <div className={`absolute inset-0 animate-pulse ${
-                            aiEnhanced
-                              ? 'bg-gradient-to-r from-purple-400/20 via-indigo-400/20 to-violet-400/20'
-                              : 'bg-gradient-to-r from-blue-400/15 via-slate-400/15 to-gray-400/15'
-                          }`}></div>
+                          <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
                         )}
                       </button>
                     );
@@ -350,14 +350,14 @@ export default function HomeContent() {
                     onClick={() => handleVendorClick(vendor)}
                     className="group cursor-pointer"
                   >
-                    <div className="aspect-square flex flex-col items-center justify-center p-4 bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-3xl border border-blue-100/40 dark:border-blue-900/20 hover:border-blue-300/60 dark:hover:border-blue-600/40 transition-all duration-500 hover:shadow-2xl group-hover:scale-110 hover:-translate-y-2 backdrop-blur-sm">
-                      <div className="w-24 h-24 rounded-3xl flex items-center justify-center mb-3 shadow-xl bg-white dark:bg-gray-700 overflow-hidden border border-gray-100/60 dark:border-gray-600/60 group-hover:shadow-2xl transition-all duration-500">
+                    <div className="aspect-[4/3] flex flex-col items-center justify-center p-3 bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-3xl border border-blue-100/40 dark:border-blue-900/20 hover:border-blue-300/60 dark:hover:border-blue-600/40 transition-all duration-500 hover:shadow-2xl group-hover:scale-110 hover:-translate-y-2 backdrop-blur-sm">
+                      <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-2 shadow-lg bg-white dark:bg-gray-700 overflow-hidden border border-gray-100/60 dark:border-gray-600/60 group-hover:shadow-xl transition-all duration-500">
                         <Image
                           src={vendor.image}
                           alt={vendor.name}
-                          width={96}
-                          height={96}
-                          className="w-22 h-22 object-contain rounded-2xl p-1.5 group-hover:scale-105 transition-transform duration-500"
+                          width={80}
+                          height={80}
+                          className="w-18 h-18 object-contain rounded-xl p-1 group-hover:scale-105 transition-transform duration-500"
                           onError={(e) => {
                             // 如果图片加载失败，显示品牌名称缩写
                             const target = e.target as HTMLImageElement;
@@ -369,7 +369,7 @@ export default function HomeContent() {
                           }}
                         />
                       </div>
-                      <p className="text-xs text-center text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-500 font-semibold leading-tight">
+                      <p className="text-xs text-center text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-500 font-medium leading-tight px-1">
                         {vendor.shortName}
                       </p>
                     </div>

@@ -75,13 +75,8 @@ export default function SearchBar({
 
           {/* 搜索内容区 */}
           <div className="relative flex items-center p-2">
-            {/* 搜索图标装饰 */}
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/50 dark:to-amber-900/50 ml-2">
-              <Search className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-            </div>
-
             {/* 搜索输入框 */}
-            <div className="flex-1 mx-3">
+            <div className="flex-1 mx-4">
               <Input
                 type="search"
                 placeholder={dynamicPlaceholder}
@@ -157,9 +152,6 @@ export default function SearchBar({
               </div>
             )}
           </div>
-
-          {/* 底部装饰线 */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 opacity-60"></div>
         </div>
       </div>
     </form>

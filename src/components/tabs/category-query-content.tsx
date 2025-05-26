@@ -7,11 +7,12 @@ import { productCategories } from '@/lib/category-data';
 import CategoryColumn from '@/components/category-query/category-column';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { ChevronRight, RotateCcw, Search, CheckCircle2, LayoutGrid, Sparkles } from 'lucide-react';
+import { ChevronRight, RotateCcw, Search, CheckCircle2, LayoutGrid, Sparkles, Star, TrendingUp } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { cn } from '@/lib/utils';
 import AiChipAssistantModal from '@/components/category-query/ai-chip-assistant-modal';
+import { AdBannerHorizontal } from '@/components/shared/ad-banner';
 
 export default function CategoryQueryContent() {
   const [selectedL1, setSelectedL1] = useState<Category | null>(null);
@@ -20,7 +21,7 @@ export default function CategoryQueryContent() {
 
   const [l2Categories, setL2Categories] = useState<Category[]>([]);
   const [l3Categories, setL3Categories] = useState<Category[]>([]);
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredL1Categories, setFilteredL1Categories] = useState<Category[]>(productCategories);
   const [isAiAssistantModalOpen, setIsAiAssistantModalOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function CategoryQueryContent() {
     }
 
     const lowerSearchTerm = searchTerm.toLowerCase();
-    
+
     const filterCategories = (categories: Category[]): Category[] => {
       return categories.map(cat => {
         const matchedSubCategories = cat.subCategories ? filterCategories(cat.subCategories) : [];
@@ -70,7 +71,7 @@ export default function CategoryQueryContent() {
   };
 
   const handleBreadcrumbClick = (level: 0 | 1 | 2) => {
-    if (level === 0) { 
+    if (level === 0) {
       handleReset();
     } else if (level === 1 && selectedL1) {
       setSelectedL2(null);
@@ -104,9 +105,9 @@ export default function CategoryQueryContent() {
       description: message,
     });
   };
-  
+
   const getButtonText = () => {
-    let count = 0; 
+    let count = 0;
     if (selectedL3) return `查看产品 (${count})`;
     if (selectedL2) return `查看产品 (${count})`;
     if (selectedL1) return `查看产品 (${count})`;
@@ -114,8 +115,8 @@ export default function CategoryQueryContent() {
   }
 
   return (
-    <>
-      <Card className="shadow-lg h-[calc(100vh_-_200px)] md:h-[calc(100vh_-_180px)] flex flex-col">
+    <div className="space-y-6">
+      <Card className="shadow-lg h-[calc(100vh_-_280px)] md:h-[calc(100vh_-_260px)] flex flex-col">
         <CardHeader className="py-3 px-4 border-b flex flex-row justify-between items-center">
           <CardTitle className="text-xl flex items-center gap-2">
             <LayoutGrid className="h-6 w-6 text-accent" />
@@ -131,7 +132,7 @@ export default function CategoryQueryContent() {
           <div className="p-3 border-b space-y-2 bg-muted/30">
               <div className="relative">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input 
+                  <Input
                       type="search"
                       placeholder="搜索分类名称..."
                       value={searchTerm}
@@ -172,7 +173,7 @@ export default function CategoryQueryContent() {
               selectedCategoryName={selectedL3?.name}
               onSelectCategory={handleSelectL3}
               level={3}
-              isLoading={false} 
+              isLoading={false}
             />
           </div>
 
@@ -188,11 +189,70 @@ export default function CategoryQueryContent() {
           </div>
         </CardContent>
       </Card>
-      <AiChipAssistantModal 
+
+      {/* 热门品牌区域 */}
+      <Card className="shadow-md">
+        <CardHeader className="py-3 px-4 border-b">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Star className="h-5 w-5 text-yellow-500" />
+              热门品牌
+            </CardTitle>
+            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+              更多 <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="p-4">
+          {/* 品牌卡片横向滚动列表 */}
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {[
+              { name: 'STMicroelectronics', logo: '🔷', products: '1200+', hot: true },
+              { name: 'Texas Instruments', logo: '🔶', products: '980+', hot: false },
+              { name: 'Espressif', logo: '🟢', products: '45+', hot: true },
+              { name: 'Microchip', logo: '🔴', products: '750+', hot: false },
+              { name: 'Analog Devices', logo: '🟡', products: '650+', hot: false },
+              { name: 'Infineon', logo: '🟣', products: '420+', hot: false },
+            ].map((brand, index) => (
+              <div
+                key={brand.name}
+                className="flex-shrink-0 w-32 p-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 cursor-pointer group"
+              >
+                <div className="text-center space-y-2">
+                  <div className="text-2xl">{brand.logo}</div>
+                  <div className="space-y-1">
+                    <h4 className="font-medium text-xs leading-tight group-hover:text-accent transition-colors">
+                      {brand.name}
+                    </h4>
+                    <p className="text-xs text-muted-foreground">{brand.products}</p>
+                    {brand.hot && (
+                      <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full text-xs">
+                        <TrendingUp className="h-3 w-3" />
+                        热门
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 广告位 - 在热门品牌下方 */}
+      <div className="px-1">
+        <AdBannerHorizontal
+          className="w-full"
+          closable
+          onClose={() => console.log('广告被关闭')}
+        />
+      </div>
+
+      <AiChipAssistantModal
         isOpen={isAiAssistantModalOpen}
         onOpenChange={setIsAiAssistantModalOpen}
       />
-    </>
+    </div>
   );
 }
 
