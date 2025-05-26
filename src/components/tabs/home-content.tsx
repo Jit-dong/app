@@ -154,10 +154,10 @@ export default function HomeContent() {
   };
 
   return (
-    <div className="space-y-8 p-4">
+    <div className="space-y-6 p-4 -mt-4">
       {/* Slogan */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent mb-2">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent mb-1">
           芯片难题，魔力化解
         </h1>
         <p className="text-gray-600 dark:text-gray-400 text-sm">
@@ -165,9 +165,9 @@ export default function HomeContent() {
         </p>
       </div>
 
-      {/* 搜索模式切换器 - 毛玻璃效果 */}
+      {/* 搜索模式切换器 - 醒目按钮设计 */}
       <div className="flex items-center justify-center">
-        <div className="inline-flex rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-1.5 shadow-xl border border-white/20 dark:border-gray-700/30">
+        <div className="inline-flex rounded-2xl bg-gradient-to-r from-orange-100/80 via-amber-50/60 to-yellow-50/40 dark:from-orange-950/40 dark:via-amber-950/30 dark:to-yellow-950/20 backdrop-blur-md p-2 shadow-2xl border-2 border-orange-200/50 dark:border-orange-800/30">
           {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
             const IconComponent = mode.icon;
             const isActive = searchMode === key;
@@ -176,15 +176,18 @@ export default function HomeContent() {
                 key={key}
                 onClick={() => handleModeChange(key as SearchMode)}
                 className={`
-                  inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold transition-all duration-300 transform
+                  inline-flex items-center gap-3 rounded-xl px-8 py-4 text-sm font-bold transition-all duration-300 transform relative overflow-hidden
                   ${isActive
-                    ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-white shadow-lg scale-105 backdrop-blur-sm'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-white/50 dark:hover:bg-gray-700/50 hover:scale-102 hover:shadow-md backdrop-blur-sm'
+                    ? 'bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 text-white shadow-2xl scale-110 ring-2 ring-orange-300/50 ring-offset-2 ring-offset-orange-50'
+                    : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 dark:hover:from-orange-950/20 dark:hover:to-amber-950/20 hover:scale-105 hover:shadow-xl border-2 border-orange-100/50 dark:border-orange-900/30 hover:border-orange-300/70'
                   }
                 `}
               >
-                <IconComponent className="h-4 w-4" />
-                <span>{mode.label}</span>
+                <IconComponent className={`h-5 w-5 ${isActive ? 'drop-shadow-sm' : ''}`} />
+                <span className="relative z-10">{mode.label}</span>
+                {isActive && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-amber-400/20 animate-pulse"></div>
+                )}
               </button>
             );
           })}
@@ -215,13 +218,13 @@ export default function HomeContent() {
                 onAiTooltipChange={setShowAiTooltip}
               />
 
-              {/* 优雅的装饰元素 */}
-              <div className="absolute -top-3 -right-3 w-6 h-6 bg-gradient-to-br from-orange-300 to-amber-400 rounded-full opacity-20 animate-pulse"></div>
-              <div className="absolute -bottom-3 -left-3 w-4 h-4 bg-gradient-to-br from-amber-300 to-yellow-400 rounded-full opacity-15 animate-pulse delay-700"></div>
+              {/* 优雅的装饰线条 */}
+              <div className="absolute top-1/2 -left-1 transform -translate-y-1/2 w-0.5 h-12 bg-gradient-to-b from-orange-300 to-amber-300 rounded-full opacity-40"></div>
+              <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-0.5 h-12 bg-gradient-to-b from-amber-300 to-yellow-300 rounded-full opacity-40"></div>
 
-              {/* 侧边装饰线 */}
-              <div className="absolute top-1/2 -left-1 transform -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-orange-300 to-amber-300 rounded-full opacity-30"></div>
-              <div className="absolute top-1/2 -right-1 transform -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-amber-300 to-yellow-300 rounded-full opacity-30"></div>
+              {/* 角落装饰 */}
+              <div className="absolute -top-2 -left-2 w-3 h-3 border-l-2 border-t-2 border-orange-300/40 rounded-tl-lg"></div>
+              <div className="absolute -bottom-2 -right-2 w-3 h-3 border-r-2 border-b-2 border-amber-300/40 rounded-br-lg"></div>
             </div>
 
             {/* 当前模式描述 */}

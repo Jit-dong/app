@@ -72,7 +72,7 @@ export default function SearchBar({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className={`
-              w-full text-base md:text-sm pr-24 pl-4 py-3
+              w-full text-base md:text-sm pr-28 pl-4 py-3
               border-2 rounded-xl transition-all duration-300
               ${aiEnhanced
                 ? 'border-purple-300 dark:border-purple-700 bg-purple-50/50 dark:bg-purple-950/20 focus:border-purple-500 dark:focus:border-purple-400'
@@ -82,18 +82,18 @@ export default function SearchBar({
             aria-label="搜索查询"
           />
 
-          {/* AI图标 - 集成在搜索框内 */}
+          {/* AI图标 - 集成在搜索框内，向右偏移 */}
           {onAiToggle && (
-            <div className="absolute right-12 top-1/2 transform -translate-y-1/2">
+            <div className="absolute right-16 top-1/2 transform -translate-y-1/2">
               <div className="relative group">
                 <button
                   type="button"
                   onClick={handleAiClick}
                   className={`
-                    p-2 rounded-lg transition-all duration-300 transform hover:scale-110
+                    p-2.5 rounded-xl transition-all duration-300 transform hover:scale-110 shadow-md
                     ${aiEnhanced
                       ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/25'
-                      : 'text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-950/30'
+                      : 'bg-white/90 dark:bg-gray-800/90 text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-950/30 border border-purple-200/50 dark:border-purple-800/30'
                     }
                   `}
                   title={aiEnhanced ? "AI增强已启用" : "启用AI增强搜索"}
