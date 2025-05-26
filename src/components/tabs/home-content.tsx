@@ -165,59 +165,72 @@ export default function HomeContent() {
         </p>
       </div>
 
-      {/* 突出的搜索框 */}
+      {/* 整体搜索功能卡片 */}
       <div className="flex justify-center">
         <div className="w-full max-w-4xl">
-          {/* 搜索框容器 - 突出显示 */}
-          <div className="relative p-6 bg-gradient-to-br from-white via-orange-50/30 to-amber-50/20 dark:from-gray-900 dark:via-orange-950/20 dark:to-amber-950/10 rounded-2xl shadow-xl border-2 border-orange-200/50 dark:border-orange-800/30 backdrop-blur-sm">
-            {/* 搜索框 */}
-            <div className="relative">
-              <SearchBar
-                onSearch={handleSearch}
-                className="w-full shadow-lg"
-                placeholder={searchModes[searchMode].placeholder}
-                initialQuery={currentQuery}
-                aiEnhanced={aiEnhanced}
-                onAiToggle={handleAiToggle}
-                showAiTooltip={showAiTooltip}
-                onAiTooltipChange={setShowAiTooltip}
-              />
-            </div>
+          <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-2xl border-2 border-orange-100/50 dark:border-orange-900/30 rounded-3xl overflow-hidden">
+            <CardContent className="p-8 space-y-6">
+              {/* 搜索框区域 */}
+              <div className="space-y-4">
+                <SearchBar
+                  onSearch={handleSearch}
+                  className="w-full shadow-lg"
+                  placeholder={searchModes[searchMode].placeholder}
+                  initialQuery={currentQuery}
+                  aiEnhanced={aiEnhanced}
+                  onAiToggle={handleAiToggle}
+                  showAiTooltip={showAiTooltip}
+                  onAiTooltipChange={setShowAiTooltip}
+                />
 
-            {/* 当前模式描述 */}
-            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4 font-medium">
-              {searchModes[searchMode].description}
-            </p>
-          </div>
-        </div>
-      </div>
+                {/* 当前模式描述 */}
+                <p className="text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
+                  {searchModes[searchMode].description}
+                </p>
+              </div>
 
-      {/* 搜索模式切换器 - 与搜索框和谐统一 */}
-      <div className="flex items-center justify-center">
-        <div className="inline-flex rounded-2xl bg-gradient-to-br from-white via-orange-50/30 to-amber-50/20 dark:from-gray-900 dark:via-orange-950/20 dark:to-amber-950/10 backdrop-blur-sm p-2 shadow-xl border-2 border-orange-200/50 dark:border-orange-800/30">
-          {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
-            const IconComponent = mode.icon;
-            const isActive = searchMode === key;
-            return (
-              <button
-                key={key}
-                onClick={() => handleModeChange(key as SearchMode)}
-                className={`
-                  inline-flex items-center gap-3 rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-300 transform relative overflow-hidden
-                  ${isActive
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg scale-105 border-2 border-orange-400/50'
-                    : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 hover:scale-102 hover:shadow-md border-2 border-transparent hover:border-orange-200/50'
-                  }
-                `}
-              >
-                <IconComponent className={`h-4 w-4 ${isActive ? 'drop-shadow-sm' : ''}`} />
-                <span className="relative z-10">{mode.label}</span>
-                {isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400/10 to-amber-400/10 animate-pulse"></div>
-                )}
-              </button>
-            );
-          })}
+              {/* 分隔线 */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-orange-200/50 dark:border-orange-800/30"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white/80 dark:bg-gray-900/80 text-gray-500 dark:text-gray-400 font-medium">
+                    选择搜索模式
+                  </span>
+                </div>
+              </div>
+
+              {/* 搜索模式切换器 */}
+              <div className="flex items-center justify-center">
+                <div className="inline-flex rounded-2xl bg-gradient-to-r from-orange-50/50 to-amber-50/30 dark:from-orange-950/30 dark:to-amber-950/20 p-2 border border-orange-200/30 dark:border-orange-800/30">
+                  {Object.entries(searchModes).filter(([key]) => key !== 'datasheet').map(([key, mode]) => {
+                    const IconComponent = mode.icon;
+                    const isActive = searchMode === key;
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => handleModeChange(key as SearchMode)}
+                        className={`
+                          inline-flex items-center gap-3 rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-300 transform relative overflow-hidden
+                          ${isActive
+                            ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg scale-105'
+                            : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50/70 dark:hover:bg-orange-950/30 hover:scale-102 hover:shadow-md'
+                          }
+                        `}
+                      >
+                        <IconComponent className={`h-4 w-4 ${isActive ? 'drop-shadow-sm' : ''}`} />
+                        <span className="relative z-10">{mode.label}</span>
+                        {isActive && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-orange-400/10 to-amber-400/10 animate-pulse"></div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
