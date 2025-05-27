@@ -183,100 +183,116 @@ export default function BrandListWithFilter() {
           </button>
         ))}
       </div>
-      {/* 筛选区 */}
-      <div className="flex flex-wrap gap-3 mb-6 px-2">
+      {/* 筛选区 - 四个为一横 */}
+      <div className="flex flex-wrap gap-3 mb-6 px-2 justify-start">
         <MultiSelect
           options={countryOptions}
           value={selectedCountries}
           onChange={setSelectedCountries}
           placeholder="国家地域"
-          className="w-40 rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+          className="flex-1 min-w-[120px] max-w-[200px] rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
         />
         <MultiSelect
           options={typeOptions}
           value={selectedTypes}
           onChange={setSelectedTypes}
           placeholder="企业类型"
-          className="w-40 rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+          className="flex-1 min-w-[120px] max-w-[200px] rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
         />
         <MultiSelect
           options={fieldOptions}
           value={selectedFields}
           onChange={setSelectedFields}
           placeholder="应用领域"
-          className="w-40 rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+          className="flex-1 min-w-[120px] max-w-[200px] rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
         />
         <MultiSelect
           options={categoryOptions}
           value={selectedCategories}
           onChange={setSelectedCategories}
           placeholder="产品种类"
-          className="w-40 rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+          className="flex-1 min-w-[120px] max-w-[200px] rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
         />
       </div>
       {/* 品牌网格 */}
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6">
-        {filtered.length === 0 && <div className="text-center text-gray-400 py-12 text-lg">暂无符合条件的品牌</div>}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
-          {filtered.slice(0, showCount).map((b, idx) => (
-            <div key={b.name} className="group cursor-pointer">
-              <div className="relative bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-500 transition-all duration-300 hover:shadow-lg hover:scale-105 transform p-4">
-                {/* 品牌Logo */}
-                <div className="aspect-square flex items-center justify-center mb-3">
-                  <div className="w-full h-full rounded-lg bg-white dark:bg-gray-700 shadow-sm border border-gray-100 dark:border-gray-600 overflow-hidden group-hover:shadow-md transition-all duration-300">
-                    <Image
-                      src={b.logo}
-                      alt={b.name}
-                      width={80}
-                      height={80}
-                      className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        const parent = target.parentElement;
-                        if (parent) {
-                          parent.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-500 to-red-500 text-white font-bold text-lg">${b.name.split('(')[0]}</div>`;
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-4 sm:p-6">
+        {filtered.length === 0 && (
+          <div className="text-center text-gray-400 py-12 text-lg">
+            暂无符合条件的品牌
+          </div>
+        )}
 
-                {/* 品牌信息 */}
-                <div className="text-center space-y-2">
-                  <h3 className="font-bold text-sm text-gray-800 dark:text-gray-100 leading-tight line-clamp-2">
-                    {b.name}
-                  </h3>
-                  <div className="flex items-center justify-center gap-1">
-                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-2 py-0.5 rounded-full">
-                      {b.country}
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-2 py-0.5 rounded-full">
-                      {b.type}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
-                    {b.desc}
-                  </p>
+        {/* 品牌网格 - 四个为一横，手机端适配 */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          {filtered.slice(0, showCount).map((brand, index) => (
+            <div
+              key={brand.name}
+              className="group cursor-pointer"
+              onClick={() => {
+                // 这里可以添加点击品牌的处理逻辑
+                console.log('点击品牌:', brand.name);
+              }}
+            >
+              {/* 使用原来的图片格式 */}
+              <div className="aspect-square flex items-center justify-center bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-lg border border-blue-100/40 dark:border-blue-900/20 hover:border-blue-300/60 dark:hover:border-blue-600/40 transition-all duration-500 hover:shadow-2xl group-hover:scale-110 hover:-translate-y-2 backdrop-blur-sm">
+                <div className="w-full h-full rounded-md flex items-center justify-center shadow-lg bg-white dark:bg-gray-700 overflow-hidden border border-gray-100/60 dark:border-gray-600/60 group-hover:shadow-xl transition-all duration-500">
+                  <Image
+                    src={brand.logo}
+                    alt={brand.name}
+                    width={80}
+                    height={80}
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      // 如果图片加载失败，显示品牌名称缩写
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = `<span class="text-blue-600 font-bold text-lg">${brand.name.split('(')[0]}</span>`;
+                      }
+                    }}
+                  />
                 </div>
+              </div>
 
-                {/* 悬停效果覆盖层 */}
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              {/* 品牌名称 - 在图片下方 */}
+              <div className="mt-2 text-center">
+                <h3 className="text-xs sm:text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
+                  {brand.name}
+                </h3>
+                <div className="flex items-center justify-center gap-1 mt-1">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-1.5 py-0.5 rounded text-xs">
+                    {brand.country}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-1.5 py-0.5 rounded text-xs">
+                    {brand.type}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
         </div>
+
+        {/* 加载更多按钮 */}
         {filtered.length > showCount && (
           <div className="flex justify-center mt-8">
             <Button
               variant="outline"
-              className="rounded-xl border-orange-200 text-orange-600 font-bold px-8 py-3 shadow hover:bg-orange-50 transition-all duration-200"
-              onClick={() => setShowCount(showCount + 12)}
+              className="rounded-xl border-orange-200 text-orange-600 font-bold px-6 sm:px-8 py-2 sm:py-3 shadow hover:bg-orange-50 transition-all duration-200 text-sm sm:text-base"
+              onClick={() => setShowCount(showCount + 8)}
             >
               加载更多
             </Button>
           </div>
         )}
+
+        {/* 底部提示 */}
+        <div className="text-center mt-6 sm:mt-8">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">
+            点击品牌logo查看详细信息
+          </p>
+          <div className="mt-2 sm:mt-3 w-16 sm:w-20 h-0.5 bg-gradient-to-r from-blue-300 to-slate-400 rounded-full mx-auto opacity-60"></div>
+        </div>
       </div>
     </div>
   );
