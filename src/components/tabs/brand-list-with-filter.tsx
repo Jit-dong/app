@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { MultiSelect } from "@/components/ui/multi-select";
 
 // mock 品牌数据
 const allBrands = [
@@ -113,10 +114,10 @@ const tabOptions = ["推荐", "国内", "国外"];
 
 export default function BrandListWithFilter() {
   const [activeTab, setActiveTab] = useState("推荐");
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [showCount, setShowCount] = useState(6);
   const [brandSearch, setBrandSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -128,10 +129,10 @@ export default function BrandListWithFilter() {
     } else if (activeTab === "国外") {
       if (b.country.includes("中国") || b.country === "新加坡") return false;
     }
-    if (selectedCountry && b.country !== selectedCountry) return false;
-    if (selectedType && b.type !== selectedType) return false;
-    if (selectedFields.length && !selectedFields.every(f => b.fields.includes(f))) return false;
-    if (selectedCategory.length && !selectedCategory.every(c => b.category.includes(c))) return false;
+    if (selectedCountries.length && !selectedCountries.includes(b.country)) return false;
+    if (selectedTypes.length && !selectedTypes.includes(b.type)) return false;
+    if (selectedFields.length && !selectedFields.some(f => b.fields.includes(f))) return false;
+    if (selectedCategories.length && !selectedCategories.some(c => b.category.includes(c))) return false;
     if (brandSearch && !b.name.toLowerCase().includes(brandSearch.trim().toLowerCase())) return false;
     return true;
   });
@@ -184,69 +185,99 @@ export default function BrandListWithFilter() {
       </div>
       {/* 筛选区 */}
       <div className="flex flex-wrap gap-3 mb-6 px-2">
-        <select
-          className="border rounded-xl px-3 py-2 text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-          value={selectedCountry || ''}
-          onChange={e => setSelectedCountry(e.target.value || null)}
-        >
-          <option value="">国家地域</option>
-          {countryOptions.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-        <select
-          className="border rounded-xl px-3 py-2 text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-          value={selectedType || ''}
-          onChange={e => setSelectedType(e.target.value || null)}
-        >
-          <option value="">企业类型</option>
-          {typeOptions.map(t => <option key={t} value={t}>{t}</option>)}
-        </select>
-        <div className="flex flex-wrap gap-1 items-center">
-          {fieldOptions.map(f => (
-            <span
-              key={f}
-              className={`px-3 py-1 rounded-full text-xs cursor-pointer border font-medium transition-all duration-200 ${selectedFields.includes(f) ? 'bg-orange-100 text-orange-700 border-orange-400 shadow' : 'bg-gray-100 text-gray-500 border-gray-200 hover:bg-orange-50 hover:text-orange-600'}`}
-              onClick={() => setSelectedFields(selectedFields.includes(f) ? selectedFields.filter(x => x !== f) : [...selectedFields, f])}
-            >
-              {f}
-            </span>
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-1 items-center">
-          {categoryOptions.map(c => (
-            <span
-              key={c}
-              className={`px-3 py-1 rounded-full text-xs cursor-pointer border font-medium transition-all duration-200 ${selectedCategory.includes(c) ? 'bg-orange-100 text-orange-700 border-orange-400 shadow' : 'bg-gray-100 text-gray-500 border-gray-200 hover:bg-orange-50 hover:text-orange-600'}`}
-              onClick={() => setSelectedCategory(selectedCategory.includes(c) ? selectedCategory.filter(x => x !== c) : [...selectedCategory, c])}
-            >
-              {c}
-            </span>
-          ))}
-        </div>
+        <MultiSelect
+          options={countryOptions}
+          value={selectedCountries}
+          onChange={setSelectedCountries}
+          placeholder="国家地域"
+          className="w-40 rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+        />
+        <MultiSelect
+          options={typeOptions}
+          value={selectedTypes}
+          onChange={setSelectedTypes}
+          placeholder="企业类型"
+          className="w-40 rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+        />
+        <MultiSelect
+          options={fieldOptions}
+          value={selectedFields}
+          onChange={setSelectedFields}
+          placeholder="应用领域"
+          className="w-40 rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+        />
+        <MultiSelect
+          options={categoryOptions}
+          value={selectedCategories}
+          onChange={setSelectedCategories}
+          placeholder="产品种类"
+          className="w-40 rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+        />
       </div>
-      {/* 品牌列表 */}
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-md">
+      {/* 品牌网格 */}
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6">
         {filtered.length === 0 && <div className="text-center text-gray-400 py-12 text-lg">暂无符合条件的品牌</div>}
-        {filtered.slice(0, showCount).map((b, idx) => (
-          <div key={b.name} className="flex items-center gap-6 border-b last:border-b-0 py-6 px-4 group transition-all duration-200 hover:bg-orange-50/30 hover:shadow-lg rounded-xl">
-            <Image src={b.logo} alt={b.name} width={64} height={64} className="rounded-xl bg-white border p-2 object-contain shadow group-hover:scale-105 transition-transform duration-200" />
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-1 truncate">{b.name}</div>
-              <div className="text-gray-500 text-sm mb-2 truncate">{b.desc}</div>
-              <div className="flex flex-wrap gap-2 mt-1">
-                <span className="bg-gray-100 text-gray-500 rounded px-2 py-0.5 text-xs font-medium shadow-sm">{b.country}</span>
-                <span className="bg-gray-100 text-gray-500 rounded px-2 py-0.5 text-xs font-medium shadow-sm">{b.type}</span>
-                {b.fields.map(f => <span key={f} className="bg-orange-50 text-orange-600 rounded px-2 py-0.5 text-xs font-medium shadow-sm">{f}</span>)}
-                {b.category.map(c => <span key={c} className="bg-blue-50 text-blue-600 rounded px-2 py-0.5 text-xs font-medium shadow-sm">{c}</span>)}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+          {filtered.slice(0, showCount).map((b, idx) => (
+            <div key={b.name} className="group cursor-pointer">
+              <div className="relative bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-500 transition-all duration-300 hover:shadow-lg hover:scale-105 transform p-4">
+                {/* 品牌Logo */}
+                <div className="aspect-square flex items-center justify-center mb-3">
+                  <div className="w-full h-full rounded-lg bg-white dark:bg-gray-700 shadow-sm border border-gray-100 dark:border-gray-600 overflow-hidden group-hover:shadow-md transition-all duration-300">
+                    <Image
+                      src={b.logo}
+                      alt={b.name}
+                      width={80}
+                      height={80}
+                      className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          parent.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-500 to-red-500 text-white font-bold text-lg">${b.name.split('(')[0]}</div>`;
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* 品牌信息 */}
+                <div className="text-center space-y-2">
+                  <h3 className="font-bold text-sm text-gray-800 dark:text-gray-100 leading-tight line-clamp-2">
+                    {b.name}
+                  </h3>
+                  <div className="flex items-center justify-center gap-1">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-2 py-0.5 rounded-full">
+                      {b.country}
+                    </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-2 py-0.5 rounded-full">
+                      {b.type}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                    {b.desc}
+                  </p>
+                </div>
+
+                {/* 悬停效果覆盖层 */}
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
         {filtered.length > showCount && (
-          <div className="flex justify-center mt-6">
-            <Button variant="outline" className="rounded-xl border-orange-200 text-orange-600 font-bold px-8 py-2 shadow" onClick={() => setShowCount(showCount + 6)}>加载更多</Button>
+          <div className="flex justify-center mt-8">
+            <Button
+              variant="outline"
+              className="rounded-xl border-orange-200 text-orange-600 font-bold px-8 py-3 shadow hover:bg-orange-50 transition-all duration-200"
+              onClick={() => setShowCount(showCount + 12)}
+            >
+              加载更多
+            </Button>
           </div>
         )}
       </div>
     </div>
   );
-} 
+}
