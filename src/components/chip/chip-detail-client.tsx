@@ -131,7 +131,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
       <div className="px-4 py-4 space-y-4">
         {/* 芯片标题和基本信息 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-          <div className="flex items-start justify-between mb-3">
+          <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -145,59 +145,20 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
                 {chip.displayDescription}
               </p>
+              <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                <span>制造商: {chip.displayManufacturer}</span>
+                <span>分类: {chip.displayCategory}</span>
+              </div>
             </div>
             <div className="flex flex-col gap-2 ml-4">
               <Button variant="outline" size="sm" className="text-blue-600 border-blue-200">
-                <Info className="h-4 w-4 mr-1" />
-                通知
+                <FileText className="h-4 w-4 mr-1" />
+                数据表
               </Button>
               <Button className="bg-red-600 hover:bg-red-700 text-white">
                 立即订购
               </Button>
             </div>
-          </div>
-
-          {/* 数据手册链接 */}
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center gap-2 text-sm">
-              <FileText className="h-4 w-4 text-blue-600" />
-              <span className="text-gray-600 dark:text-gray-400">数据表</span>
-            </div>
-            <div className="ml-6 space-y-1">
-              <div className="flex items-center gap-2 text-sm">
-                <FileText className="h-4 w-4 text-blue-600" />
-                <Link href="#" className="text-blue-600 hover:underline">
-                  TPS56320x 采用 SOT-23 封装的 4.5V 至 17V 输入、3A 同步降压转换器 数据表 (Rev. B)
-                </Link>
-                <span className="text-gray-500">PDF | HTML</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm ml-6">
-                <FileText className="h-4 w-4 text-blue-600" />
-                <Link href="#" className="text-blue-600 hover:underline">
-                  英语版 (Rev.B)
-                </Link>
-                <span className="text-gray-500">PDF | HTML</span>
-              </div>
-            </div>
-          </div>
-
-          {/* 导航标签 */}
-          <div className="flex gap-6 border-b border-gray-200 dark:border-gray-700">
-            <button className="pb-2 text-sm font-medium text-gray-900 dark:text-gray-100 border-b-2 border-gray-900 dark:border-gray-100">
-              产品详情
-            </button>
-            <button className="pb-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
-              技术文档
-            </button>
-            <button className="pb-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
-              设计和开发
-            </button>
-            <button className="pb-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
-              订购和质量
-            </button>
-            <button className="pb-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
-              支持和培训
-            </button>
           </div>
         </div>
 

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -12,6 +11,7 @@ import { Input } from '../ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { cn } from '@/lib/utils';
 import AiChipAssistantModal from '@/components/category-query/ai-chip-assistant-modal';
+import { useRouter } from 'next/navigation';
 
 
 export default function CategoryQueryContent() {
@@ -27,6 +27,7 @@ export default function CategoryQueryContent() {
   const [isAiAssistantModalOpen, setIsAiAssistantModalOpen] = useState(false);
 
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     if (!searchTerm) {
@@ -95,10 +96,22 @@ export default function CategoryQueryContent() {
     let message = "未选择分类";
     if (selectedL3) {
       message = `已选择: ${selectedL1?.name} > ${selectedL2?.name} > ${selectedL3.name}`;
+      const params = new URLSearchParams();
+      params.set('category', `${selectedL1?.name}/${selectedL2?.name}/${selectedL3.name}`);
+      params.set('mode', 'datasheet');
+      router.push(`/search?${params.toString()}`);
     } else if (selectedL2) {
       message = `已选择: ${selectedL1?.name} > ${selectedL2.name}`;
+      const params = new URLSearchParams();
+      params.set('category', `${selectedL1?.name}/${selectedL2.name}`);
+      params.set('mode', 'datasheet');
+      router.push(`/search?${params.toString()}`);
     } else if (selectedL1) {
       message = `已选择: ${selectedL1.name}`;
+      const params = new URLSearchParams();
+      params.set('category', selectedL1.name);
+      params.set('mode', 'datasheet');
+      router.push(`/search?${params.toString()}`);
     }
     toast({
       title: '分类选择结果',

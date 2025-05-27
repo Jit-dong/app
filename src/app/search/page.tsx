@@ -36,12 +36,16 @@ function SearchPageContent() {
   const router = useRouter();
 
   const query = searchParams.get('q') || '';
-  const mode = (searchParams.get('mode') as SearchMode) || 'datasheet';
+  const modeRaw = searchParams.get('mode') || 'datasheet';
+  const validModes = ['datasheet', 'silkscreen', 'brand', 'alternative'];
+  const mode: SearchMode = validModes.includes(modeRaw) ? (modeRaw as SearchMode) : 'datasheet';
 
   const [currentQuery, setCurrentQuery] = useState(query);
+  const [searchInput, setSearchInput] = useState(query);
 
   const handleSearch = (newQuery: string) => {
     setCurrentQuery(newQuery);
+    setSearchInput(newQuery);
     // 更新URL参数
     const params = new URLSearchParams();
     params.set('q', newQuery);
@@ -53,51 +57,46 @@ function SearchPageContent() {
     router.back();
   };
 
+  // 美化后的主搜索框提交
+  const handleMainSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    handleSearch(searchInput);
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      {/* 顶部导航栏 */}
+      {/* 顶部美化主搜索栏 */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleBack}
-              className="flex-shrink-0"
-            >
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              返回
-            </Button>
-
-            <div className="flex-1 max-w-2xl">
-              <EnhancedSearchBar
-                onSearch={handleSearch}
-                initialQuery={currentQuery}
-                placeholder={`${searchModes[mode].label} - ${searchModes[mode].description}`}
-                className="w-full"
-                showSuggestions={true}
-              />
-            </div>
-          </div>
+        <div className="container mx-auto px-4 py-6 flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleBack}
+            className="flex-shrink-0"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            返回
+          </Button>
+          {/* 顶部主搜索框已去除，仅保留返回按钮 */}
         </div>
       </div>
 
       {/* 搜索结果内容 */}
       <div className="container mx-auto px-4 py-6">
-        {query && (
+        {currentQuery && (
           <div className="mb-6">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
               <Search className="h-4 w-4" />
               <span>搜索模式：{searchModes[mode].label}</span>
             </div>
             <h1 className="text-xl font-semibold">
-              搜索结果：<span className="text-primary">{query}</span>
+              搜索结果：<span className="text-primary">{currentQuery}</span>
             </h1>
           </div>
         )}
 
         {/* 使用现有的搜索组件，传递搜索参数并隐藏搜索框 */}
-        <ChipSearchContent initialQuery={query} initialMode={mode} hideSearchBar={true} />
+        <ChipSearchContent initialQuery={currentQuery} initialMode={mode} hideSearchBar={true} />
       </div>
     </div>
   );

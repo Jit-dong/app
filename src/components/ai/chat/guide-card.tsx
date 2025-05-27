@@ -2,6 +2,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import type { LucideIcon } from "lucide-react";
 import React from "react";
+import { useRouter } from 'next/navigation';
 
 interface GuideCardProps {
   icon: LucideIcon;
@@ -14,10 +15,15 @@ interface GuideCardProps {
 
 export default function GuideCard({ icon: Icon, title, description, buttonText, onButtonClick, onFileUpload }: GuideCardProps) {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const handleMainButtonClick = () => {
     if (title === "Datasheet解读" && onFileUpload) {
       fileInputRef.current?.click();
+    } else if (title === "查看全部66款芯片") {
+      const params = new URLSearchParams();
+      params.set('mode', 'datasheet');
+      router.push(`/search?${params.toString()}`);
     } else {
       onButtonClick(title, buttonText);
     }
