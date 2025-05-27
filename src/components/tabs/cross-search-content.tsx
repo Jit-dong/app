@@ -41,17 +41,20 @@ export default function CrossSearchContent() {
     brand.name.toLowerCase().includes(brandSearchTerm.toLowerCase())
   );
 
-  // Recommended brands (with image URLs) - Updated with better alignment
+  // 推荐品牌 (使用public目录中的实际图片)
   const recommendedBrands = [
-    { code: 'ADI', name: 'Analog Devices', imageUrl: '/brands/ Infineon.png', category: 'Analog' },
-    { code: 'TI', name: 'Texas Instruments', imageUrl: '/brands/TI.png', category: 'Mixed Signal' },
-    { code: 'RNS', name: 'Renesas Electronics', imageUrl: '/brands/NXP.png', category: 'MCU' },
-    { code: 'NXP', name: 'NXP Semiconductors', imageUrl: '/brands/NXP.png', category: 'Automotive' },
-    { code: 'STM', name: 'STMicroelectronics', imageUrl: '/brands/ST.png', category: 'MCU' },
-    { code: 'MPS', name: 'Monolithic Power', imageUrl: '/brands/MICROCHIP.png', category: 'Power' },
-    { code: 'MAX', name: 'Maxim Integrated', imageUrl: '/brands/MAX.png', category: 'Analog' },
-    { code: 'INF', name: 'Infineon Technologies', imageUrl: '/brands/ Infineon.png', category: 'Power' },
-    // Add more recommended brands with image URLs and ensure corresponding image files exist
+    { code: 'TI', name: 'Texas Instruments', imageUrl: '/brands/TI.png', category: '模拟芯片' },
+    { code: 'STM', name: 'STMicroelectronics', imageUrl: '/brands/ST.png', category: '微控制器' },
+    { code: 'NXP', name: 'NXP Semiconductors', imageUrl: '/brands/NXP.png', category: '汽车电子' },
+    { code: 'MAX', name: 'Maxim Integrated', imageUrl: '/brands/MAX.png', category: '模拟芯片' },
+    { code: 'MICROCHIP', name: 'Microchip Technology', imageUrl: '/brands/MICROCHIP.png', category: '微控制器' },
+    { code: 'INF', name: 'Infineon Technologies', imageUrl: '/brands/ Infineon.png', category: '功率器件' },
+    { code: 'VISHAY', name: 'Vishay Intertechnology', imageUrl: '/brands/VISHAY.png', category: '分立器件' },
+    { code: 'TOSHIBA', name: 'Toshiba', imageUrl: '/brands/Toshiba.png', category: '功率器件' },
+    { code: 'FUJITSU', name: 'Fujitsu', imageUrl: '/brands/ Fujitsu.png', category: '存储器件' },
+    { code: 'INTERSIL', name: 'Intersil', imageUrl: '/brands/Intersil.png', category: '电源管理' },
+    { code: 'JRC', name: 'Japan Radio Company', imageUrl: '/brands/JRC.png', category: '射频器件' },
+    { code: 'NTE', name: 'NTE Electronics', imageUrl: '/brands/NTE.png', category: '通用器件' },
   ];
 
   const handleSearch = () => {
@@ -150,30 +153,32 @@ export default function CrossSearchContent() {
   };
 
   return (
-    <div className="cross-search-page space-y-8 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+    <div className="cross-search-page space-y-6 p-3 sm:p-4 md:p-6 max-w-6xl mx-auto">
 
-      <div className="text-center space-y-2 mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Cross Search
+      <div className="text-center space-y-3 mb-6">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          交叉搜索
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 text-lg">Find equivalent chips across different brands</p>
+        <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg px-4">
+          查找不同品牌的等效芯片，快速找到替代方案
+        </p>
       </div>
 
       {/* Search Input Area */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6 border border-gray-200 dark:border-gray-700 mx-auto max-w-4xl backdrop-blur-sm bg-white/90 dark:bg-gray-800/90">
-        {/* Horizontal layout for inputs and button */}
-        <div className="flex flex-col lg:flex-row gap-6 items-end">
+      <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border border-gray-200 dark:border-gray-700 backdrop-blur-sm bg-white/90 dark:bg-gray-800/90">
+        {/* Mobile-first responsive layout */}
+        <div className="flex flex-col gap-4 sm:gap-6">
           {/* Brand Selection (Searchable Dropdown) */}
-          <div className="space-y-3 flex-1" ref={dropdownRef}>
+          <div className="space-y-2 sm:space-y-3" ref={dropdownRef}>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
               <Filter className="h-4 w-4" />
-              Select Brand
+              选择品牌
             </label>
             <div className="relative">
               <input
                 type="text"
-                className="block w-full pl-4 pr-12 py-3.5 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base dark:bg-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all duration-200"
-                placeholder="Search or select chip brand..."
+                className="block w-full pl-4 pr-12 py-3 sm:py-3.5 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base dark:bg-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all duration-200"
+                placeholder="搜索或选择芯片品牌..."
                 value={brandSearchTerm}
                 onChange={(e) => {
                   setBrandSearchTerm(e.target.value);
@@ -196,26 +201,26 @@ export default function CrossSearchContent() {
 
               {/* Dropdown List */}
               {isDropdownOpen && brandSearchTerm && filteredBrands.length > 0 && (
-                <ul className="absolute z-20 w-full bg-white dark:bg-gray-800 shadow-xl max-h-60 rounded-xl py-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none mt-2 border border-gray-200 dark:border-gray-700">
+                <ul className="absolute z-20 w-full bg-white dark:bg-gray-800 shadow-xl max-h-48 sm:max-h-60 rounded-lg sm:rounded-xl py-2 text-sm sm:text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none mt-1 sm:mt-2 border border-gray-200 dark:border-gray-700">
                   {filteredBrands.map((brand) => (
                     <li
                       key={brand.code}
                       onClick={() => handleSelectBrand(brand)}
-                      className="text-gray-900 dark:text-gray-100 cursor-pointer select-none relative py-3 px-4 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors rounded-lg mx-2"
+                      className="text-gray-900 dark:text-gray-100 cursor-pointer select-none relative py-2 sm:py-3 px-3 sm:px-4 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors rounded-lg mx-1 sm:mx-2"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-medium">{brand.name}</span>
-                        <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">{brand.code}</span>
+                        <span className="font-medium text-sm sm:text-base truncate">{brand.name}</span>
+                        <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded ml-2 flex-shrink-0">{brand.code}</span>
                       </div>
                     </li>
                   ))}
                 </ul>
               )}
               {isDropdownOpen && brandSearchTerm && filteredBrands.length === 0 && (
-                <div className="absolute z-20 w-full bg-white dark:bg-gray-800 shadow-xl rounded-xl py-4 px-4 text-sm text-gray-500 dark:text-gray-400 mt-2 border border-gray-200 dark:border-gray-700">
+                <div className="absolute z-20 w-full bg-white dark:bg-gray-800 shadow-xl rounded-lg sm:rounded-xl py-3 sm:py-4 px-3 sm:px-4 text-sm text-gray-500 dark:text-gray-400 mt-1 sm:mt-2 border border-gray-200 dark:border-gray-700">
                   <div className="text-center">
-                    <Search className="h-8 w-8 mx-auto mb-2 text-gray-300" />
-                    <p>No matching brands found</p>
+                    <Search className="h-6 sm:h-8 w-6 sm:w-8 mx-auto mb-2 text-gray-300" />
+                    <p>未找到匹配的品牌</p>
                   </div>
                 </div>
               )}
@@ -223,19 +228,19 @@ export default function CrossSearchContent() {
           </div>
 
           {/* Model Input Field */}
-          <div className="space-y-3 flex-1">
+          <div className="space-y-2 sm:space-y-3">
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
               <Search className="h-4 w-4" />
-              Model Keywords
+              型号关键词
             </label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">
-                <Search className="h-5 w-5" />
+                <Search className="h-4 sm:h-5 w-4 sm:w-5" />
               </span>
               <input
                 type="text"
-                className="block w-full pl-12 pr-4 py-3.5 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base dark:bg-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all duration-200"
-                placeholder="Enter model number or keywords..."
+                className="block w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 border border-gray-300 dark:border-gray-600 rounded-lg sm:rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base dark:bg-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all duration-200"
+                placeholder="请输入型号或关键词..."
                 value={modelKeyword}
                 onChange={e => {
                   setModelKeyword(e.target.value);
@@ -246,21 +251,21 @@ export default function CrossSearchContent() {
           </div>
 
           {/* Search Button */}
-          <div className="pt-2 lg:pt-0">
-            <div className="flex gap-3">
+          <div className="pt-2">
+            <div className="flex gap-2 sm:gap-3">
               <Button
                 onClick={handleSearch}
-                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-3.5 rounded-xl shadow-lg transition-all duration-200 text-base font-semibold w-full lg:w-auto transform hover:scale-105"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg sm:rounded-xl shadow-lg transition-all duration-200 text-sm sm:text-base font-semibold flex-1 sm:flex-none transform hover:scale-105"
               >
-                Search
+                搜索
               </Button>
               {(selectedBrand || modelKeyword || hasSearched) && (
                 <Button
                   onClick={clearSearch}
                   variant="outline"
-                  className="px-4 py-3.5 rounded-xl border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
+                  className="px-3 sm:px-4 py-3 sm:py-3.5 rounded-lg sm:rounded-xl border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 sm:h-5 w-4 sm:w-5" />
                 </Button>
               )}
             </div>
@@ -269,9 +274,9 @@ export default function CrossSearchContent() {
 
         {/* Recent Searches Section */}
         {recentSearches.length > 0 && (
-          <div className="recent-searches-area space-y-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
-              <History className="h-5 w-5 text-blue-500" /> Recent Searches
+          <div className="recent-searches-area space-y-3 sm:space-y-4 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+              <History className="h-4 sm:h-5 w-4 sm:w-5 text-blue-500" /> 最近搜索
             </h3>
             <div className="flex flex-wrap gap-2">
               {recentSearches.map((search, index) => (
@@ -281,7 +286,7 @@ export default function CrossSearchContent() {
                     setModelKeyword(search);
                     handleSearch();
                   }}
-                  className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                  className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs sm:text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
                 >
                   {search}
                 </button>
@@ -293,40 +298,40 @@ export default function CrossSearchContent() {
 
       {/* Brand Recommendations Section */}
       {!hasSearched && (
-        <div className="brand-recommendations-area bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8 space-y-6 border border-gray-200 dark:border-gray-700 backdrop-blur-sm bg-white/90 dark:bg-gray-800/90">
+        <div className="brand-recommendations-area bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border border-gray-200 dark:border-gray-700 backdrop-blur-sm bg-white/90 dark:bg-gray-800/90">
           <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg">
-                <Star className="h-6 w-6 text-white" />
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg">
+                <Star className="h-4 sm:h-5 md:h-6 w-4 sm:w-5 md:w-6 text-white" />
               </div>
-              Featured Brands
+              品牌推荐
             </h3>
             <button
               onClick={() => setShowAllBrands(!showAllBrands)}
-              className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1 transition-colors"
+              className="text-blue-600 hover:text-blue-700 font-medium text-xs sm:text-sm flex items-center gap-1 transition-colors"
             >
-              {showAllBrands ? 'Show Less' : 'View All'}
-              <ChevronDown className={`h-4 w-4 transition-transform ${showAllBrands ? 'rotate-180' : ''}`} />
+              {showAllBrands ? '收起' : '查看全部'}
+              <ChevronDown className={`h-3 sm:h-4 w-3 sm:w-4 transition-transform ${showAllBrands ? 'rotate-180' : ''}`} />
             </button>
           </div>
 
-          {/* Brand Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-4 md:gap-6">
-            {(showAllBrands ? recommendedBrands : recommendedBrands.slice(0, 8)).map(brand => (
+          {/* Brand Grid - Mobile optimized */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
+            {(showAllBrands ? recommendedBrands : recommendedBrands.slice(0, 6)).map(brand => (
               <button
                 key={brand.code}
                 onClick={() => handleSelectBrand(brand)}
-                className="group relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
+                className="group relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
               >
                 {/* Category Badge */}
-                <div className="absolute top-3 right-3">
-                  <span className="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full font-medium">
+                <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+                  <span className="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full font-medium">
                     {brand.category}
                   </span>
                 </div>
 
                 {/* Brand Logo Container */}
-                <div className="relative w-full h-16 mb-4 flex items-center justify-center">
+                <div className="relative w-full h-10 sm:h-12 md:h-16 mb-2 sm:mb-3 md:mb-4 flex items-center justify-center">
                   <div className="relative w-full h-full">
                     <Image
                       src={brand.imageUrl}
@@ -340,7 +345,7 @@ export default function CrossSearchContent() {
                         if (parent) {
                           parent.innerHTML = `
                             <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg">
-                              <span class="text-white font-bold text-lg">${brand.code}</span>
+                              <span class="text-white font-bold text-sm sm:text-base md:text-lg">${brand.code}</span>
                             </div>
                           `;
                         }
@@ -350,31 +355,31 @@ export default function CrossSearchContent() {
                 </div>
 
                 {/* Brand Info */}
-                <div className="space-y-2">
-                  <h4 className="font-bold text-gray-900 dark:text-gray-100 text-sm leading-tight line-clamp-2">
+                <div className="space-y-1 sm:space-y-2">
+                  <h4 className="font-bold text-gray-900 dark:text-gray-100 text-xs sm:text-sm leading-tight line-clamp-2 text-center">
                     {brand.name}
                   </h4>
                   <div className="flex items-center justify-center">
-                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-md font-mono">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-600 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md font-mono">
                       {brand.code}
                     </span>
                   </div>
                 </div>
 
                 {/* Hover Effect Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
             ))}
           </div>
 
           {/* Additional Features */}
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-wrap gap-2 justify-center">
-              <span className="text-sm text-gray-500 dark:text-gray-400">Popular categories:</span>
-              {['MCU', 'Analog', 'Power', 'Mixed Signal'].map(category => (
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">热门分类:</span>
+              {['微控制器', '模拟芯片', '功率器件', '电源管理'].map(category => (
                 <button
                   key={category}
-                  className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                  className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 sm:px-3 py-1 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
                   onClick={() => {
                     const categoryBrands = recommendedBrands.filter(b => b.category === category);
                     if (categoryBrands.length > 0) {
@@ -392,81 +397,82 @@ export default function CrossSearchContent() {
 
       {/* Search Results Display Area */}
       {hasSearched && (
-        <div className="search-results-area bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm bg-white/90 dark:bg-gray-800/90">
+        <div className="search-results-area bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-sm bg-white/90 dark:bg-gray-800/90">
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-16">
+            <div className="flex flex-col items-center justify-center py-12 sm:py-16">
               <div className="relative">
-                <div className="w-16 h-16 border-4 border-blue-200 dark:border-blue-800 rounded-full animate-spin border-t-blue-600 dark:border-t-blue-400"></div>
-                <div className="absolute inset-0 w-16 h-16 border-4 border-transparent rounded-full animate-ping border-t-blue-400"></div>
+                <div className="w-12 sm:w-16 h-12 sm:h-16 border-4 border-blue-200 dark:border-blue-800 rounded-full animate-spin border-t-blue-600 dark:border-t-blue-400"></div>
+                <div className="absolute inset-0 w-12 sm:w-16 h-12 sm:h-16 border-4 border-transparent rounded-full animate-ping border-t-blue-400"></div>
               </div>
-              <p className="text-gray-600 dark:text-gray-400 text-lg mt-6 font-medium">Searching for cross-references...</p>
-              <p className="text-gray-500 dark:text-gray-500 text-sm mt-2">Finding equivalent chips across brands</p>
+              <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg mt-4 sm:mt-6 font-medium text-center">正在搜索交叉引用...</p>
+              <p className="text-gray-500 dark:text-gray-500 text-sm mt-2 text-center">查找不同品牌的等效芯片</p>
             </div>
           ) : searchResults.length > 0 ? (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-3">
-                  <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg">
-                    <Search className="h-6 w-6 text-white" />
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg">
+                    <Search className="h-4 sm:h-5 md:h-6 w-4 sm:w-5 md:w-6 text-white" />
                   </div>
-                  Search Results
-                  <span className="text-sm font-normal bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full">
-                    {searchResults.length} found
+                  <span className="hidden sm:inline">搜索结果</span>
+                  <span className="sm:hidden">结果</span>
+                  <span className="text-xs sm:text-sm font-normal bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 sm:px-3 py-1 rounded-full">
+                    {searchResults.length}个
                   </span>
                 </h3>
                 <button
                   onClick={clearSearch}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors p-1"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 sm:h-5 w-4 sm:w-5" />
                 </button>
               </div>
 
-              <div className="grid gap-4">
+              <div className="grid gap-3 sm:gap-4">
                 {searchResults.map((chip) => (
-                  <div key={chip.id} className="transform transition-all duration-200 hover:scale-[1.02]">
+                  <div key={chip.id} className="transform transition-all duration-200 hover:scale-[1.01] sm:hover:scale-[1.02]">
                     <ChipListItem chip={chip} />
                   </div>
                 ))}
               </div>
 
               {/* Search Tips */}
-              <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
-                <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">Search Tips:</h4>
-                <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-                  <li>• Try different brand combinations for better cross-reference results</li>
-                  <li>• Use partial model numbers for broader search results</li>
-                  <li>• Check the datasheet links for detailed specifications</li>
+              <div className="mt-6 sm:mt-8 p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg sm:rounded-xl border border-blue-200 dark:border-blue-800">
+                <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2 text-sm sm:text-base">搜索提示:</h4>
+                <ul className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                  <li>• 尝试不同的品牌组合以获得更好的交叉引用结果</li>
+                  <li>• 使用部分型号进行更广泛的搜索</li>
+                  <li>• 查看数据手册链接获取详细规格</li>
                 </ul>
               </div>
             </div>
           ) : (
-            <div className="text-center py-16">
-              <div className="relative mb-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center mx-auto">
-                  <Search className="h-10 w-10 text-gray-400 dark:text-gray-500" />
+            <div className="text-center py-12 sm:py-16">
+              <div className="relative mb-4 sm:mb-6">
+                <div className="w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center mx-auto">
+                  <Search className="h-8 sm:h-10 w-8 sm:w-10 text-gray-400 dark:text-gray-500" />
                 </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-red-100 dark:bg-red-900/50 rounded-full flex items-center justify-center">
-                  <X className="h-4 w-4 text-red-500" />
+                <div className="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-6 sm:w-8 h-6 sm:h-8 bg-red-100 dark:bg-red-900/50 rounded-full flex items-center justify-center">
+                  <X className="h-3 sm:h-4 w-3 sm:w-4 text-red-500" />
                 </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">No Results Found</h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
-                We couldn't find any chips matching your search criteria. Try adjusting your search terms or selecting a different brand.
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">未找到结果</h3>
+              <p className="text-gray-500 dark:text-gray-400 mb-4 sm:mb-6 max-w-md mx-auto text-sm sm:text-base px-4">
+                未能找到符合您搜索条件的芯片。请尝试调整搜索词或选择不同的品牌。
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center px-4">
                 <Button
                   onClick={clearSearch}
                   variant="outline"
-                  className="px-6 py-2 rounded-lg"
+                  className="px-4 sm:px-6 py-2 rounded-lg text-sm sm:text-base"
                 >
-                  Clear Search
+                  清除搜索
                 </Button>
                 <Button
                   onClick={() => setHasSearched(false)}
-                  className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700"
+                  className="px-4 sm:px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-sm sm:text-base"
                 >
-                  Browse Brands
+                  浏览品牌
                 </Button>
               </div>
             </div>
