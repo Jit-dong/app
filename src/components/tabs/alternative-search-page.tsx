@@ -44,9 +44,9 @@ export default function AlternativeSearchPage({ onBack }: { onBack?: () => void 
     <div className="max-w-2xl mx-auto pb-12">
       {/* 顶部导航栏 */}
       <div className="flex items-center justify-between py-4 px-2">
-        <Button variant="ghost" size="icon" onClick={onBack}>
+        {/* <Button variant="ghost" size="icon" onClick={onBack}>
           <ArrowLeft className="h-5 w-5" />
-        </Button>
+        </Button> */}
         <div className="text-lg font-bold text-gray-800">查替代料</div>
         <Button variant="outline" className="rounded-xl px-4 py-1 text-sm font-semibold border-orange-200 text-orange-600">批量查询</Button>
       </div>

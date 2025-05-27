@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle, Shuffle } from "lucide-react";
 import BrandListWithFilter from './brand-list-with-filter';
 import AlternativeSearchPage from './alternative-search-page';
+import SilkscreenReversePage from './silkscreen-reverse-page';
 
 // 搜索模式类型定义
 type SearchMode = 'datasheet' | 'silkscreen' | 'cross' | 'alternative' | 'brand';
@@ -154,6 +155,9 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
   // 替代模式直接渲染查替代页面
   if (safeMode === 'alternative') {
     return <AlternativeSearchPage />;
+  }
+  if (safeMode === 'silkscreen') {
+    return <SilkscreenReversePage />;
   }
 
   return (
