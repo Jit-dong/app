@@ -1,12 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Search, ChevronDown } from "lucide-react"; // Assuming icons for search and dropdown
+import { Search, ChevronDown, TrendingUp, History } from "lucide-react"; // Added icons for recommendations and history
+import ChipListItem from "@/components/shared/chip-list-item"; // Import ChipListItem for displaying results
+import type { Chip } from "@/lib/types"; // Import Chip type
+import Image from "next/image"; // Import Image component
 
 export default function CrossSearchContent() {
   const [selectedBrand, setSelectedBrand] = useState<{ code: string, name: string } | null>(null);
   const [modelKeyword, setModelKeyword] = useState("");
+  const [brandSearchTerm, setBrandSearchTerm] = useState(""); // State for the brand input
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to control dropdown visibility
+  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for detecting clicks outside
+  const [searchResults, setSearchResults] = useState<Chip[]>([]); // State for search results
+  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
+  const [hasSearched, setHasSearched] = useState(false); // State to track if search has been performed
 
   // Placeholder for brand data - in a real app, this would come from an API
   const brands = [
@@ -15,6 +24,27 @@ export default function CrossSearchContent() {
     { code: 'ESP', name: 'Espressif' },
     { code: 'ADI', name: 'Analog Devices' },
     { code: 'NXP', name: 'NXP Semiconductors' },
+    { code: 'INF', name: 'Infineon Technologies' },
+    { code: 'RNS', name: 'Renesas Electronics' },
+    { code: 'MPS', name: 'Monolithic Power Systems' },
+    { code: 'TXC', name: 'TXC Corporation' },
+    { code: 'CYP', name: 'Cypress Semiconductor' },
+  ];
+
+  // Filtered brands based on search term
+  const filteredBrands = brands.filter(brand =>
+    brand.name.toLowerCase().includes(brandSearchTerm.toLowerCase())
+  );
+
+  // Recommended brands (with image URLs)
+  const recommendedBrands = [
+    { code: 'ADI', name: 'Analog Devices', imageUrl: '/brands/ADI.png' },
+    { code: 'TI', name: 'Texas Instruments', imageUrl: '/brands/TI.png' },
+    { code: 'RNS', name: 'Renesas Electronics', imageUrl: '/brands/Renesas.png' },
+    { code: 'NXP', name: 'NXP Semiconductors', imageUrl: '/brands/NXP.png' },
+    { code: 'STM', name: 'STMicroelectronics', imageUrl: '/brands/ST.png' },
+    { code: 'MPS', name: 'Monolithic Power Systems', imageUrl: '/brands/MPS.png' },
+    // Add more recommended brands with image URLs
   ];
 
   const handleSearch = () => {
@@ -23,58 +53,116 @@ export default function CrossSearchContent() {
       console.log("请选择品牌或输入型号关键词");
       return;
     }
+
+    setIsLoading(true); // Start loading
+    setHasSearched(true); // Mark as searched
+    setSearchResults([]); // Clear previous results
+
     console.log("Searching for:", { brandCode: selectedBrand?.code, keyword: modelKeyword });
-    // TODO: Implement actual API call here
-    // fetch('/api/chips/search', { method: 'POST', body: JSON.stringify({ brandCode: selectedBrand?.code, keyword: modelKeyword }) });
+
+    // Simulate API call with a delay
+    setTimeout(() => {
+      // TODO: Replace with actual API call
+      const mockResults: Chip[] = [
+        { id: '1', model: 'STM32F407VGT6', manufacturer: 'STMicroelectronics', description: 'High-performance ARM Cortex-M4 MCU', datasheetUrl: '#', imageUrl: '#' },
+        { id: '2', model: 'TPS5430DDA', manufacturer: 'Texas Instruments', description: '4A Step-Down Converter', datasheetUrl: '#', imageUrl: '#' },
+        { id: '3', model: 'ESP32-WROOM-32', manufacturer: 'Espressif', description: 'Wi-Fi & Bluetooth MCU Module', datasheetUrl: '#', imageUrl: '#' },
+      ];
+
+      // Simple mock filtering based on keyword (for demo)
+      const results = mockResults.filter(chip =>
+        chip.model.toLowerCase().includes(modelKeyword.toLowerCase()) ||
+        chip.manufacturer.toLowerCase().includes(modelKeyword.toLowerCase())
+      );
+
+      setSearchResults(results); // Set search results
+      setIsLoading(false); // End loading
+
+    }, 1000); // Simulate network delay of 1 second
   };
 
+  // Handle selecting a brand from the dropdown
+  const handleSelectBrand = (brand: { code: string, name: string }) => {
+    setSelectedBrand(brand);
+    setBrandSearchTerm(brand.name); // Set input value to selected brand name
+    setIsDropdownOpen(false); // Close dropdown
+  };
+
+  // Handle clicking on a recommended brand
+  const handleRecommendedBrandClick = (brand: { code: string, name: string, imageUrl?: string }) => {
+    // When clicking a recommended brand, we select it and close the dropdown if open
+    setSelectedBrand(brand);
+    setBrandSearchTerm(brand.name);
+    setIsDropdownOpen(false); // Close the dropdown when a recommendation is clicked
+    // Optionally, perform search immediately after selecting a recommended brand
+    // handleSearch(); // Uncomment if you want immediate search
+  };
+
+  // Handle clicks outside the dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
   return (
-    <div className="cross-search-page space-y-6 p-4 md:p-6 lg:p-8 max-w-screen-md mx-auto"> {/* 增加页面内边距、间距，限制最大宽度并居中 */}
+    <div className="cross-search-page space-y-8 p-4 md:p-6 lg:p-8 max-w-screen-xl mx-auto"> {/* Increased max width and spacing */}
 
-      <h1 className="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">交叉搜索</h1> {/* 页面标题 */}
+      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-gray-200">交叉搜索</h1> {/* Larger title */}
 
-      {/* 搜索输入区域 - 包含品牌选择和型号输入 */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 space-y-4 border border-gray-200 dark:border-gray-700"> {/* 搜索区域卡片化 */}
+      {/* Search Input Area */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-6 border border-gray-200 dark:border-gray-700"> {/* Increased padding and shadow */}
 
-        {/* 品牌选择器 (Placeholder) */}
-        <div className="space-y-2">
+        {/* Brand Selection (Searchable Dropdown) */}
+        <div className="space-y-2" ref={dropdownRef}> {/* Attach ref here */}
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">选择品牌</label>
-          {/* Replace with actual searchable dropdown component */}
           <div className="relative">
-            <button className="flex items-center justify-between w-full px-4 py-2.5 text-left bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-              <span>{selectedBrand ? selectedBrand.name : '请选择芯片品牌'}</span>
-              <ChevronDown className="h-5 w-5 text-gray-500" />
-            </button>
-            {/* Dropdown options would appear here when button is clicked */}
-            {/* For now, a simple selection example */}
-            {/* 
-              <ul className="absolute z-10 w-full bg-white dark:bg-gray-800 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                {brands.map((brand) => (
-                  <li key={brand.code} onClick={() => setSelectedBrand(brand)} className="text-gray-900 dark:text-gray-100 cursor-default select-none relative py-2 pl-3 pr-9 hover:bg-blue-500 hover:text-white">
+            <input
+              type="text"
+              className="block w-full pl-3 pr-10 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+              placeholder="搜索或选择芯片品牌..."
+              value={brandSearchTerm}
+              onChange={(e) => {
+                setBrandSearchTerm(e.target.value);
+                setIsDropdownOpen(true);
+                setSelectedBrand(null);
+              }}
+              onFocus={() => setIsDropdownOpen(true)}
+            />
+            {/* Optional: Add a clear button for the input */}
+            {/* <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">X</button> */}
+
+            {/* Dropdown List */}
+            {isDropdownOpen && brandSearchTerm && filteredBrands.length > 0 && (
+              <ul className="absolute z-10 w-full bg-white dark:bg-gray-800 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm mt-1 border border-gray-200 dark:border-gray-700"> {/* Added border and margin-top */}
+                {filteredBrands.map((brand) => (
+                  <li
+                    key={brand.code}
+                    onClick={() => handleSelectBrand(brand)}
+                    className="text-gray-900 dark:text-gray-100 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:text-white"
+                  >
                     {brand.name}
                   </li>
                 ))}
               </ul>
-            */}
+            )}
+             {/* Show message if no brands found for search term */}
+            {isDropdownOpen && brandSearchTerm && filteredBrands.length === 0 && (
+                 <div className="absolute z-10 w-full bg-white dark:bg-gray-800 shadow-lg max-h-60 rounded-md py-2 px-3 text-sm text-gray-500 dark:text-gray-400 mt-1 border border-gray-200 dark:border-gray-700">
+                    未找到匹配品牌
+                 </div>
+            )}
+
           </div>
-           {/* Simple select for now, replace with searchable dropdown later */}
-           <select 
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
-              onChange={(e) => {
-                const brandCode = e.target.value;
-                const brand = brands.find(b => b.code === brandCode);
-                setSelectedBrand(brand || null);
-              }}
-              value={selectedBrand?.code || ''}
-           >
-              <option value="">请选择芯片品牌</option>
-              {brands.map(brand => (
-                <option key={brand.code} value={brand.code}>{brand.name}</option>
-              ))}
-           </select>
         </div>
 
-        {/* 型号输入框 */}
+        {/* Model Input Field */}
         <div className="space-y-2">
            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">型号关键词</label>
            <div className="relative">
@@ -83,7 +171,7 @@ export default function CrossSearchContent() {
               </span>
               <input
                 type="text"
-                className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500"
                 placeholder="请输入型号关键词..."
                 value={modelKeyword}
                 onChange={e => setModelKeyword(e.target.value)}
@@ -91,11 +179,11 @@ export default function CrossSearchContent() {
            </div>
         </div>
 
-        {/* 搜索按钮 */}
-        <div className="flex justify-center pt-2">
+        {/* Search Button */}
+        <div className="flex justify-center pt-4"> {/* Increased padding top */}
           <Button
             onClick={handleSearch}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-2.5 rounded-lg shadow-sm transition-colors text-base font-semibold"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-10 py-3 rounded-lg shadow-md transition-colors text-base font-semibold" {/* Larger button */}
           >
             搜索
           </Button>
@@ -103,7 +191,75 @@ export default function CrossSearchContent() {
 
       </div>
 
-      {/* TODO: Add search results display area below */} 
+      {/* Brand Recommendations Section */}
+      {!hasSearched && (
+        <div className="brand-recommendations-area bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4 border border-gray-200 dark:border-gray-700"> {/* Increased padding and shadow */}
+           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-4"> {/* Larger title */}
+             <TrendingUp className="h-6 w-6 text-orange-500" /> 品牌推荐
+           </h3>
+           {/* Use grid for a more structured layout */}
+           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"> {/* Increased gap */}
+             {recommendedBrands.map(brand => (
+               <button
+                 key={brand.code}
+                 className="flex flex-col items-center justify-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors cursor-pointer text-center h-32" {/* Added justify-center and fixed height */}
+                 onClick={() => handleRecommendedBrandClick(brand)}
+               >
+                 {/* Brand Image (Logo) */}
+                 {brand.imageUrl && (
+                   <div className="relative w-full h-16 mb-2"> {/* Container for image with fixed height */}
+                     <Image
+                       src={brand.imageUrl}
+                       alt={`${brand.name} Logo`}
+                       fill
+                       objectFit="contain"
+                     />
+                   </div>
+                 )}
+                 {/* Brand Name */}
+                 <span className="text-sm font-medium text-gray-800 dark:text-gray-200 mt-auto">{brand.name}</span>
+               </button>
+             ))}
+           </div>
+        </div>
+      )}
+
+      {/* Recent Searches / Keyword Suggestions Section (Placeholder) */}
+      {!hasSearched && ( // Only show before search results are displayed
+        <div className="recent-searches-area bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4 border border-gray-200 dark:border-gray-700"> {/* Increased padding and shadow */}
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-4"> {/* Larger title */}
+            <History className="h-6 w-6 text-green-500" /> 最近搜索 / 关键词
+          </h3>
+          <div className="text-base text-gray-500 dark:text-gray-400"> {/* Larger text */}
+            {/* TODO: Implement actual recent searches or keyword suggestions */}
+            <p>点击品牌推荐或输入关键词进行搜索，您的历史记录将显示在此。</p>
+          </div>
+        </div>
+      )}
+
+      {/* Search Results Display Area */}
+      {hasSearched && ( // Only show results after a search has been performed
+        <div className="search-results-area bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"> {/* Increased padding and shadow */}
+          {isLoading ? (
+            <div className="flex justify-center py-12"> {/* Increased padding */}
+              {/* TODO: Use a proper LoadingSpinner component */} 
+              <p className="text-gray-500 dark:text-gray-400 text-lg">正在搜索...</p> {/* Larger text */} 
+            </div>
+          ) : searchResults.length > 0 ? (
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">搜索结果</h3> {/* Larger title */}
+              {searchResults.map((chip) => (
+                <ChipListItem key={chip.id} chip={chip} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400"> {/* Increased padding */}
+              <Search className="h-10 w-10 mx-auto mb-4" /> {/* Larger icon */} 
+              <p className="text-lg">未找到匹配的芯片。</p> {/* Larger text */} 
+            </div>
+          )}
+        </div>
+      )}
 
     </div>
   );
