@@ -29,18 +29,19 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
-      {/* 分类路径 */}
-      <div className="px-4 pt-3 pb-2">
-        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-          产品
+      {/* 产品信息框架 */}
+      <div className="m-4 border border-gray-300 dark:border-gray-600 rounded-lg p-4">
+        {/* 分类路径 */}
+        <div className="mb-3">
+          <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+            产品
+          </div>
+          <div className="text-sm text-blue-600 dark:text-blue-400">
+            电源管理芯片-直流直流交换器-降压型稳压器
+          </div>
         </div>
-        <div className="text-sm text-blue-600 dark:text-blue-400">
-          电源管理芯片-直流直流交换器-降压型稳压器
-        </div>
-      </div>
 
-      {/* 产品标题区域 */}
-      <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+        {/* 产品标题区域 */}
         <div className="flex items-start">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
