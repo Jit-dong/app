@@ -210,25 +210,27 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
               </div>
             </div>
 
-            {/* 示例 */}
+            {/* 搜索技巧 */}
             <div className="mt-4 p-3 bg-white dark:bg-gray-800/50 rounded-lg border border-blue-100 dark:border-blue-800/50">
-              <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">输入示例：</h4>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-                <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                  <CheckCircle2 className="h-3 w-3" />
-                  <code className="bg-green-50 dark:bg-green-900/20 px-1 rounded">5430</code>
+              <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-3">搜索技巧：</h4>
+              <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="h-3 w-3 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <span>全部丝印搜不出时，可以删减后缀尝试</span>
                 </div>
-                <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                  <CheckCircle2 className="h-3 w-3" />
-                  <code className="bg-green-50 dark:bg-green-900/20 px-1 rounded">ALL</code>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="h-3 w-3 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <span>多行可以尝试每行分别搜索</span>
                 </div>
-                <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                  <CheckCircle2 className="h-3 w-3" />
-                  <code className="bg-green-50 dark:bg-green-900/20 px-1 rounded">358</code>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="h-3 w-3 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <span>字样为品牌logo标识，不作为搜索关键词，多行可以分开搜索</span>
                 </div>
-                <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                  <CheckCircle2 className="h-3 w-3" />
-                  <code className="bg-green-50 dark:bg-green-900/20 px-1 rounded">3201</code>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="h-3 w-3 text-orange-500 mt-0.5 flex-shrink-0" />
+                  <span className="text-orange-600 dark:text-orange-400">
+                    <strong>ADI品牌</strong>此类型的芯片需要两行一起搜索
+                  </span>
                 </div>
               </div>
             </div>
