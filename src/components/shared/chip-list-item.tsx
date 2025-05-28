@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import type { Chip } from '@/lib/types';
 import { FileText, Replace, ShieldCheck, Package, ChevronDown, ChevronUp } from 'lucide-react';
-import { findAlternativesByChipId } from '@/lib/placeholder-data';
 import { useState } from 'react';
 
 interface ChipListItemProps {
@@ -10,8 +9,6 @@ interface ChipListItemProps {
 
 export default function ChipListItem({ chip }: ChipListItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const alternativeCount = findAlternativesByChipId(chip.id).length;
-  const displayAlternativeText = alternativeCount > 0 ? (alternativeCount > 99 ? '99+' : alternativeCount.toString()) : '0';
 
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -123,15 +120,34 @@ export default function ChipListItem({ chip }: ChipListItemProps) {
               <div className="flex justify-end">
                 <button
                   onClick={toggleExpanded}
-                  className="group relative inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white rounded-xl transition-all duration-300 text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+                  className="group relative overflow-hidden inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border border-slate-200/60 dark:border-gray-600/50 hover:border-slate-300/80 dark:hover:border-gray-500/70 rounded-2xl transition-all duration-500 ease-out shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-gray-900/30 backdrop-blur-sm"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <span className="relative z-10">订购信息</span>
-                  {isExpanded ? (
-                    <ChevronUp className="h-4 w-4 relative z-10 transition-transform duration-200" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 relative z-10 transition-transform duration-200 group-hover:translate-y-0.5" />
-                  )}
+                  {/* 背景光效 */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 via-blue-50/30 to-purple-50/0 dark:from-blue-900/0 dark:via-blue-900/20 dark:to-purple-900/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                  {/* 边框光效 */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-blue-200/20 to-transparent dark:via-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                  {/* 内容 */}
+                  <div className="relative z-10 flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"></div>
+                      <span className="text-sm font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-white bg-clip-text text-transparent">
+                        订购信息
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-gray-600 dark:to-gray-700 border border-slate-300/50 dark:border-gray-500/50 group-hover:scale-110 transition-transform duration-300">
+                      {isExpanded ? (
+                        <ChevronUp className="h-3.5 w-3.5 text-slate-600 dark:text-slate-300 transition-transform duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+                      ) : (
+                        <ChevronDown className="h-3.5 w-3.5 text-slate-600 dark:text-slate-300 transition-all duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:translate-y-0.5" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 微妙的内阴影 */}
+                  <div className="absolute inset-0 rounded-2xl shadow-inner shadow-slate-200/20 dark:shadow-gray-900/20 pointer-events-none"></div>
                 </button>
               </div>
             </div>
@@ -140,22 +156,6 @@ export default function ChipListItem({ chip }: ChipListItemProps) {
           {/* 折叠展开的订购信息 - 在产品框架内 */}
           {isExpanded && (
             <div className="border-t border-white/20 dark:border-gray-600/50 pt-6 mt-6 animate-in slide-in-from-top-2 duration-300">
-              {/* 顶部标签栏 */}
-              <div className="flex flex-wrap items-center gap-3 mb-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/60 dark:bg-gray-700/60 backdrop-blur-sm rounded-lg border border-orange-200 dark:border-orange-700/50">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-orange-700 dark:text-orange-300">数据手册</span>
-                </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/60 dark:bg-gray-700/60 backdrop-blur-sm rounded-lg border border-blue-200 dark:border-blue-700/50">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-blue-700 dark:text-blue-300">替代料: {displayAlternativeText}</span>
-                </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/60 dark:bg-gray-700/60 backdrop-blur-sm rounded-lg border border-purple-200 dark:border-purple-700/50">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-purple-700 dark:text-purple-300">替代料列表: 2</span>
-                </div>
-              </div>
-
               {/* 替代料列表 */}
               <div className="space-y-4">
                 {/* 第一个替代料 */}
