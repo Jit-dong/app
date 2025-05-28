@@ -90,8 +90,12 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
   // 订购信息展开状态
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
 
-  // 产品展示模式状态（折叠/展开）
+  // 各内容类型的展示模式状态（折叠/展开）
   const [isProductsExpanded, setIsProductsExpanded] = useState(false);
+  const [isReferenceDesignsExpanded, setIsReferenceDesignsExpanded] = useState(false);
+  const [isTechnicalDocsExpanded, setIsTechnicalDocsExpanded] = useState(false);
+  const [isApplicationGuidesExpanded, setIsApplicationGuidesExpanded] = useState(false);
+  const [isIndustryNewsExpanded, setIsIndustryNewsExpanded] = useState(false);
 
   // 计算过滤后的结果
   const filteredResults = React.useMemo(() => {
@@ -124,10 +128,14 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
     return filteredResults.slice(0, displayedCount);
   }, [filteredResults, displayedCount]);
 
-  // 当搜索结果变化时，重置产品展开状态
+  // 当搜索结果变化时，重置所有展开状态
   React.useEffect(() => {
     setIsProductsExpanded(false);
-  }, [filteredResults.length]);
+    setIsReferenceDesignsExpanded(false);
+    setIsTechnicalDocsExpanded(false);
+    setIsApplicationGuidesExpanded(false);
+    setIsIndustryNewsExpanded(false);
+  }, [filteredResults.length, referenceDesigns.length, technicalDocuments.length, applicationGuides.length, industryNews.length]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -268,8 +276,12 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
     });
   };
 
-  // 判断是否应该显示折叠模式（多条数据时）
+  // 判断各内容类型是否应该显示折叠模式（多条数据时）
   const shouldShowCollapsedMode = filteredResults.length > 3;
+  const shouldShowReferenceDesignsCollapsed = referenceDesigns.length > 3;
+  const shouldShowTechnicalDocsCollapsed = technicalDocuments.length > 3;
+  const shouldShowApplicationGuidesCollapsed = applicationGuides.length > 3;
+  const shouldShowIndustryNewsCollapsed = industryNews.length > 3;
 
 
 
@@ -696,20 +708,59 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     </h3>
                   </div>
 
-                  {/* 参考设计网格布局 */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {referenceDesigns.map((design) => (
-                      <div key={design.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{design.title}</h4>
-                        <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
-                          品牌：{design.manufacturer}
+                  {/* 参考设计布局 - 根据模式显示不同的布局 */}
+                  {shouldShowReferenceDesignsCollapsed && !isReferenceDesignsExpanded ? (
+                    // 折叠模式：简化显示
+                    <div className="space-y-3">
+                      {referenceDesigns.slice(0, 3).map((design) => (
+                        <div key={design.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{design.title}</h4>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">
+                              品牌：{design.manufacturer}
+                            </div>
+                          </div>
                         </div>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
-                          描述：{design.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    // 展开模式：完整显示
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {referenceDesigns.map((design) => (
+                        <div key={design.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{design.title}</h4>
+                          <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                            品牌：{design.manufacturer}
+                          </div>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                            描述：{design.description}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* 展开/收起按钮 */}
+                  {shouldShowReferenceDesignsCollapsed && (
+                    <div className="flex justify-center pt-4 mt-4 border-t border-gray-200 dark:border-gray-600">
+                      <button
+                        onClick={() => setIsReferenceDesignsExpanded(!isReferenceDesignsExpanded)}
+                        className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-colors"
+                      >
+                        {isReferenceDesignsExpanded ? (
+                          <>
+                            <ChevronUp className="h-4 w-4" />
+                            收起 ({referenceDesigns.length - 3} 个)
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-4 w-4" />
+                            展开更多 ({referenceDesigns.length - 3} 个)
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -725,15 +776,52 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     </h3>
                   </div>
 
-                  {/* 技术文档网格布局 */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {technicalDocuments.map((doc) => (
-                      <div key={doc.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{doc.title}</h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{doc.description}</p>
-                      </div>
-                    ))}
-                  </div>
+                  {/* 技术文档布局 - 根据模式显示不同的布局 */}
+                  {shouldShowTechnicalDocsCollapsed && !isTechnicalDocsExpanded ? (
+                    // 折叠模式：简化显示
+                    <div className="space-y-3">
+                      {technicalDocuments.slice(0, 3).map((doc) => (
+                        <div key={doc.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{doc.title}</h4>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1">{doc.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    // 展开模式：完整显示
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {technicalDocuments.map((doc) => (
+                        <div key={doc.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{doc.title}</h4>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{doc.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* 展开/收起按钮 */}
+                  {shouldShowTechnicalDocsCollapsed && (
+                    <div className="flex justify-center pt-4 mt-4 border-t border-gray-200 dark:border-gray-600">
+                      <button
+                        onClick={() => setIsTechnicalDocsExpanded(!isTechnicalDocsExpanded)}
+                        className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-colors"
+                      >
+                        {isTechnicalDocsExpanded ? (
+                          <>
+                            <ChevronUp className="h-4 w-4" />
+                            收起 ({technicalDocuments.length - 3} 个)
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-4 w-4" />
+                            展开更多 ({technicalDocuments.length - 3} 个)
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -749,15 +837,52 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     </h3>
                   </div>
 
-                  {/* 应用指南网格布局 */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {applicationGuides.map((guide) => (
-                      <div key={guide.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{guide.title}</h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{guide.description}</p>
-                      </div>
-                    ))}
-                  </div>
+                  {/* 应用指南布局 - 根据模式显示不同的布局 */}
+                  {shouldShowApplicationGuidesCollapsed && !isApplicationGuidesExpanded ? (
+                    // 折叠模式：简化显示
+                    <div className="space-y-3">
+                      {applicationGuides.slice(0, 3).map((guide) => (
+                        <div key={guide.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{guide.title}</h4>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1">{guide.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    // 展开模式：完整显示
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {applicationGuides.map((guide) => (
+                        <div key={guide.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{guide.title}</h4>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{guide.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* 展开/收起按钮 */}
+                  {shouldShowApplicationGuidesCollapsed && (
+                    <div className="flex justify-center pt-4 mt-4 border-t border-gray-200 dark:border-gray-600">
+                      <button
+                        onClick={() => setIsApplicationGuidesExpanded(!isApplicationGuidesExpanded)}
+                        className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-colors"
+                      >
+                        {isApplicationGuidesExpanded ? (
+                          <>
+                            <ChevronUp className="h-4 w-4" />
+                            收起 ({applicationGuides.length - 3} 个)
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-4 w-4" />
+                            展开更多 ({applicationGuides.length - 3} 个)
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -773,15 +898,52 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     </h3>
                   </div>
 
-                  {/* 行业资讯网格布局 */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {industryNews.map((news) => (
-                      <div key={news.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{news.title}</h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{news.description}</p>
-                      </div>
-                    ))}
-                  </div>
+                  {/* 行业资讯布局 - 根据模式显示不同的布局 */}
+                  {shouldShowIndustryNewsCollapsed && !isIndustryNewsExpanded ? (
+                    // 折叠模式：简化显示
+                    <div className="space-y-3">
+                      {industryNews.slice(0, 3).map((news) => (
+                        <div key={news.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{news.title}</h4>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1">{news.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    // 展开模式：完整显示
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {industryNews.map((news) => (
+                        <div key={news.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{news.title}</h4>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{news.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* 展开/收起按钮 */}
+                  {shouldShowIndustryNewsCollapsed && (
+                    <div className="flex justify-center pt-4 mt-4 border-t border-gray-200 dark:border-gray-600">
+                      <button
+                        onClick={() => setIsIndustryNewsExpanded(!isIndustryNewsExpanded)}
+                        className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-colors"
+                      >
+                        {isIndustryNewsExpanded ? (
+                          <>
+                            <ChevronUp className="h-4 w-4" />
+                            收起 ({industryNews.length - 3} 个)
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-4 w-4" />
+                            展开更多 ({industryNews.length - 3} 个)
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
