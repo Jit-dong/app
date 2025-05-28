@@ -147,82 +147,73 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
         {/* 折叠展开的订购信息 */}
         {isExpanded && (
           <div className="border-t border-gray-200 dark:border-gray-600 pt-4 mt-4">
-            <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-3">订购信息</h4>
-
-            {/* 数据手册 */}
-            <div className="mb-4">
-              <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-orange-600" />
-                  <span className="text-sm font-medium text-orange-700 dark:text-orange-300">数据手册</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                  <span>替代料: {displayAlternativeText}</span>
-                  <span>•</span>
-                  <span>管脚兼容: 3</span>
-                </div>
-              </div>
+            {/* 顶部标签栏 */}
+            <div className="flex items-center gap-4 mb-4 text-sm">
+              <span className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full">数据手册</span>
+              <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full">替代料: {displayAlternativeText}</span>
+              <span className="px-3 py-1 bg-purple-100 text-purple-600 rounded-full">替代料列表: 2</span>
             </div>
 
             {/* 替代料列表 */}
-            {alternativeCount > 0 && (
-              <div className="mb-4">
-                <h5 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">替代料</h5>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                          {chip.model}DOCT
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span className="text-xs text-green-600 dark:text-green-400">量产</span>
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 space-x-4">
-                        <span>封装: SOT23-6</span>
-                        <span>替代料: 6</span>
-                        <span>数量: 3201</span>
-                      </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                        <span>包装: 3000/T&R</span>
-                        <span className="ml-4">工作温度: -40°至125°</span>
+            <div className="space-y-3">
+              {/* 第一个替代料 */}
+              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                        {chip.model}DOCT
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-xs text-green-600 dark:text-green-400">量产</span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-gray-800 dark:text-gray-200">替代料: 3</div>
+
+                    <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
+                      <div>封装: SOT23-6</div>
+                      <div>替代料: 6</div>
+                      <div>数量: 3201</div>
+                      <div>包装: 3000/T&R</div>
+                      <div className="col-span-2">工作温度: -40°至125°</div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                          {chip.model}DDCR
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span className="text-xs text-green-600 dark:text-green-400">量产</span>
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 space-x-4">
-                        <span>封装: SOT23-6</span>
-                        <span>替代料: 6</span>
-                        <span>数量: 3201</span>
-                      </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                        <span>包装: 3000/T&R</span>
-                        <span className="ml-4">工作温度: -40°至125°</span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-gray-800 dark:text-gray-200">替代料: 3</div>
-                    </div>
+                  <div className="text-right ml-4">
+                    <div className="text-lg font-bold text-gray-800 dark:text-gray-200">替代料: 3</div>
                   </div>
                 </div>
               </div>
-            )}
+
+              {/* 第二个替代料 */}
+              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                        {chip.model}DDCR
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-xs text-green-600 dark:text-green-400">量产</span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
+                      <div>封装: SOT23-6</div>
+                      <div>替代料: 6</div>
+                      <div>数量: 3201</div>
+                      <div>包装: 3000/T&R</div>
+                      <div className="col-span-2">工作温度: -40°至125°</div>
+                    </div>
+                  </div>
+
+                  <div className="text-right ml-4">
+                    <div className="text-lg font-bold text-gray-800 dark:text-gray-200">替代料: 3</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
