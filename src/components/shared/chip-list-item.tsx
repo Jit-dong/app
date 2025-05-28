@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { Chip } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FileText, Replace, ShieldCheck, ExternalLink } from 'lucide-react';
+import { FileText, Replace, ShieldCheck, ExternalLink, Package } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { findAlternativesByChipId } from '@/lib/placeholder-data'; // To get alternative count
 
@@ -46,8 +46,8 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
       </div>
 
       {/* 操作按钮区域 */}
-      <div className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-4 text-sm">
+      <div className="p-4">
+        <div className="flex items-center gap-4 text-sm mb-4">
           {chip.datasheetUrl && chip.datasheetUrl !== '#' && (
             <button
               onClick={(e) => {
@@ -76,17 +76,47 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
           )}
         </div>
 
-        <div className="flex items-center gap-2">
-          <Link href={`/chip/${chip.id}/purchase`} passHref legacyBehavior>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-950/20"
-              onClick={stopPropagation}
-            >
-              查看订购信息
-            </Button>
-          </Link>
+        {/* 参考设计 */}
+        <div className="mb-4">
+          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">参考设计</h4>
+          <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <Package className="h-4 w-4 text-blue-600" />
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                {chip.model}EVM-715
+              </span>
+            </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+              品牌：{chip.manufacturer || 'TI(德州仪器)'}
+            </p>
+            <p className="text-xs text-gray-700 dark:text-gray-300">
+              描述：3A SWIFT 降压转换器评估模块
+            </p>
+          </div>
+        </div>
+
+        {/* 技术文档 */}
+        <div className="mb-4">
+          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">技术文档</h4>
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            Keeping DC/DC solutions (super) simple for cost-sensitive applications
+          </p>
+        </div>
+
+        {/* 应用指南 */}
+        <div className="mb-4">
+          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">应用指南</h4>
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            Keeping DC/DC solutions (super) simple for cost-sensitive applications
+          </p>
+        </div>
+
+        {/* 行业资讯 */}
+        <div className="mb-4">
+          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">行业资讯</h4>
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            Keeping DC/DC solutions (super) simple for cost-sensitive applications
+          </p>
         </div>
       </div>
     </div>
