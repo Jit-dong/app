@@ -185,11 +185,29 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
         </button>
 
         {showInstructions && (
-          <div className="px-4 pb-4 space-y-3">
-            <div className="text-sm text-gray-700 dark:text-gray-400 space-y-2">
-              <p>✓ <strong>输入芯片表面丝印</strong>（支持模糊或部分内容），系统将帮助您查找对应的订购型号</p>
-              <p>✓ <strong>支持查找信息</strong>：订购型号、封装与品牌、产品分类和描述</p>
-              <p>✓ <strong>智能匹配</strong>：支持精确匹配和模糊搜索，自动排序最相关结果</p>
+          <div className="px-4 pb-4 space-y-4">
+            {/* 什么是丝印反查 */}
+            <div className="text-sm text-gray-700 dark:text-gray-400 space-y-3">
+              <div>
+                <p className="font-medium text-gray-800 dark:text-gray-200 mb-2">• 什么是丝印反查？</p>
+                <p className="ml-4 text-gray-600 dark:text-gray-400">
+                  通过元器件表面的丝印（印字、Marking）来查找其型号。
+                </p>
+              </div>
+
+              <div>
+                <p className="font-medium text-gray-800 dark:text-gray-200 mb-2">• 如何搜索：</p>
+                <p className="ml-4 text-gray-600 dark:text-gray-400">
+                  直接输入芯片表面的丝印代码。如果搜不到，可尝试去除末尾的字母（如批次、日期信息），它们通常不是关键字。
+                </p>
+              </div>
+
+              <div>
+                <p className="font-medium text-gray-800 dark:text-gray-200 mb-2">• 找不到怎么办？</p>
+                <p className="ml-4 text-gray-600 dark:text-gray-400">
+                  检查丝印输入是否正确，或尝试输入部分丝印。
+                </p>
+              </div>
             </div>
 
             {/* 示例 */}
