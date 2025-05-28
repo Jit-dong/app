@@ -8,7 +8,7 @@ import { searchChips } from "@/lib/placeholder-data";
 import LoadingSpinner from "@/components/shared/loading-spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle, Shuffle } from "lucide-react";
+import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle, Shuffle, ChevronDown } from "lucide-react";
 import BrandListWithFilter from './brand-list-with-filter';
 import AlternativeSearchPage from './alternative-search-page';
 import SilkscreenReversePage from './silkscreen-reverse-page';
@@ -276,8 +276,28 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
           </div>
         ) : searchResults.length > 0 ? (
           <div className="space-y-4">
-            {/* 根据搜索模式显示不同的结果标题 - 在此区域内 safeMode 必然是 datasheet */}
-            {/* If needed, conditional titles based on the *original* mode would require state management outside this block */}
+            {/* 搜索结果标题和筛选器 */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  搜索结果：共 <span className="font-medium text-blue-600">{searchResults.length}</span> 个型号
+                </p>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" className="text-xs">
+                    品牌 <ChevronDown className="h-3 w-3 ml-1" />
+                  </Button>
+                  <Button variant="outline" size="sm" className="text-xs">
+                    分类 <ChevronDown className="h-3 w-3 ml-1" />
+                  </Button>
+                  <Button variant="outline" size="sm" className="text-xs">
+                    工作温度 <ChevronDown className="h-3 w-3 ml-1" />
+                  </Button>
+                  <Button variant="outline" size="sm" className="text-xs">
+                    环保等级 <ChevronDown className="h-3 w-3 ml-1" />
+                  </Button>
+                </div>
+              </div>
+            </div>
 
             {/* AI增强提示 */}
             {aiEnhanced && (
@@ -287,14 +307,18 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
               </div>
             )}
 
-            {searchResults.map((chip, index) => (
-              <ChipListItem
-                key={chip.id}
-                chip={chip}
-                // Conditional prop based on datasheet mode
-                showAlternativeCount={chip.model === 'TPS5430' && chip.id === 'TPS5430-1'}
-              />
-            ))}
+            {/* 产品列表 */}
+            <div className="space-y-3">
+              <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">产品</h3>
+              {searchResults.map((chip, index) => (
+                <ChipListItem
+                  key={chip.id}
+                  chip={chip}
+                  // Conditional prop based on datasheet mode
+                  showAlternativeCount={chip.model === 'TPS5430' && chip.id === 'TPS5430-1'}
+                />
+              ))}
+            </div>
           </div>
         ) : (
           <Alert variant="default" className="shadow-md">
