@@ -505,53 +505,36 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 产品网格布局 - 根据模式显示不同的布局 */}
                   {shouldShowCollapsedMode && !isProductsExpanded ? (
-                    // 折叠模式：简化显示
-                    <div className="space-y-3">
+                    // 折叠模式：极简显示（无图片）
+                    <div className="space-y-2">
                       {filteredResults.slice(0, 3).map((chip) => (
-                        <div key={chip.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                          {/* 产品图片 */}
-                          <div className="flex-shrink-0">
-                            <img
-                              src={`/brands/image_cp/${chip.model}.png`}
-                              alt={chip.model}
-                              className="w-10 h-10 object-contain bg-gray-50 dark:bg-gray-700 rounded border"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.style.display = 'none';
-                                target.nextElementSibling?.classList.remove('hidden');
-                              }}
-                            />
-                            <div className="hidden w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded border flex items-center justify-center">
-                              <Package className="h-5 w-5 text-gray-400" />
-                            </div>
-                          </div>
-
-                          {/* 产品信息 */}
+                        <div key={chip.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          {/* 产品信息 - 无图片 */}
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
+                            <div className="flex items-center gap-3">
                               <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{chip.model}</h4>
                               <div className="flex items-center gap-1">
                                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                                 <span className="text-xs text-green-600 dark:text-green-400">量产</span>
                               </div>
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1">{chip.description}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">{chip.description}</p>
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    // 展开模式：完整显示
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    // 展开模式：紧凑显示
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                       {displayedResults.map((chip) => (
-                      <div key={chip.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                        {/* 产品图片 */}
-                        <div className="flex items-start gap-3 mb-2">
+                      <div key={chip.id} className="p-2 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        {/* 产品图片和基本信息 */}
+                        <div className="flex items-start gap-2 mb-1">
                           <div className="flex-shrink-0">
                             <img
                               src={`/brands/image_cp/${chip.model}.png`}
                               alt={chip.model}
-                              className="w-12 h-12 object-contain bg-gray-50 dark:bg-gray-700 rounded border"
+                              className="w-10 h-10 object-contain bg-gray-50 dark:bg-gray-700 rounded border"
                               onError={(e) => {
                                 // 如果图片加载失败，显示默认占位符
                                 const target = e.target as HTMLImageElement;
@@ -560,56 +543,69 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                               }}
                             />
                             {/* 默认占位符 */}
-                            <div className="hidden w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded border flex items-center justify-center">
-                              <Package className="h-6 w-6 text-gray-400" />
+                            <div className="hidden w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded border flex items-center justify-center">
+                              <Package className="h-5 w-5 text-gray-400" />
                             </div>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
+                            <div className="flex items-center gap-1 mb-0.5">
                               <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{chip.model}</h4>
-                              <div className="flex items-center gap-1">
-                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              <div className="flex items-center gap-0.5">
+                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                                 <span className="text-xs text-green-600 dark:text-green-400">量产</span>
                               </div>
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{chip.description}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-2 leading-tight">{chip.description}</p>
                           </div>
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-500 mb-2">
-                          <div>制造商: {chip.manufacturer}</div>
-                          {chip.category && <div>分类: {chip.category}</div>}
-                          <div>替代料: <span className="text-blue-600 dark:text-blue-400 font-medium">6</span></div>
-                          {chip.status && <div>状态: {chip.status}</div>}
+
+                        {/* 产品详细信息 - 更紧凑 */}
+                        <div className="text-xs text-gray-500 dark:text-gray-500 mb-1 space-y-0.5">
+                          <div className="flex justify-between">
+                            <span>制造商:</span>
+                            <span className="font-medium">{chip.manufacturer}</span>
+                          </div>
+                          {chip.category && (
+                            <div className="flex justify-between">
+                              <span>分类:</span>
+                              <span className="font-medium">{chip.category}</span>
+                            </div>
+                          )}
+                          <div className="flex justify-between">
+                            <span>替代料:</span>
+                            <span className="text-blue-600 dark:text-blue-400 font-medium">6</span>
+                          </div>
                         </div>
 
-                        {/* 数据手册按钮 */}
-                        <div className="mb-2">
-                          <button className="inline-flex items-center gap-1 px-3 py-1 text-xs bg-orange-100 dark:bg-orange-950/20 hover:bg-orange-200 dark:hover:bg-orange-950/30 text-orange-700 dark:text-orange-300 rounded-md transition-colors border border-orange-200 dark:border-orange-800">
+                        {/* 按钮区域 - 更紧凑 */}
+                        <div className="space-y-1">
+                          {/* 数据手册按钮 */}
+                          <button className="w-full inline-flex items-center justify-center gap-1 px-2 py-1 text-xs bg-orange-100 dark:bg-orange-950/20 hover:bg-orange-200 dark:hover:bg-orange-950/30 text-orange-700 dark:text-orange-300 rounded transition-colors border border-orange-200 dark:border-orange-800">
                             <FileText className="h-3 w-3" />
                             <span>数据手册</span>
                           </button>
+
+                          {/* 订购信息按钮 */}
+                          <button
+                            onClick={() => toggleOrderInfo(chip.id)}
+                            className="w-full flex items-center justify-between px-2 py-1 text-xs bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 text-blue-700 dark:text-blue-300 rounded transition-colors border border-blue-200 dark:border-blue-800"
+                          >
+                            <div className="flex items-center gap-1">
+                              <ShoppingCart className="h-3 w-3" />
+                              <span>订购信息</span>
+                            </div>
+                            {expandedOrders.has(chip.id) ? (
+                              <ChevronUp className="h-3 w-3" />
+                            ) : (
+                              <ChevronDown className="h-3 w-3" />
+                            )}
+                          </button>
                         </div>
 
-                        {/* 订购信息按钮 */}
-                        <button
-                          onClick={() => toggleOrderInfo(chip.id)}
-                          className="w-full flex items-center justify-between px-3 py-2 text-xs bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 text-blue-700 dark:text-blue-300 rounded-md transition-colors border border-blue-200 dark:border-blue-800"
-                        >
-                          <div className="flex items-center gap-1">
-                            <ShoppingCart className="h-3 w-3" />
-                            <span>订购信息</span>
-                          </div>
-                          {expandedOrders.has(chip.id) ? (
-                            <ChevronUp className="h-3 w-3" />
-                          ) : (
-                            <ChevronDown className="h-3 w-3" />
-                          )}
-                        </button>
-
-                        {/* 展开的订购信息 */}
+                        {/* 展开的订购信息 - 更紧凑 */}
                         {expandedOrders.has(chip.id) && (
-                          <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-md border border-gray-200 dark:border-gray-600">
-                            <div className="space-y-2 text-xs">
+                          <div className="mt-1 p-2 bg-gray-50 dark:bg-gray-800/50 rounded border border-gray-200 dark:border-gray-600">
+                            <div className="space-y-1 text-xs">
                               <div className="flex items-center justify-between">
                                 <span className="text-gray-600 dark:text-gray-400">封装:</span>
                                 <span className="font-medium">{chip.package || 'SOT23-6'}</span>
@@ -637,7 +633,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                               <div className="flex items-center justify-between">
                                 <span className="text-gray-600 dark:text-gray-400">状态:</span>
                                 <div className="flex items-center gap-1">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                                   <span className="font-medium text-green-600 dark:text-green-400">量产</span>
                                 </div>
                               </div>
@@ -710,13 +706,13 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 参考设计布局 - 根据模式显示不同的布局 */}
                   {shouldShowReferenceDesignsCollapsed && !isReferenceDesignsExpanded ? (
-                    // 折叠模式：简化显示
-                    <div className="space-y-3">
+                    // 折叠模式：极简显示（纯文本）
+                    <div className="space-y-2">
                       {referenceDesigns.slice(0, 3).map((design) => (
-                        <div key={design.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        <div key={design.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{design.title}</h4>
-                            <div className="text-xs text-gray-600 dark:text-gray-400">
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{design.title}</h4>
+                            <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                               品牌：{design.manufacturer}
                             </div>
                           </div>
@@ -778,13 +774,13 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 技术文档布局 - 根据模式显示不同的布局 */}
                   {shouldShowTechnicalDocsCollapsed && !isTechnicalDocsExpanded ? (
-                    // 折叠模式：简化显示
-                    <div className="space-y-3">
+                    // 折叠模式：极简显示（纯文本）
+                    <div className="space-y-2">
                       {technicalDocuments.slice(0, 3).map((doc) => (
-                        <div key={doc.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        <div key={doc.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{doc.title}</h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1">{doc.description}</p>
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{doc.title}</h4>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">{doc.description}</p>
                           </div>
                         </div>
                       ))}
@@ -839,13 +835,13 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 应用指南布局 - 根据模式显示不同的布局 */}
                   {shouldShowApplicationGuidesCollapsed && !isApplicationGuidesExpanded ? (
-                    // 折叠模式：简化显示
-                    <div className="space-y-3">
+                    // 折叠模式：极简显示（纯文本）
+                    <div className="space-y-2">
                       {applicationGuides.slice(0, 3).map((guide) => (
-                        <div key={guide.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        <div key={guide.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{guide.title}</h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1">{guide.description}</p>
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{guide.title}</h4>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">{guide.description}</p>
                           </div>
                         </div>
                       ))}
@@ -900,13 +896,13 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 行业资讯布局 - 根据模式显示不同的布局 */}
                   {shouldShowIndustryNewsCollapsed && !isIndustryNewsExpanded ? (
-                    // 折叠模式：简化显示
-                    <div className="space-y-3">
+                    // 折叠模式：极简显示（纯文本）
+                    <div className="space-y-2">
                       {industryNews.slice(0, 3).map((news) => (
-                        <div key={news.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        <div key={news.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{news.title}</h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1">{news.description}</p>
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{news.title}</h4>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">{news.description}</p>
                           </div>
                         </div>
                       ))}
