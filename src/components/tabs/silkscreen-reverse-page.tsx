@@ -91,10 +91,10 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
             <Search className="h-10 w-10 text-white" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4">
-            Silkscreen Reverse Lookup
+            丝印反查
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Identify electronic components by their surface markings with our advanced search engine
+            通过芯片表面丝印快速识别电子元器件，智能搜索引擎助您精准查找
           </p>
         </div>
 
@@ -109,7 +109,7 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
               <input
                 type="text"
                 className="w-full pl-16 pr-6 py-5 text-xl bg-gray-50/50 dark:bg-gray-700/50 border-2 border-gray-200/50 dark:border-gray-600/50 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 placeholder:text-gray-400 text-gray-900 dark:text-gray-100 font-medium"
-                placeholder="Enter component marking (e.g., 5430, ALL, 358)"
+                placeholder="请输入芯片丝印（如 5430、ALL、358）"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 onKeyDown={handleKeyPress}
@@ -126,12 +126,12 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
                 {isLoading ? (
                   <>
                     <Loader2 className="h-5 w-5 mr-3 animate-spin" />
-                    Analyzing...
+                    识别中...
                   </>
                 ) : (
                   <>
                     <Search className="h-5 w-5 mr-3" />
-                    Search Component
+                    开始识别
                   </>
                 )}
               </Button>
@@ -139,11 +139,11 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
               <div className="flex items-center gap-3">
                 <Button variant="outline" className="px-6 py-3 rounded-xl border-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
                   <Camera className="h-4 w-4 mr-2" />
-                  Camera
+                  拍照识别
                 </Button>
                 <Button variant="outline" className="px-6 py-3 rounded-xl border-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200">
                   <Upload className="h-4 w-4 mr-2" />
-                  Upload
+                  上传图片
                 </Button>
               </div>
             </div>
@@ -157,7 +157,7 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
               <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
                 <History className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
-              Recent Searches
+              搜索历史
             </h3>
             <div className="flex flex-wrap gap-3">
               {searchHistory.slice(0, 8).map((item, index) => (
@@ -183,7 +183,7 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
               <div className="p-3 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-xl shadow-md">
                 <Info className="h-6 w-6 text-white" />
               </div>
-              Search Guidelines & Tips
+              使用指南与搜索技巧
             </h3>
             <div className="p-2 bg-white/50 dark:bg-gray-700/50 rounded-xl">
               {showInstructions ? (
@@ -201,30 +201,30 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
                 <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-5 border border-white/50 dark:border-gray-700/50">
                   <h4 className="font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    What is it?
+                    什么是丝印反查？
                   </h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Identify electronic components by their surface markings (silkscreen, printing, marking codes).
+                    通过元器件表面的丝印（印字、标记代码）来识别电子元器件型号。
                   </p>
                 </div>
 
                 <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-5 border border-white/50 dark:border-gray-700/50">
                   <h4 className="font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    How to search?
+                    如何搜索？
                   </h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Enter the marking directly. If no results, try removing suffixes (batch, date codes).
+                    直接输入丝印标记。如果没有结果，尝试删除后缀（批次、日期代码）。
                   </p>
                 </div>
 
                 <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-5 border border-white/50 dark:border-gray-700/50">
                   <h4 className="font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
                     <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                    No results?
+                    找不到结果？
                   </h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Check input accuracy or try partial markings. Use our advanced tips below.
+                    检查输入准确性或尝试部分标记。使用下方的高级搜索技巧。
                   </p>
                 </div>
               </div>
@@ -235,28 +235,28 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
                   <div className="p-2 bg-gradient-to-r from-orange-400 to-red-400 rounded-lg">
                     <CheckCircle2 className="h-5 w-5 text-white" />
                   </div>
-                  Advanced Search Techniques
+                  高级搜索技巧
                 </h4>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-3">
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                      <span className="text-sm text-gray-700 dark:text-gray-300">Remove suffixes when no results found</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">全部丝印搜不出时，可以删减后缀尝试</span>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                      <span className="text-sm text-gray-700 dark:text-gray-300">Try searching each line separately for multi-line markings</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">多行可以尝试每行分别搜索</span>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                      <span className="text-sm text-gray-700 dark:text-gray-300">Ignore brand logos - focus on alphanumeric codes</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">字样为品牌logo标识，不作为搜索关键词，多行可以分开搜索</span>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
                       <span className="text-sm text-orange-600 dark:text-orange-400 font-medium">
-                        <strong>ADI chips:</strong> Search both lines together
+                        <strong>ADI品牌</strong>此类型的芯片需要两行一起搜索
                       </span>
                     </div>
                   </div>
@@ -274,7 +274,7 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
                 <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl shadow-lg">
                   <CheckCircle2 className="h-6 w-6 text-white" />
                 </div>
-                Search Results ({results.length})
+                识别结果 ({results.length})
               </h3>
             </div>
 
@@ -313,13 +313,13 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
                           </h4>
                           <div className="flex items-center gap-3 mb-3">
                             <Badge className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 px-3 py-1">
-                              Marking: {item.silkscreen}
+                              丝印: {item.silkscreen}
                             </Badge>
                             <Badge variant="secondary" className="bg-gray-100 dark:bg-gray-700 px-3 py-1">
                               {item.package}
                             </Badge>
                             <Badge variant="secondary" className="bg-gray-100 dark:bg-gray-700 px-3 py-1">
-                              {item.pins} pins
+                              {item.pins}脚
                             </Badge>
                           </div>
                         </div>
@@ -339,17 +339,17 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
 
                       <div className="grid md:grid-cols-3 gap-4 mb-4 text-sm">
                         <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
-                          <span className="font-semibold text-gray-700 dark:text-gray-300">Manufacturer:</span>
+                          <span className="font-semibold text-gray-700 dark:text-gray-300">制造商:</span>
                           <br />
                           <span className="text-gray-600 dark:text-gray-400">{item.manufacturer}</span>
                         </div>
                         <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
-                          <span className="font-semibold text-gray-700 dark:text-gray-300">Category:</span>
+                          <span className="font-semibold text-gray-700 dark:text-gray-300">分类:</span>
                           <br />
                           <span className="text-gray-600 dark:text-gray-400">{item.category}</span>
                         </div>
                         <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
-                          <span className="font-semibold text-gray-700 dark:text-gray-300">Description:</span>
+                          <span className="font-semibold text-gray-700 dark:text-gray-300">描述:</span>
                           <br />
                           <span className="text-gray-600 dark:text-gray-400">{item.description}</span>
                         </div>
@@ -359,12 +359,12 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
                       <div className="flex items-center gap-3">
                         <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white border-0 rounded-xl px-6 py-2 shadow-lg">
                           <Package className="h-4 w-4 mr-2" />
-                          View Details
+                          查看详情
                         </Button>
                         {item.datasheetUrl && (
                           <Button variant="outline" className="border-2 rounded-xl px-6 py-2 hover:bg-gray-50 dark:hover:bg-gray-700">
                             <Download className="h-4 w-4 mr-2" />
-                            Datasheet
+                            数据手册
                           </Button>
                         )}
                       </div>
@@ -384,12 +384,12 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
                 <Search className="h-12 w-12 text-gray-400" />
               </div>
               <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                No Results Found
+                未找到匹配结果
               </h3>
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
-                No matches found for marking "<span className="font-bold text-blue-600 dark:text-blue-400">{search}</span>".
+                未匹配到丝印 "<span className="font-bold text-blue-600 dark:text-blue-400">{search}</span>" 的结果。
                 <br />
-                Try modifying the input or check our search tips above.
+                请尝试修改输入内容或查看上方的搜索技巧。
               </p>
               <div className="pt-4">
                 <Button
@@ -397,7 +397,7 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
                   onClick={() => setSearch('')}
                   className="border-2 rounded-xl px-8 py-3 text-lg hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  Try Again
+                  重新搜索
                 </Button>
               </div>
             </div>
