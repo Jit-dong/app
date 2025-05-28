@@ -8,7 +8,7 @@ import { searchChips } from "@/lib/placeholder-data";
 import LoadingSpinner from "@/components/shared/loading-spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle, Shuffle, ChevronDown } from "lucide-react";
+import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle, Shuffle, ChevronDown, MoreHorizontal } from "lucide-react";
 import BrandListWithFilter from './brand-list-with-filter';
 import AlternativeSearchPage from './alternative-search-page';
 import SilkscreenReversePage from './silkscreen-reverse-page';
@@ -73,6 +73,10 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
   const [selectedResource, setSelectedResource] = useState('');
   const [selectedSort, setSelectedSort] = useState('');
 
+  // 分页状态
+  const [displayedCount, setDisplayedCount] = useState(5); // 初始显示5个结果
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
   // 计算过滤后的结果
   const filteredResults = React.useMemo(() => {
     let filtered = [...searchResults];
@@ -99,6 +103,11 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
     return filtered;
   }, [searchResults, selectedBrand, selectedCategory, selectedSort]);
 
+  // 计算当前显示的结果（分页）
+  const displayedResults = React.useMemo(() => {
+    return filteredResults.slice(0, displayedCount);
+  }, [filteredResults, displayedCount]);
+
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
@@ -117,6 +126,11 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
       setIsLoading(false);
     }, 500);
   }, [initialQuery]);
+
+  // 当筛选条件改变时重置分页
+  useEffect(() => {
+    resetPagination();
+  }, [selectedBrand, selectedCategory, selectedResource, selectedSort]);
 
   const performSearch = (query: string, mode: SearchMode = searchMode, useAI: boolean = aiEnhanced) => {
     setIsLoading(true);
@@ -157,6 +171,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
   const handleSearch = (query: string) => {
     setCurrentQuery(query);
+    resetPagination(); // 重置分页
     performSearch(query, searchMode);
   };
 
@@ -176,6 +191,22 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
     if (currentQuery.trim() && hasSearched) {
       performSearch(currentQuery, searchMode, newAiState);
     }
+  };
+
+  // 处理"展示更多"按钮点击
+  const handleLoadMore = () => {
+    setIsLoadingMore(true);
+
+    // 模拟加载延迟
+    setTimeout(() => {
+      setDisplayedCount(prev => prev + 5); // 每次加载5个更多结果
+      setIsLoadingMore(false);
+    }, 800);
+  };
+
+  // 重置分页状态（当搜索或筛选条件改变时）
+  const resetPagination = () => {
+    setDisplayedCount(5);
   };
 
   // 兜底，防止searchModes[searchMode]为undefined
@@ -273,6 +304,9 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     <span className="font-semibold text-blue-700 dark:text-blue-300">{filteredResults.length}</span>
                     <span className="text-blue-600 dark:text-blue-400">个型号</span>
                   </span>
+                  {displayedResults.length < filteredResults.length && (
+                    <span className="text-gray-500 text-xs">（显示前 {displayedResults.length} 个）</span>
+                  )}
                   {filteredResults.length !== searchResults.length && (
                     <span className="text-gray-500 text-xs">（已筛选，原始结果 {searchResults.length} 个）</span>
                   )}
@@ -383,12 +417,48 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
             <div className="space-y-3">
               <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">产品</h3>
               {filteredResults.length > 0 ? (
-                filteredResults.map((chip, index) => (
-                  <ChipListItem
-                    key={chip.id}
-                    chip={chip}
-                  />
-                ))
+                <>
+                  {displayedResults.map((chip, index) => (
+                    <ChipListItem
+                      key={chip.id}
+                      chip={chip}
+                    />
+                  ))}
+
+                  {/* 展示更多按钮 */}
+                  {displayedResults.length < filteredResults.length && (
+                    <div className="flex justify-center pt-6">
+                      <button
+                        onClick={handleLoadMore}
+                        disabled={isLoadingMore}
+                        className="group relative overflow-hidden inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border border-blue-200/60 dark:border-gray-600/50 hover:border-blue-300/80 dark:hover:border-gray-500/70 rounded-2xl transition-all duration-500 ease-out shadow-sm hover:shadow-xl hover:shadow-blue-200/50 dark:hover:shadow-gray-900/30 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {/* 背景光效 */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 via-blue-50/30 to-blue-50/0 dark:from-blue-900/0 dark:via-blue-900/20 dark:to-blue-900/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                        {/* 边框光效 */}
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-blue-200/20 to-transparent dark:via-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                        {/* 内容 */}
+                        <div className="relative z-10 flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            {isLoadingMore ? (
+                              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"></div>
+                            ) : (
+                              <MoreHorizontal className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                            )}
+                            <span className="text-sm font-semibold bg-gradient-to-r from-blue-700 to-blue-900 dark:from-blue-200 dark:to-blue-100 bg-clip-text text-transparent">
+                              {isLoadingMore ? '加载中...' : `展示更多 (还有 ${filteredResults.length - displayedResults.length} 个)`}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* 微妙的内阴影 */}
+                        <div className="absolute inset-0 rounded-2xl shadow-inner shadow-blue-200/20 dark:shadow-gray-900/20 pointer-events-none"></div>
+                      </button>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                   <p>没有符合筛选条件的产品</p>
@@ -398,6 +468,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                       setSelectedCategory('');
                       setSelectedResource('');
                       setSelectedSort('');
+                      resetPagination(); // 重置分页
                     }}
                     className="mt-2 text-blue-600 hover:text-blue-700 text-sm"
                   >
