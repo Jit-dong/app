@@ -256,7 +256,7 @@ export default function ChipPurchaseClient({ chip }: ChipPurchaseClientProps) {
             <Card key={product.id} className="bg-white dark:bg-gray-800 shadow-sm">
               <CardContent className="p-4">
                 {/* 产品标题 */}
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
@@ -273,11 +273,6 @@ export default function ChipPurchaseClient({ chip }: ChipPurchaseClientProps) {
                     <p className="text-sm text-gray-700 dark:text-gray-300">
                       描述：{chip.displayDescription}
                     </p>
-                  </div>
-                  <div className="ml-4 flex-shrink-0">
-                    <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                      <div className="w-12 h-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
-                    </div>
                   </div>
                 </div>
 
