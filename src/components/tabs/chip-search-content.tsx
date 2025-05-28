@@ -559,22 +559,20 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                           </div>
                         </div>
 
-                        {/* 产品信息卡片 */}
+                        {/* 产品信息卡片 - 超紧凑布局 */}
                         <div className="px-4 pb-3">
-                          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 space-y-2">
+                          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2 space-y-1">
                             <div className="flex items-center justify-between">
-                              <span className="text-xs font-medium text-gray-500 dark:text-gray-400">制造商</span>
-                              <span className="text-xs font-semibold text-gray-900 dark:text-gray-100">{chip.manufacturer}</span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400">制造商</span>
+                              <span className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate ml-2">德州仪器-TI</span>
                             </div>
-                            {chip.category && (
-                              <div className="flex items-center justify-between">
-                                <span className="text-xs font-medium text-gray-500 dark:text-gray-400">分类</span>
-                                <span className="text-xs font-semibold text-gray-900 dark:text-gray-100">{chip.category}</span>
-                              </div>
-                            )}
                             <div className="flex items-center justify-between">
-                              <span className="text-xs font-medium text-gray-500 dark:text-gray-400">替代料</span>
-                              <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md">6</span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400">分类</span>
+                              <span className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate ml-2">开关稳压器-DC/DC转换器</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs text-gray-500 dark:text-gray-400">替代料</span>
+                              <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 rounded">6</span>
                             </div>
                           </div>
                         </div>
