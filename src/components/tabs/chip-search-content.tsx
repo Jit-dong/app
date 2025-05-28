@@ -571,6 +571,13 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                                 <span className="text-gray-600 dark:text-gray-400">替代料:</span>
                                 <span className="font-medium text-blue-600 dark:text-blue-400">3</span>
                               </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">状态:</span>
+                                <div className="flex items-center gap-1">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                  <span className="font-medium text-green-600 dark:text-green-400">量产</span>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         )}
