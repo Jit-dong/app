@@ -113,7 +113,7 @@ export default function HomeContent() {
       {/* Slogan */}
       <div className="text-center">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent mb-1">
-          芯片难题，魔力化解
+          发现新芯世界
         </h1>
         <p className="text-gray-600 dark:text-gray-400 text-sm">
           专业的芯片查询与技术支持平台
