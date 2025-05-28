@@ -56,9 +56,32 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
               品牌：{chip.manufacturer || 'TI(德州仪器)'}
             </p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
               描述：{chip.description}
             </p>
+
+            {/* 数据手册和车规级信息 */}
+            <div className="flex items-center gap-4 text-sm">
+              {chip.datasheetUrl && chip.datasheetUrl !== '#' && (
+                <button
+                  onClick={(e) => {
+                    stopPropagation(e);
+                    window.open(chip.datasheetUrl, '_blank');
+                  }}
+                  className="flex items-center gap-1 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+                >
+                  <FileText className="h-4 w-4" />
+                  数据手册
+                </button>
+              )}
+
+              {chip.automotiveGrade && (
+                <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                  <ShieldCheck className="h-4 w-4" />
+                  车规级
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -67,30 +90,10 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
       <div className="p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4 text-sm">
-            {chip.datasheetUrl && chip.datasheetUrl !== '#' && (
-              <button
-                onClick={(e) => {
-                  stopPropagation(e);
-                  window.open(chip.datasheetUrl, '_blank');
-                }}
-                className="flex items-center gap-1 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
-              >
-                <FileText className="h-4 w-4" />
-                数据手册
-              </button>
-            )}
-
             {showAlternativeCount && (
               <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
                 <Replace className="h-4 w-4" />
                 替代料: {displayAlternativeText}
-              </span>
-            )}
-
-            {chip.automotiveGrade && (
-              <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                <ShieldCheck className="h-4 w-4" />
-                车规级
               </span>
             )}
           </div>
