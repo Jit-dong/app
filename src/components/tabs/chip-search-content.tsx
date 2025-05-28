@@ -514,8 +514,9 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                             {/* 产品信息 */}
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-0.5">
+                              <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                                 <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{chip.model}</h4>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">开关稳压器-DC/DC转换器</span>
                                 <div className="flex items-center gap-1 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded-full">
                                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                                   <span className="text-xs font-medium text-green-700 dark:text-green-400">量产</span>
@@ -552,9 +553,10 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between mb-1">
-                                <div className="flex items-center gap-1">
-                                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm truncate">{chip.model}</h4>
-                                  <div className="flex items-center gap-0.5 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded-full">
+                                <div className="flex items-center gap-2 flex-1 min-w-0">
+                                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{chip.model}</h4>
+                                  <span className="text-xs text-gray-500 dark:text-gray-400 truncate">开关稳压器-DC/DC转换器</span>
+                                  <div className="flex items-center gap-0.5 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded-full flex-shrink-0">
                                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                                     <span className="text-xs font-medium text-green-700 dark:text-green-400">量产</span>
                                   </div>
@@ -581,7 +583,6 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                           <div className="flex items-center justify-between text-xs">
                             <div className="flex items-center gap-3 flex-1 min-w-0">
                               <span className="font-medium text-gray-900 dark:text-gray-100">德州仪器-TI</span>
-                              <span className="font-medium text-gray-900 dark:text-gray-100 truncate">开关稳压器-DC/DC转换器</span>
                             </div>
                             <div className="flex items-center gap-2 flex-shrink-0">
                               <span className="font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded text-xs">替代料 6</span>
