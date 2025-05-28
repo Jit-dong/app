@@ -49,17 +49,17 @@ const searchModes = {
     placeholder: '输入芯片丝印查询型号',
     description: '通过丝印标识查找对应的芯片型号'
   },
-  cross: {
-    label: '交叉查询',
-    icon: Shuffle,
-    placeholder: '多维度交叉查询芯片信息',
-    description: '通过多种条件组合查询芯片'
-  },
   alternative: {
     label: '查替代',
     icon: RefreshCw,
     placeholder: '输入芯片型号查找替代品',
     description: '查找芯片的替代型号和兼容产品'
+  },
+  cross: {
+    label: '交叉查询',
+    icon: Shuffle,
+    placeholder: '多维度交叉查询芯片信息',
+    description: '通过多种条件组合查询芯片'
   }
 };
 
@@ -159,13 +159,13 @@ export default function HomeContent() {
                         active: 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30',
                         inactive: 'bg-gradient-to-r from-green-50 to-emerald-100 dark:from-green-950/50 dark:to-emerald-900/50 text-green-600 dark:text-green-400 hover:from-green-100 hover:to-emerald-200 dark:hover:from-green-900/70 dark:hover:to-emerald-800/70 border border-green-200/50 dark:border-green-800/30'
                       },
-                      cross: {
-                        active: 'bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-lg shadow-purple-500/30',
-                        inactive: 'bg-gradient-to-r from-purple-50 to-violet-100 dark:from-purple-950/50 dark:to-violet-900/50 text-purple-600 dark:text-purple-400 hover:from-purple-100 hover:to-violet-200 dark:hover:from-purple-900/70 dark:hover:to-violet-800/70 border border-purple-200/50 dark:border-purple-800/30'
-                      },
                       alternative: {
                         active: 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/30',
                         inactive: 'bg-gradient-to-r from-orange-50 to-red-100 dark:from-orange-950/50 dark:to-red-900/50 text-orange-600 dark:text-orange-400 hover:from-orange-100 hover:to-red-200 dark:hover:from-orange-900/70 dark:hover:to-red-800/70 border border-orange-200/50 dark:border-orange-800/30'
+                      },
+                      cross: {
+                        active: 'bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-lg shadow-purple-500/30',
+                        inactive: 'bg-gradient-to-r from-purple-50 to-violet-100 dark:from-purple-950/50 dark:to-violet-900/50 text-purple-600 dark:text-purple-400 hover:from-purple-100 hover:to-violet-200 dark:hover:from-purple-900/70 dark:hover:to-violet-800/70 border border-purple-200/50 dark:border-purple-800/30'
                       }
                     };
 
