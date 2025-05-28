@@ -630,12 +630,10 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">工作温度 </span>
                                 <span className="font-bold text-gray-900 dark:text-gray-100">-40~120度</span>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
+                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50 flex items-center gap-1">
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">状态 </span>
-                                <span className="flex items-center gap-1">
-                                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                                  <span className="font-bold text-green-600 dark:text-green-400">量产</span>
-                                </span>
+                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                <span className="font-bold text-green-600 dark:text-green-400">量产</span>
                               </div>
                             </div>
                           </div>
