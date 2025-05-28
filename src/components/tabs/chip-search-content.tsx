@@ -522,7 +522,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                                   <span className="text-xs font-medium text-green-700 dark:text-green-400">量产</span>
                                 </div>
                               </div>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 leading-tight">{chip.description}</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-tight">{chip.description}</p>
                             </div>
                           </div>
                         </div>
@@ -573,7 +573,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                                   <span>PDF</span>
                                 </a>
                               </div>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 leading-tight">{chip.description}</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-tight">{chip.description}</p>
                             </div>
                           </div>
                         </div>
