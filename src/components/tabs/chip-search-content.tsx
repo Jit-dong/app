@@ -505,20 +505,35 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 产品网格布局 - 根据模式显示不同的布局 */}
                   {shouldShowCollapsedMode && !isProductsExpanded ? (
-                    // 折叠模式：极简显示（无图片）
-                    <div className="space-y-2">
+                    // 折叠模式：现代移动端设计
+                    <div className="space-y-3">
                       {filteredResults.slice(0, 3).map((chip) => (
-                        <div key={chip.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                          {/* 产品信息 - 无图片 */}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3">
-                              <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{chip.model}</h4>
-                              <div className="flex items-center gap-1">
-                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                <span className="text-xs text-green-600 dark:text-green-400">量产</span>
+                        <div key={chip.id} className="bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-4 border border-gray-100 dark:border-gray-600 hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
+                          {/* 产品信息 - 移动端优化 */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-2">
+                                <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base">{chip.model}</h4>
+                                <div className="flex items-center gap-1 bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 px-3 py-1 rounded-full">
+                                  <div className="w-2 h-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
+                                  <span className="text-xs font-semibold text-green-700 dark:text-green-400">量产</span>
+                                </div>
                               </div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1 leading-relaxed">{chip.description}</p>
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">{chip.description}</p>
+                            <div className="flex items-center gap-2 ml-3">
+                              {/* PDF链接 */}
+                              <a
+                                href={`/datasheets/${chip.model}.pdf`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1 px-3 py-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
+                                title="查看数据手册PDF"
+                              >
+                                <FileText className="h-4 w-4" />
+                                <span className="font-medium">PDF</span>
+                              </a>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -701,14 +716,23 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 参考设计布局 - 根据模式显示不同的布局 */}
                   {shouldShowReferenceDesignsCollapsed && !isReferenceDesignsExpanded ? (
-                    // 折叠模式：极简显示（纯文本）
-                    <div className="space-y-2">
+                    // 折叠模式：现代移动端设计
+                    <div className="space-y-3">
                       {referenceDesigns.slice(0, 3).map((design) => (
-                        <div key={design.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{design.title}</h4>
-                            <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                              品牌：{design.manufacturer}
+                        <div key={design.id} className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl p-4 border border-indigo-100 dark:border-indigo-800/30 hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base mb-1">{design.title}</h4>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900/30 px-2 py-1 rounded-lg">
+                                  {design.manufacturer}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="ml-3">
+                              <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center">
+                                <FileText className="h-4 w-4 text-white" />
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -769,13 +793,20 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 技术文档布局 - 根据模式显示不同的布局 */}
                   {shouldShowTechnicalDocsCollapsed && !isTechnicalDocsExpanded ? (
-                    // 折叠模式：极简显示（纯文本）
-                    <div className="space-y-2">
+                    // 折叠模式：现代移动端设计
+                    <div className="space-y-3">
                       {technicalDocuments.slice(0, 3).map((doc) => (
-                        <div key={doc.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{doc.title}</h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">{doc.description}</p>
+                        <div key={doc.id} className="bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 rounded-2xl p-4 border border-green-100 dark:border-green-800/30 hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base mb-1">{doc.title}</h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">{doc.description}</p>
+                            </div>
+                            <div className="ml-3">
+                              <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center">
+                                <FileText className="h-4 w-4 text-white" />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -830,13 +861,20 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 应用指南布局 - 根据模式显示不同的布局 */}
                   {shouldShowApplicationGuidesCollapsed && !isApplicationGuidesExpanded ? (
-                    // 折叠模式：极简显示（纯文本）
-                    <div className="space-y-2">
+                    // 折叠模式：现代移动端设计
+                    <div className="space-y-3">
                       {applicationGuides.slice(0, 3).map((guide) => (
-                        <div key={guide.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{guide.title}</h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">{guide.description}</p>
+                        <div key={guide.id} className="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-2xl p-4 border border-orange-100 dark:border-orange-800/30 hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base mb-1">{guide.title}</h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">{guide.description}</p>
+                            </div>
+                            <div className="ml-3">
+                              <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl flex items-center justify-center">
+                                <FileText className="h-4 w-4 text-white" />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -891,13 +929,20 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                   {/* 行业资讯布局 - 根据模式显示不同的布局 */}
                   {shouldShowIndustryNewsCollapsed && !isIndustryNewsExpanded ? (
-                    // 折叠模式：极简显示（纯文本）
-                    <div className="space-y-2">
+                    // 折叠模式：现代移动端设计
+                    <div className="space-y-3">
                       {industryNews.slice(0, 3).map((news) => (
-                        <div key={news.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{news.title}</h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1 mt-1">{news.description}</p>
+                        <div key={news.id} className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-4 border border-purple-100 dark:border-purple-800/30 hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base mb-1">{news.title}</h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">{news.description}</p>
+                            </div>
+                            <div className="ml-3">
+                              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                                <FileText className="h-4 w-4 text-white" />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       ))}
