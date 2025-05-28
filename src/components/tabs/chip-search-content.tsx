@@ -389,23 +389,37 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                 </p>
               </div>
 
-              {/* 筛选器区域 */}
-              <div className="space-y-3">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
-                  </svg>
-                  筛选条件
-                </h4>
+              {/* 筛选器区域 - 移动端优化设计 */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-4 border border-blue-100 dark:border-blue-800/30 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-base font-bold text-gray-800 dark:text-gray-200 flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl shadow-md">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+                      </svg>
+                    </div>
+                    筛选条件
+                  </h4>
+                  <div className="flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 px-3 py-1.5 rounded-full">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-sm font-semibold text-blue-700 dark:text-blue-400">
+                      {filteredResults.length} 个结果
+                    </span>
+                  </div>
+                </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {/* 移动端优化：2x2网格布局 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* 品牌筛选 */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400">品牌</label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                      品牌
+                    </label>
                     <select
                       value={selectedBrand}
                       onChange={(e) => setSelectedBrand(e.target.value)}
-                      className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                      className="w-full text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md"
                     >
                       <option value="">全部品牌</option>
                       {Array.from(new Set(searchResults.map(chip => chip.manufacturer))).map(brand => (
@@ -415,12 +429,15 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                   </div>
 
                   {/* 分类筛选 */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400">分类</label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                      分类
+                    </label>
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                      className="w-full text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-4 focus:ring-green-500/20 focus:border-green-500 transition-all duration-200 shadow-sm hover:shadow-md"
                     >
                       <option value="">全部分类</option>
                       {Array.from(new Set(searchResults.map(chip => chip.category).filter(Boolean))).map(category => (
@@ -430,12 +447,15 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                   </div>
 
                   {/* 设计资源筛选 */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400">设计资源</label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                      设计资源
+                    </label>
                     <select
                       value={selectedResource}
                       onChange={(e) => setSelectedResource(e.target.value)}
-                      className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                      className="w-full text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 transition-all duration-200 shadow-sm hover:shadow-md"
                     >
                       <option value="">全部资源</option>
                       <option value="reference-design">参考设计</option>
@@ -445,12 +465,15 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                   </div>
 
                   {/* 排序方式 */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400">排序方式</label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                      排序方式
+                    </label>
                     <select
                       value={selectedSort}
                       onChange={(e) => setSelectedSort(e.target.value)}
-                      className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                      className="w-full text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-200 shadow-sm hover:shadow-md"
                     >
                       <option value="">默认排序</option>
                       <option value="relevance">相关性由强到弱</option>
@@ -459,9 +482,9 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                   </div>
                 </div>
 
-                {/* 清除筛选按钮 */}
+                {/* 清除筛选按钮 - 移动端优化 */}
                 {(selectedBrand || selectedCategory || selectedResource || selectedSort) && (
-                  <div className="flex justify-end pt-2">
+                  <div className="flex justify-center pt-2">
                     <button
                       onClick={() => {
                         setSelectedBrand('');
@@ -469,12 +492,12 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                         setSelectedResource('');
                         setSelectedSort('');
                       }}
-                      className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex items-center gap-1 px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
+                      className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 font-medium"
                     >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
-                      清除筛选
+                      清除所有筛选
                     </button>
                   </div>
                 )}
