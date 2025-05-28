@@ -210,9 +210,9 @@ export default function EnhancedSearchBar({
 
       {/* 搜索建议下拉框 */}
       {showSuggestions && isOpen && suggestions.length > 0 && (
-        <Card className="absolute top-full left-0 right-0 mt-2 z-50 shadow-2xl border-orange-200/50 dark:border-orange-800/30">
+        <Card className="absolute top-full left-0 right-0 mt-2 z-50 shadow-2xl border-orange-200/50 dark:border-orange-800/30 rounded-2xl">
           <CardContent className="p-0">
-            <div className="max-h-96 overflow-y-auto">
+            <div className="max-h-[500px] overflow-y-auto">
               {/* 分组显示建议 */}
               {(() => {
                 const recentSuggestions = suggestions.filter(s => s.type === 'recent');
@@ -222,27 +222,27 @@ export default function EnhancedSearchBar({
                   <>
                     {/* 最近搜索 - 标签云形式 */}
                     {recentSuggestions.length > 0 && (
-                      <div className="p-3 border-b border-gray-100 dark:border-gray-800">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Clock className="h-3 w-3 text-gray-400" />
-                          <span className="text-xs font-medium text-gray-500 dark:text-gray-400">最近</span>
-                          <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
+                      <div className="p-4 border-b border-gray-100 dark:border-gray-800">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Clock className="h-4 w-4 text-gray-400" />
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">最近搜索</span>
+                          <Badge variant="secondary" className="text-xs px-2 py-0.5">
                             {recentSuggestions.length}
                           </Badge>
                         </div>
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap gap-2">
                           {recentSuggestions.map((suggestion, index) => (
                             <button
                               key={suggestion.id}
                               onClick={() => handleSuggestionClick(suggestion)}
                               className={cn(
-                                "inline-flex items-center gap-1 px-2 py-1 text-xs rounded-md transition-all duration-200 border",
+                                "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 border font-medium",
                                 index === highlightedIndex
-                                  ? "bg-orange-100 dark:bg-orange-900/30 border-orange-300 dark:border-orange-600 text-orange-700 dark:text-orange-300"
-                                  : "bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:border-orange-200 dark:hover:border-orange-700"
+                                  ? "bg-orange-100 dark:bg-orange-900/30 border-orange-300 dark:border-orange-600 text-orange-700 dark:text-orange-300 shadow-sm"
+                                  : "bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:border-orange-200 dark:hover:border-orange-700 hover:shadow-sm"
                               )}
                             >
-                              <span className="font-medium">{suggestion.text}</span>
+                              <span>{suggestion.text}</span>
                             </button>
                           ))}
                         </div>
@@ -250,50 +250,54 @@ export default function EnhancedSearchBar({
                     )}
 
                     {/* 其他建议 - 列表形式 */}
-                    {otherSuggestions.map((suggestion, index) => (
-                      <div
-                        key={suggestion.id}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className={cn(
-                          "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0",
-                          (index + recentSuggestions.length) === highlightedIndex
-                            ? "bg-orange-50 dark:bg-orange-950/20"
-                            : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
-                        )}
-                      >
-                        {getSuggestionIcon(suggestion.type)}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium truncate">
-                              {suggestion.text}
-                            </span>
-                            <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
-                              {getSuggestionLabel(suggestion.type)}
-                            </Badge>
+                    {otherSuggestions.length > 0 && (
+                      <div className="py-2">
+                        {otherSuggestions.map((suggestion, index) => (
+                          <div
+                            key={suggestion.id}
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            className={cn(
+                              "flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0",
+                              (index + recentSuggestions.length) === highlightedIndex
+                                ? "bg-orange-50 dark:bg-orange-950/20"
+                                : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                            )}
+                          >
+                            {getSuggestionIcon(suggestion.type)}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium truncate">
+                                  {suggestion.text}
+                                </span>
+                                <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                                  {getSuggestionLabel(suggestion.type)}
+                                </Badge>
+                              </div>
+                              {suggestion.description && (
+                                <div className="text-xs text-gray-500 mt-1 truncate">
+                                  {suggestion.description}
+                                </div>
+                              )}
+                              {suggestion.brand && suggestion.type !== 'brand' && (
+                                <div className="text-xs text-gray-400 mt-0.5">
+                                  品牌: {suggestion.brand}
+                                </div>
+                              )}
+                              {suggestion.category && (
+                                <div className="text-xs text-gray-400 mt-0.5">
+                                  分类: {suggestion.category}
+                                </div>
+                              )}
+                            </div>
+                            {suggestion.count && (
+                              <div className="text-xs text-gray-400 font-medium">
+                                {suggestion.count}+
+                              </div>
+                            )}
                           </div>
-                          {suggestion.description && (
-                            <div className="text-xs text-gray-500 mt-0.5 truncate">
-                              {suggestion.description}
-                            </div>
-                          )}
-                          {suggestion.brand && suggestion.type !== 'brand' && (
-                            <div className="text-xs text-gray-400 mt-0.5">
-                              品牌: {suggestion.brand}
-                            </div>
-                          )}
-                          {suggestion.category && (
-                            <div className="text-xs text-gray-400 mt-0.5">
-                              分类: {suggestion.category}
-                            </div>
-                          )}
-                        </div>
-                        {suggestion.count && (
-                          <div className="text-xs text-gray-400 font-medium">
-                            {suggestion.count}+
-                          </div>
-                        )}
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </>
                 );
               })()}
