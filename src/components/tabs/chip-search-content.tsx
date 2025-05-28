@@ -3,12 +3,18 @@
 import React, { useState, useEffect } from "react";
 import SearchBar from "@/components/shared/search-bar";
 import ChipListItem from "@/components/shared/chip-list-item"; // Import new component
-import type { Chip } from "@/lib/types";
-import { searchChips } from "@/lib/placeholder-data";
+import type { Chip, ReferenceDesign, TechnicalDocument, ApplicationGuide, IndustryNews } from "@/lib/types";
+import {
+  searchChips,
+  searchReferenceDesigns,
+  searchTechnicalDocuments,
+  searchApplicationGuides,
+  searchIndustryNews
+} from "@/lib/placeholder-data";
+import ContentItem from '@/components/shared/content-item';
 import LoadingSpinner from "@/components/shared/loading-spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle, Shuffle, ChevronDown, MoreHorizontal } from "lucide-react";
+import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle, Shuffle, MoreHorizontal, ChevronDown, ChevronUp, ShoppingCart, Package, Truck } from "lucide-react";
 import BrandListWithFilter from './brand-list-with-filter';
 import AlternativeSearchPage from './alternative-search-page';
 import SilkscreenReversePage from './silkscreen-reverse-page';
@@ -59,6 +65,10 @@ interface ChipSearchContentProps {
 
 export default function ChipSearchContent({ initialQuery = '', initialMode = 'datasheet', hideSearchBar = false }: ChipSearchContentProps) {
   const [searchResults, setSearchResults] = useState<Chip[]>([]);
+  const [referenceDesigns, setReferenceDesigns] = useState<ReferenceDesign[]>([]);
+  const [technicalDocuments, setTechnicalDocuments] = useState<TechnicalDocument[]>([]);
+  const [applicationGuides, setApplicationGuides] = useState<ApplicationGuide[]>([]);
+  const [industryNews, setIndustryNews] = useState<IndustryNews[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuery, setCurrentQuery] = useState(initialQuery);
 
@@ -76,6 +86,9 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
   // 分页状态
   const [displayedCount, setDisplayedCount] = useState(5); // 初始显示5个结果
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  // 订购信息展开状态
+  const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
 
   // 计算过滤后的结果
   const filteredResults = React.useMemo(() => {
@@ -114,7 +127,16 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
       if (initialQuery) {
         // 如果有初始查询，执行搜索
         const results = searchChips(initialQuery);
+        const refDesigns = searchReferenceDesigns(initialQuery);
+        const techDocs = searchTechnicalDocuments(initialQuery);
+        const appGuides = searchApplicationGuides(initialQuery);
+        const news = searchIndustryNews(initialQuery);
+
         setSearchResults(results);
+        setReferenceDesigns(refDesigns);
+        setTechnicalDocuments(techDocs);
+        setApplicationGuides(appGuides);
+        setIndustryNews(news);
       } else {
         // 否则显示默认结果
         const initialResults = searchChips("", {});
@@ -122,6 +144,12 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
         const tpsDemoItems = initialResults.filter(c => c.model === 'TPS5430');
         const otherItems = initialResults.filter(c => c.model !== 'TPS5430');
         setSearchResults([...tpsDemoItems, ...otherItems]);
+
+        // 加载默认的其他内容
+        setReferenceDesigns(searchReferenceDesigns(""));
+        setTechnicalDocuments(searchTechnicalDocuments(""));
+        setApplicationGuides(searchApplicationGuides(""));
+        setIndustryNews(searchIndustryNews(""));
       }
       setIsLoading(false);
     }, 500);
@@ -158,6 +186,12 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
           results = searchChips(query);
       }
 
+      // 搜索其他类型的内容
+      const refDesigns = searchReferenceDesigns(query);
+      const techDocs = searchTechnicalDocuments(query);
+      const appGuides = searchApplicationGuides(query);
+      const news = searchIndustryNews(query);
+
       // 如果启用AI增强，可以对结果进行AI处理
       if (useAI) {
         // 这里可以添加AI增强逻辑，比如智能排序、相关推荐等
@@ -165,6 +199,10 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
       }
 
       setSearchResults(results);
+      setReferenceDesigns(refDesigns);
+      setTechnicalDocuments(techDocs);
+      setApplicationGuides(appGuides);
+      setIndustryNews(news);
       setIsLoading(false);
     }, searchDelay);
   };
@@ -207,6 +245,19 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
   // 重置分页状态（当搜索或筛选条件改变时）
   const resetPagination = () => {
     setDisplayedCount(5);
+  };
+
+  // 切换订购信息展开状态
+  const toggleOrderInfo = (chipId: string) => {
+    setExpandedOrders(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(chipId)) {
+        newSet.delete(chipId);
+      } else {
+        newSet.add(chipId);
+      }
+      return newSet;
+    });
   };
 
   // 兜底，防止searchModes[searchMode]为undefined
@@ -413,62 +464,249 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
               </div>
             )}
 
-            {/* 产品列表 */}
-            <div className="space-y-3">
-              <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">产品</h3>
-              {filteredResults.length > 0 ? (
-                <>
-                  {displayedResults.map((chip, index) => (
-                    <ChipListItem
-                      key={chip.id}
-                      chip={chip}
-                    />
-                  ))}
+            {/* 搜索结果分类显示 */}
+            <div className="space-y-6">
+              {/* 1. 产品框架 - 所有产品聚合在一个大框架中 */}
+              {filteredResults.length > 0 && (
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                      <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
+                        <FileText className="h-4 w-4 text-white" />
+                      </div>
+                      产品 ({filteredResults.length})
+                    </h3>
+                  </div>
+
+                  {/* 产品网格布局 - 所有产品在一个容器中 */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {displayedResults.map((chip) => (
+                      <div key={chip.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{chip.model}</h4>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{chip.description}</p>
+                        <div className="text-xs text-gray-500 dark:text-gray-500 mb-2">
+                          <div>制造商: {chip.manufacturer}</div>
+                          {chip.category && <div>分类: {chip.category}</div>}
+                          {chip.status && <div>状态: {chip.status}</div>}
+                        </div>
+
+                        {/* 订购信息按钮 */}
+                        <button
+                          onClick={() => toggleOrderInfo(chip.id)}
+                          className="w-full flex items-center justify-between px-3 py-2 text-xs bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 text-blue-700 dark:text-blue-300 rounded-md transition-colors border border-blue-200 dark:border-blue-800"
+                        >
+                          <div className="flex items-center gap-1">
+                            <ShoppingCart className="h-3 w-3" />
+                            <span>订购信息</span>
+                          </div>
+                          {expandedOrders.has(chip.id) ? (
+                            <ChevronUp className="h-3 w-3" />
+                          ) : (
+                            <ChevronDown className="h-3 w-3" />
+                          )}
+                        </button>
+
+                        {/* 展开的订购信息 */}
+                        {expandedOrders.has(chip.id) && (
+                          <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-md border border-gray-200 dark:border-gray-600">
+                            <div className="space-y-2 text-xs">
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">库存状态:</span>
+                                <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                                  <Package className="h-3 w-3" />
+                                  量产
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">最小订购量:</span>
+                                <span className="font-medium">1000 pcs</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">交货周期:</span>
+                                <span className="flex items-center gap-1">
+                                  <Truck className="h-3 w-3" />
+                                  8-12 周
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">封装类型:</span>
+                                <span className="font-medium">{chip.package || 'SOIC-8'}</span>
+                              </div>
+                              {chip.price && (
+                                <div className="flex items-center justify-between">
+                                  <span className="text-gray-600 dark:text-gray-400">参考价格:</span>
+                                  <span className="font-medium text-blue-600 dark:text-blue-400">{chip.price}</span>
+                                </div>
+                              )}
+
+                              {/* 操作按钮 */}
+                              <div className="flex gap-2 mt-3 pt-2 border-t border-gray-200 dark:border-gray-600">
+                                <button className="flex-1 px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors">
+                                  立即询价
+                                </button>
+                                <button className="flex-1 px-2 py-1 text-xs bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors">
+                                  加入购物车
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
 
                   {/* 展示更多按钮 */}
                   {displayedResults.length < filteredResults.length && (
-                    <div className="flex justify-center pt-6">
+                    <div className="flex justify-center pt-4 mt-4 border-t border-gray-200 dark:border-gray-600">
                       <button
                         onClick={handleLoadMore}
                         disabled={isLoadingMore}
-                        className="group relative overflow-hidden inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border border-blue-200/60 dark:border-gray-600/50 hover:border-blue-300/80 dark:hover:border-gray-500/70 rounded-2xl transition-all duration-500 ease-out shadow-sm hover:shadow-xl hover:shadow-blue-200/50 dark:hover:shadow-gray-900/30 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-colors"
                       >
-                        {/* 背景光效 */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 via-blue-50/30 to-blue-50/0 dark:from-blue-900/0 dark:via-blue-900/20 dark:to-blue-900/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                        {/* 边框光效 */}
-                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-blue-200/20 to-transparent dark:via-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                        {/* 内容 */}
-                        <div className="relative z-10 flex items-center gap-3">
-                          <div className="flex items-center gap-2">
-                            {isLoadingMore ? (
-                              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"></div>
-                            ) : (
-                              <MoreHorizontal className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                            )}
-                            <span className="text-sm font-semibold bg-gradient-to-r from-blue-700 to-blue-900 dark:from-blue-200 dark:to-blue-100 bg-clip-text text-transparent">
-                              {isLoadingMore ? '加载中...' : `展示更多 (还有 ${filteredResults.length - displayedResults.length} 个)`}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* 微妙的内阴影 */}
-                        <div className="absolute inset-0 rounded-2xl shadow-inner shadow-blue-200/20 dark:shadow-gray-900/20 pointer-events-none"></div>
+                        {isLoadingMore ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                            加载中...
+                          </>
+                        ) : (
+                          <>
+                            <MoreHorizontal className="h-4 w-4" />
+                            展示更多 ({filteredResults.length - displayedResults.length} 个)
+                          </>
+                        )}
                       </button>
                     </div>
                   )}
-                </>
-              ) : (
+                </div>
+              )}
+
+              {/* 2. 参考设计框架 - 所有参考设计聚合在一个大框架中 */}
+              {referenceDesigns.length > 0 && (
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                      <div className="w-6 h-6 bg-indigo-500 rounded flex items-center justify-center">
+                        <FileText className="h-4 w-4 text-white" />
+                      </div>
+                      参考设计 ({referenceDesigns.length})
+                    </h3>
+                  </div>
+
+                  {/* 参考设计网格布局 */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {referenceDesigns.map((design) => (
+                      <div key={design.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{design.title}</h4>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{design.description}</p>
+                        <div className="text-xs text-gray-500 dark:text-gray-500">
+                          {design.chipModel && <div>芯片: {design.chipModel}</div>}
+                          {design.manufacturer && <div>制造商: {design.manufacturer}</div>}
+                          {design.downloadCount && <div>下载: {design.downloadCount}</div>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 3. 技术文档框架 - 所有技术文档聚合在一个大框架中 */}
+              {technicalDocuments.length > 0 && (
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                      <div className="w-6 h-6 bg-green-500 rounded flex items-center justify-center">
+                        <FileText className="h-4 w-4 text-white" />
+                      </div>
+                      技术文档 ({technicalDocuments.length})
+                    </h3>
+                  </div>
+
+                  {/* 技术文档网格布局 */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {technicalDocuments.map((doc) => (
+                      <div key={doc.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{doc.title}</h4>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{doc.description}</p>
+                        <div className="text-xs text-gray-500 dark:text-gray-500">
+                          {doc.chipModel && <div>芯片: {doc.chipModel}</div>}
+                          {doc.pageCount && <div>页数: {doc.pageCount}</div>}
+                          <div>类型: {doc.type}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 4. 应用指南框架 - 所有应用指南聚合在一个大框架中 */}
+              {applicationGuides.length > 0 && (
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                      <div className="w-6 h-6 bg-orange-500 rounded flex items-center justify-center">
+                        <FileText className="h-4 w-4 text-white" />
+                      </div>
+                      应用指南 ({applicationGuides.length})
+                    </h3>
+                  </div>
+
+                  {/* 应用指南网格布局 */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {applicationGuides.map((guide) => (
+                      <div key={guide.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{guide.title}</h4>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{guide.description}</p>
+                        <div className="text-xs text-gray-500 dark:text-gray-500">
+                          {guide.chipModel && <div>芯片: {guide.chipModel}</div>}
+                          <div>应用: {guide.applicationField}</div>
+                          <div>难度: {guide.difficulty}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 5. 行业资讯框架 - 所有行业资讯聚合在一个大框架中 */}
+              {industryNews.length > 0 && (
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                      <div className="w-6 h-6 bg-purple-500 rounded flex items-center justify-center">
+                        <FileText className="h-4 w-4 text-white" />
+                      </div>
+                      行业资讯 ({industryNews.length})
+                    </h3>
+                  </div>
+
+                  {/* 行业资讯网格布局 */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {industryNews.map((news) => (
+                      <div key={news.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{news.title}</h4>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{news.description}</p>
+                        <div className="text-xs text-gray-500 dark:text-gray-500">
+                          <div>发布: {news.publishDate}</div>
+                          {news.author && <div>作者: {news.author}</div>}
+                          {news.readTime && <div>阅读: {news.readTime}分钟</div>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 无结果提示 */}
+              {filteredResults.length === 0 && referenceDesigns.length === 0 && technicalDocuments.length === 0 && applicationGuides.length === 0 && industryNews.length === 0 && (
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <p>没有符合筛选条件的产品</p>
+                  <p>没有找到相关内容</p>
                   <button
                     onClick={() => {
                       setSelectedBrand('');
                       setSelectedCategory('');
                       setSelectedResource('');
                       setSelectedSort('');
-                      resetPagination(); // 重置分页
+                      resetPagination();
                     }}
                     className="mt-2 text-blue-600 hover:text-blue-700 text-sm"
                   >

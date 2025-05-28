@@ -1,5 +1,5 @@
 
-import type { Chip, AlternativeChip } from './types';
+import type { Chip, AlternativeChip, ReferenceDesign, TechnicalDocument, ApplicationGuide, IndustryNews } from './types';
 import type { ChipFilters } from '@/components/shared/filter-panel'; // Import ChipFilters
 
 export const placeholderChips: Chip[] = [
@@ -25,6 +25,9 @@ export const placeholderChips: Chip[] = [
     tags: ['DC-DC', '降压转换器', '电源管理'],
     rohsCompliant: true,
     lowPower: false,
+    status: '量产',
+    package: 'SOIC-8',
+    price: '¥12.50'
   },
   {
     id: 'TPS5430-2',
@@ -47,6 +50,9 @@ export const placeholderChips: Chip[] = [
     },
     tags: ['DC-DC', '降压转换器', '电源管理'],
     rohsCompliant: true,
+    status: '量产',
+    package: 'SOIC-8',
+    price: '¥11.80'
   },
     {
     id: 'TPS5430-3',
@@ -262,7 +268,7 @@ export function searchChips(query: string, filters: ChipFilters = {}): Chip[] {
       matchesQuery = chip.model.toLowerCase().includes(lowerQuery) ||
                      chip.description.toLowerCase().includes(lowerQuery) ||
                      chip.manufacturer.toLowerCase().includes(lowerQuery) ||
-                     (chip.tags && chip.tags.some(tag => tag.toLowerCase().includes(lowerQuery)));
+                     (chip.tags?.some(tag => tag.toLowerCase().includes(lowerQuery)) ?? false);
     }
 
     if (!matchesQuery) return false;
@@ -326,4 +332,230 @@ export function searchChips(query: string, filters: ChipFilters = {}): Chip[] {
   });
   // Not slicing results for now, let the UI handle pagination or virtual scrolling if needed.
   // .slice(0, 20);
+}
+
+// 参考设计模拟数据
+export const placeholderReferenceDesigns: ReferenceDesign[] = [
+  {
+    id: 'ref-1',
+    title: 'TPS5430EVM-715 评估模块',
+    description: '3A SWIFT 降压转换器评估模块，包含完整的设计文件和测试报告',
+    chipModel: 'TPS5430',
+    manufacturer: '德州仪器-TI',
+    documentUrl: '/docs/TPS5430EVM-715.pdf',
+    imageUrl: '/reference-designs/TPS5430EVM.jpg',
+    category: '电源管理',
+    tags: ['降压转换器', '评估板', 'SWIFT'],
+    downloadCount: 1250,
+    lastUpdated: '2024-01-15'
+  },
+  {
+    id: 'ref-2',
+    title: 'STM32F407 开发板参考设计',
+    description: 'ARM Cortex-M4高性能微控制器开发板完整设计方案',
+    chipModel: 'STM32F407',
+    manufacturer: 'STMicroelectronics',
+    documentUrl: '/docs/STM32F407-RefDesign.pdf',
+    imageUrl: '/reference-designs/STM32F407.jpg',
+    category: '微控制器',
+    tags: ['ARM', 'Cortex-M4', '开发板'],
+    downloadCount: 2100,
+    lastUpdated: '2024-02-20'
+  },
+  {
+    id: 'ref-3',
+    title: 'ESP32 物联网网关参考设计',
+    description: '基于ESP32的完整物联网网关解决方案',
+    chipModel: 'ESP32',
+    manufacturer: 'Espressif',
+    documentUrl: '/docs/ESP32-IoT-Gateway.pdf',
+    imageUrl: '/reference-designs/ESP32-Gateway.jpg',
+    category: '物联网',
+    tags: ['WiFi', '蓝牙', '网关', '物联网'],
+    downloadCount: 890,
+    lastUpdated: '2024-03-10'
+  }
+];
+
+// 技术文档模拟数据
+export const placeholderTechnicalDocuments: TechnicalDocument[] = [
+  {
+    id: 'doc-1',
+    title: 'TPS5430 数据手册',
+    description: 'TPS5430 3A降压转换器完整技术规格和应用说明',
+    type: 'datasheet',
+    chipModel: 'TPS5430',
+    manufacturer: '德州仪器-TI',
+    documentUrl: '/docs/TPS5430-datasheet.pdf',
+    category: '数据手册',
+    tags: ['降压转换器', '电源管理'],
+    pageCount: 42,
+    lastUpdated: '2024-01-10'
+  },
+  {
+    id: 'doc-2',
+    title: 'STM32F407 编程手册',
+    description: 'STM32F407系列微控制器编程指南和寄存器说明',
+    type: 'programming_guide',
+    chipModel: 'STM32F407',
+    manufacturer: 'STMicroelectronics',
+    documentUrl: '/docs/STM32F407-programming.pdf',
+    category: '编程指南',
+    tags: ['ARM', 'Cortex-M4', '编程'],
+    pageCount: 156,
+    lastUpdated: '2024-02-15'
+  },
+  {
+    id: 'doc-3',
+    title: 'ESP32 技术参考手册',
+    description: 'ESP32系列芯片完整技术参考和寄存器说明',
+    type: 'user_guide',
+    chipModel: 'ESP32',
+    manufacturer: 'Espressif',
+    documentUrl: '/docs/ESP32-technical-reference.pdf',
+    category: '技术参考',
+    tags: ['WiFi', '蓝牙', '物联网'],
+    pageCount: 677,
+    lastUpdated: '2024-01-25'
+  }
+];
+
+// 应用指南模拟数据
+export const placeholderApplicationGuides: ApplicationGuide[] = [
+  {
+    id: 'app-1',
+    title: '汽车LED大灯驱动电源设计',
+    description: '基于TPS5430的汽车LED大灯驱动电源完整设计方案',
+    chipModel: 'TPS5430',
+    manufacturer: '德州仪器-TI',
+    applicationField: '汽车电子',
+    documentUrl: '/docs/automotive-led-driver.pdf',
+    imageUrl: '/applications/automotive-led.jpg',
+    difficulty: 'intermediate',
+    tags: ['汽车电子', 'LED驱动', '电源设计'],
+    lastUpdated: '2024-01-20'
+  },
+  {
+    id: 'app-2',
+    title: 'STM32F407工业控制系统开发',
+    description: '使用STM32F407开发工业自动化控制系统的完整指南',
+    chipModel: 'STM32F407',
+    manufacturer: 'STMicroelectronics',
+    applicationField: '工业控制',
+    documentUrl: '/docs/stm32-industrial-control.pdf',
+    imageUrl: '/applications/industrial-control.jpg',
+    difficulty: 'advanced',
+    tags: ['工业控制', '自动化', 'ARM'],
+    lastUpdated: '2024-02-25'
+  },
+  {
+    id: 'app-3',
+    title: 'ESP32智能家居网关开发',
+    description: '基于ESP32的智能家居中央控制网关设计与实现',
+    chipModel: 'ESP32',
+    manufacturer: 'Espressif',
+    applicationField: '智能家居',
+    documentUrl: '/docs/esp32-smart-home.pdf',
+    imageUrl: '/applications/smart-home.jpg',
+    difficulty: 'beginner',
+    tags: ['智能家居', 'WiFi', '物联网'],
+    lastUpdated: '2024-03-05'
+  }
+];
+
+// 行业资讯模拟数据
+export const placeholderIndustryNews: IndustryNews[] = [
+  {
+    id: 'news-1',
+    title: '2024年电源管理芯片市场趋势分析',
+    description: '深入分析2024年电源管理芯片市场的发展趋势和技术创新',
+    content: '随着新能源汽车和5G技术的快速发展，电源管理芯片市场迎来新的增长机遇...',
+    author: '芯智研究院',
+    publishDate: '2024-03-15',
+    category: '市场分析',
+    tags: ['电源管理', '市场趋势', '新能源'],
+    imageUrl: '/news/power-management-2024.jpg',
+    sourceUrl: 'https://example.com/news/power-management-2024',
+    readTime: 8
+  },
+  {
+    id: 'news-2',
+    title: 'ARM Cortex-M系列微控制器新品发布',
+    description: 'ARM公司发布新一代Cortex-M系列微控制器，性能提升显著',
+    content: 'ARM公司今日正式发布了新一代Cortex-M系列微控制器架构...',
+    author: '半导体观察',
+    publishDate: '2024-03-12',
+    category: '产品发布',
+    tags: ['ARM', 'Cortex-M', '微控制器'],
+    imageUrl: '/news/arm-cortex-m-new.jpg',
+    sourceUrl: 'https://example.com/news/arm-cortex-m-new',
+    readTime: 5
+  },
+  {
+    id: 'news-3',
+    title: '物联网芯片安全标准更新',
+    description: '国际物联网安全联盟发布最新的物联网芯片安全标准',
+    content: '为了应对日益严峻的网络安全威胁，国际物联网安全联盟发布了...',
+    author: '安全技术周刊',
+    publishDate: '2024-03-08',
+    category: '技术标准',
+    tags: ['物联网', '安全', '标准'],
+    imageUrl: '/news/iot-security-standards.jpg',
+    sourceUrl: 'https://example.com/news/iot-security-standards',
+    readTime: 6
+  }
+];
+
+// 搜索函数
+export function searchReferenceDesigns(query: string): ReferenceDesign[] {
+  if (!query.trim()) return placeholderReferenceDesigns;
+
+  const lowerQuery = query.toLowerCase();
+  return placeholderReferenceDesigns.filter(design =>
+    design.title.toLowerCase().includes(lowerQuery) ||
+    design.description.toLowerCase().includes(lowerQuery) ||
+    design.chipModel?.toLowerCase().includes(lowerQuery) ||
+    design.manufacturer?.toLowerCase().includes(lowerQuery) ||
+    design.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+  );
+}
+
+export function searchTechnicalDocuments(query: string): TechnicalDocument[] {
+  if (!query.trim()) return placeholderTechnicalDocuments;
+
+  const lowerQuery = query.toLowerCase();
+  return placeholderTechnicalDocuments.filter(doc =>
+    doc.title.toLowerCase().includes(lowerQuery) ||
+    doc.description.toLowerCase().includes(lowerQuery) ||
+    doc.chipModel?.toLowerCase().includes(lowerQuery) ||
+    doc.manufacturer?.toLowerCase().includes(lowerQuery) ||
+    doc.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+  );
+}
+
+export function searchApplicationGuides(query: string): ApplicationGuide[] {
+  if (!query.trim()) return placeholderApplicationGuides;
+
+  const lowerQuery = query.toLowerCase();
+  return placeholderApplicationGuides.filter(guide =>
+    guide.title.toLowerCase().includes(lowerQuery) ||
+    guide.description.toLowerCase().includes(lowerQuery) ||
+    guide.chipModel?.toLowerCase().includes(lowerQuery) ||
+    guide.manufacturer?.toLowerCase().includes(lowerQuery) ||
+    guide.applicationField.toLowerCase().includes(lowerQuery) ||
+    guide.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+  );
+}
+
+export function searchIndustryNews(query: string): IndustryNews[] {
+  if (!query.trim()) return placeholderIndustryNews;
+
+  const lowerQuery = query.toLowerCase();
+  return placeholderIndustryNews.filter(news =>
+    news.title.toLowerCase().includes(lowerQuery) ||
+    news.description.toLowerCase().includes(lowerQuery) ||
+    news.content?.toLowerCase().includes(lowerQuery) ||
+    news.category.toLowerCase().includes(lowerQuery) ||
+    news.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+  );
 }
