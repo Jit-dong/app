@@ -3,9 +3,10 @@ import Link from 'next/link';
 import type { Chip } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FileText, Replace, ShieldCheck, ExternalLink, Package } from 'lucide-react';
+import { FileText, Replace, ShieldCheck, ExternalLink, Package, ChevronDown, ChevronUp } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { findAlternativesByChipId } from '@/lib/placeholder-data'; // To get alternative count
+import { useState } from 'react';
 
 interface ChipListItemProps {
   chip: Chip;
@@ -13,11 +14,17 @@ interface ChipListItemProps {
 }
 
 export default function ChipListItem({ chip, showAlternativeCount = false }: ChipListItemProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
   const alternativeCount = findAlternativesByChipId(chip.id).length;
   const displayAlternativeText = alternativeCount > 0 ? (alternativeCount > 99 ? '99+' : alternativeCount.toString()) : '0';
 
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
+  };
+
+  const toggleExpanded = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsExpanded(!isExpanded);
   };
 
   return (
@@ -78,16 +85,19 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
           </div>
 
           <div className="flex items-center gap-2">
-            <Link href={`/chip/${chip.id}/purchase`} passHref legacyBehavior>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-950/20"
-                onClick={stopPropagation}
-              >
-                查看订购信息
-              </Button>
-            </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-950/20"
+              onClick={toggleExpanded}
+            >
+              <span>查看订购信息</span>
+              {isExpanded ? (
+                <ChevronUp className="h-4 w-4 ml-1" />
+              ) : (
+                <ChevronDown className="h-4 w-4 ml-1" />
+              )}
+            </Button>
           </div>
         </div>
 
@@ -133,6 +143,88 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
             Keeping DC/DC solutions (super) simple for cost-sensitive applications
           </p>
         </div>
+
+        {/* 折叠展开的订购信息 */}
+        {isExpanded && (
+          <div className="border-t border-gray-200 dark:border-gray-600 pt-4 mt-4">
+            <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-3">订购信息</h4>
+
+            {/* 数据手册 */}
+            <div className="mb-4">
+              <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-orange-600" />
+                  <span className="text-sm font-medium text-orange-700 dark:text-orange-300">数据手册</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                  <span>替代料: {displayAlternativeText}</span>
+                  <span>•</span>
+                  <span>管脚兼容: 3</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 替代料列表 */}
+            {alternativeCount > 0 && (
+              <div className="mb-4">
+                <h5 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">替代料</h5>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                          {chip.model}DOCT
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span className="text-xs text-green-600 dark:text-green-400">量产</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 space-x-4">
+                        <span>封装: SOT23-6</span>
+                        <span>替代料: 6</span>
+                        <span>数量: 3201</span>
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        <span>包装: 3000/T&R</span>
+                        <span className="ml-4">工作温度: -40°至125°</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-gray-800 dark:text-gray-200">替代料: 3</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                          {chip.model}DDCR
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span className="text-xs text-green-600 dark:text-green-400">量产</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 space-x-4">
+                        <span>封装: SOT23-6</span>
+                        <span>替代料: 6</span>
+                        <span>数量: 3201</span>
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        <span>包装: 3000/T&R</span>
+                        <span className="ml-4">工作温度: -40°至125°</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-gray-800 dark:text-gray-200">替代料: 3</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
