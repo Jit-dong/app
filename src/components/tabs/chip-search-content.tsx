@@ -90,6 +90,9 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
   // 订购信息展开状态
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
 
+  // 产品展示模式状态（折叠/展开）
+  const [isProductsExpanded, setIsProductsExpanded] = useState(false);
+
   // 计算过滤后的结果
   const filteredResults = React.useMemo(() => {
     let filtered = [...searchResults];
@@ -120,6 +123,11 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
   const displayedResults = React.useMemo(() => {
     return filteredResults.slice(0, displayedCount);
   }, [filteredResults, displayedCount]);
+
+  // 当搜索结果变化时，重置产品展开状态
+  React.useEffect(() => {
+    setIsProductsExpanded(false);
+  }, [filteredResults.length]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -259,6 +267,11 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
       return newSet;
     });
   };
+
+  // 判断是否应该显示折叠模式（多条数据时）
+  const shouldShowCollapsedMode = filteredResults.length > 3;
+
+
 
   // 兜底，防止searchModes[searchMode]为undefined
   const safeMode = searchModes[searchMode] ? searchMode : 'datasheet';
@@ -478,9 +491,47 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     </h3>
                   </div>
 
-                  {/* 产品网格布局 - 所有产品在一个容器中 */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {displayedResults.map((chip) => (
+                  {/* 产品网格布局 - 根据模式显示不同的布局 */}
+                  {shouldShowCollapsedMode && !isProductsExpanded ? (
+                    // 折叠模式：简化显示
+                    <div className="space-y-3">
+                      {filteredResults.slice(0, 3).map((chip) => (
+                        <div key={chip.id} className="flex items-center gap-4 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
+                          {/* 产品图片 */}
+                          <div className="flex-shrink-0">
+                            <img
+                              src={`/brands/image_cp/${chip.model}.png`}
+                              alt={chip.model}
+                              className="w-10 h-10 object-contain bg-gray-50 dark:bg-gray-700 rounded border"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                target.nextElementSibling?.classList.remove('hidden');
+                              }}
+                            />
+                            <div className="hidden w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded border flex items-center justify-center">
+                              <Package className="h-5 w-5 text-gray-400" />
+                            </div>
+                          </div>
+
+                          {/* 产品信息 */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{chip.model}</h4>
+                              <div className="flex items-center gap-1">
+                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                <span className="text-xs text-green-600 dark:text-green-400">量产</span>
+                              </div>
+                            </div>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-1">{chip.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    // 展开模式：完整显示
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                      {displayedResults.map((chip) => (
                       <div key={chip.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
                         {/* 产品图片 */}
                         <div className="flex items-start gap-3 mb-2">
@@ -582,11 +633,34 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                           </div>
                         )}
                       </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
 
-                  {/* 展示更多按钮 */}
-                  {displayedResults.length < filteredResults.length && (
+                  {/* 展开/收起按钮 */}
+                  {shouldShowCollapsedMode && (
+                    <div className="flex justify-center pt-4 mt-4 border-t border-gray-200 dark:border-gray-600">
+                      <button
+                        onClick={() => setIsProductsExpanded(!isProductsExpanded)}
+                        className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-colors"
+                      >
+                        {isProductsExpanded ? (
+                          <>
+                            <ChevronUp className="h-4 w-4" />
+                            收起 ({filteredResults.length - 3} 个)
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-4 w-4" />
+                            展开更多 ({filteredResults.length - 3} 个)
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* 展示更多按钮（仅在展开模式下显示） */}
+                  {(!shouldShowCollapsedMode || isProductsExpanded) && displayedResults.length < filteredResults.length && (
                     <div className="flex justify-center pt-4 mt-4 border-t border-gray-200 dark:border-gray-600">
                       <button
                         onClick={handleLoadMore}
