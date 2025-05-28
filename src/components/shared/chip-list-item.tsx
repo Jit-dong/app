@@ -33,7 +33,7 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
         {/* 分类路径 */}
         <div className="mb-4">
           <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-600 mb-2">
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-300">产品分类</span>
+            <span className="text-xs font-medium text-gray-600 dark:text-gray-300">产品</span>
           </div>
           <div className="text-sm font-medium text-blue-700 dark:text-blue-300">
             电源管理芯片 › 直流直流交换器 › 降压型稳压器
