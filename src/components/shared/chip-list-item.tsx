@@ -47,33 +47,48 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
 
       {/* 操作按钮区域 */}
       <div className="p-4">
-        <div className="flex items-center gap-4 text-sm mb-4">
-          {chip.datasheetUrl && chip.datasheetUrl !== '#' && (
-            <button
-              onClick={(e) => {
-                stopPropagation(e);
-                window.open(chip.datasheetUrl, '_blank');
-              }}
-              className="flex items-center gap-1 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
-            >
-              <FileText className="h-4 w-4" />
-              数据手册
-            </button>
-          )}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-4 text-sm">
+            {chip.datasheetUrl && chip.datasheetUrl !== '#' && (
+              <button
+                onClick={(e) => {
+                  stopPropagation(e);
+                  window.open(chip.datasheetUrl, '_blank');
+                }}
+                className="flex items-center gap-1 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+              >
+                <FileText className="h-4 w-4" />
+                数据手册
+              </button>
+            )}
 
-          {showAlternativeCount && (
-            <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
-              <Replace className="h-4 w-4" />
-              替代料: {displayAlternativeText}
-            </span>
-          )}
+            {showAlternativeCount && (
+              <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                <Replace className="h-4 w-4" />
+                替代料: {displayAlternativeText}
+              </span>
+            )}
 
-          {chip.automotiveGrade && (
-            <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-              <ShieldCheck className="h-4 w-4" />
-              车规级
-            </span>
-          )}
+            {chip.automotiveGrade && (
+              <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                <ShieldCheck className="h-4 w-4" />
+                车规级
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link href={`/chip/${chip.id}/purchase`} passHref legacyBehavior>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-950/20"
+                onClick={stopPropagation}
+              >
+                查看订购信息
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* 参考设计 */}
