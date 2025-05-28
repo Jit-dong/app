@@ -610,32 +610,32 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                               订购详情
                             </h5>
                             <div className="grid grid-cols-2 gap-2 text-xs">
-                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">封装</span>
-                                <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">{chip.package || 'SOT23-6'}</div>
+                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
+                                <span className="text-gray-500 dark:text-gray-400 font-medium">封装 </span>
+                                <span className="font-bold text-gray-900 dark:text-gray-100">{chip.package || 'SOT23-6'}</span>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">管脚</span>
-                                <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">6</div>
+                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
+                                <span className="text-gray-500 dark:text-gray-400 font-medium">管脚 </span>
+                                <span className="font-bold text-gray-900 dark:text-gray-100">6</span>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">丝印</span>
-                                <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">3201</div>
+                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
+                                <span className="text-gray-500 dark:text-gray-400 font-medium">丝印 </span>
+                                <span className="font-bold text-gray-900 dark:text-gray-100">3201</span>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">包装</span>
-                                <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">2500/T&R</div>
+                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
+                                <span className="text-gray-500 dark:text-gray-400 font-medium">包装 </span>
+                                <span className="font-bold text-gray-900 dark:text-gray-100">2500/T&R</span>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">工作温度</span>
-                                <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">-40~120度</div>
+                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
+                                <span className="text-gray-500 dark:text-gray-400 font-medium">工作温度 </span>
+                                <span className="font-bold text-gray-900 dark:text-gray-100">-40~120度</span>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">状态</span>
-                                <div className="flex items-center gap-1 mt-0.5">
+                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
+                                <span className="text-gray-500 dark:text-gray-400 font-medium">状态 </span>
+                                <span className="flex items-center gap-1">
                                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                                   <span className="font-bold text-green-600 dark:text-green-400">量产</span>
-                                </div>
+                                </span>
                               </div>
                             </div>
                           </div>
