@@ -28,209 +28,281 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-800">
       {/* 产品信息框架 */}
-      <div className="m-4 border border-gray-300 dark:border-gray-600 rounded-lg p-4">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 p-6 border-b border-gray-100 dark:border-gray-700">
         {/* 分类路径 */}
-        <div className="mb-3">
-          <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-            产品
+        <div className="mb-4">
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-600 mb-2">
+            <span className="text-xs font-medium text-gray-600 dark:text-gray-300">产品分类</span>
           </div>
-          <div className="text-sm text-blue-600 dark:text-blue-400">
-            电源管理芯片-直流直流交换器-降压型稳压器
+          <div className="text-sm font-medium text-blue-700 dark:text-blue-300">
+            电源管理芯片 › 直流直流交换器 › 降压型稳压器
           </div>
         </div>
 
         {/* 产品标题区域 */}
-        <div className="flex items-start">
+        <div className="flex items-start justify-between">
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
+            <div className="flex items-center gap-3 mb-3">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {chip.model}
               </h3>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-green-600 dark:text-green-400">量产</span>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-green-100 dark:bg-green-900/30 rounded-full">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-xs font-semibold text-green-700 dark:text-green-400">量产</span>
               </div>
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-              品牌：{chip.manufacturer || 'TI(德州仪器)'}
-            </p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-              描述：{chip.description}
-            </p>
 
-            {/* 数据手册和车规级信息 */}
-            <div className="flex items-center gap-4 text-sm">
-              {chip.datasheetUrl && chip.datasheetUrl !== '#' && (
-                <button
-                  onClick={(e) => {
-                    stopPropagation(e);
-                    window.open(chip.datasheetUrl, '_blank');
-                  }}
-                  className="flex items-center gap-1 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
-                >
-                  <FileText className="h-4 w-4" />
-                  数据手册
-                </button>
-              )}
-
-              {chip.automotiveGrade && (
-                <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                  <ShieldCheck className="h-4 w-4" />
-                  车规级
-                </span>
-              )}
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">品牌</span>
+                <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{chip.manufacturer || 'TI(德州仪器)'}</span>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                {chip.description}
+              </p>
             </div>
+
+            {/* 功能标签和操作按钮 */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {chip.datasheetUrl && chip.datasheetUrl !== '#' && (
+                  <button
+                    onClick={(e) => {
+                      stopPropagation(e);
+                      window.open(chip.datasheetUrl, '_blank');
+                    }}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/30 dark:hover:bg-orange-900/50 text-orange-700 dark:text-orange-300 rounded-lg transition-all duration-200 text-sm font-medium"
+                  >
+                    <FileText className="h-4 w-4" />
+                    数据手册
+                  </button>
+                )}
+
+                {chip.automotiveGrade && (
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-lg text-sm font-medium">
+                    <ShieldCheck className="h-4 w-4" />
+                    车规级
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={toggleExpanded}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-xl transition-all duration-200 text-sm font-semibold shadow-lg hover:shadow-xl"
+              >
+                <span>订购信息</span>
+                {isExpanded ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+
+            {/* 折叠展开的订购信息 - 在产品框架内 */}
+            {isExpanded && (
+              <div className="border-t border-white/20 dark:border-gray-600/50 pt-6 mt-6 animate-in slide-in-from-top-2 duration-300">
+                {/* 顶部标签栏 */}
+                <div className="flex flex-wrap items-center gap-3 mb-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/60 dark:bg-gray-700/60 backdrop-blur-sm rounded-lg border border-orange-200 dark:border-orange-700/50">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                    <span className="text-sm font-medium text-orange-700 dark:text-orange-300">数据手册</span>
+                  </div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/60 dark:bg-gray-700/60 backdrop-blur-sm rounded-lg border border-blue-200 dark:border-blue-700/50">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-sm font-medium text-blue-700 dark:text-blue-300">替代料: {displayAlternativeText}</span>
+                  </div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/60 dark:bg-gray-700/60 backdrop-blur-sm rounded-lg border border-purple-200 dark:border-purple-700/50">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span className="text-sm font-medium text-purple-700 dark:text-purple-300">替代料列表: 2</span>
+                  </div>
+                </div>
+
+                {/* 替代料列表 */}
+                <div className="space-y-4">
+                  {/* 第一个替代料 */}
+                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-600/50 rounded-xl p-5 hover:shadow-lg transition-all duration-200">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                            {chip.model}DOCT
+                          </span>
+                          <div className="flex items-center gap-1.5 px-2 py-0.5 bg-green-100 dark:bg-green-900/30 rounded-full">
+                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-xs font-semibold text-green-700 dark:text-green-400">量产</span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">封装</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">SOT23-6</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">替代料</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">6</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">数量</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">3,201</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">包装</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">3000/T&R</span>
+                          </div>
+                          <div className="col-span-2 flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">工作温度</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">-40°至125°</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="ml-4 text-right">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                          <span className="text-sm font-medium text-blue-700 dark:text-blue-300">替代料</span>
+                          <span className="text-lg font-bold text-blue-800 dark:text-blue-200">3</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 第二个替代料 */}
+                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-600/50 rounded-xl p-5 hover:shadow-lg transition-all duration-200">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                            {chip.model}DDCR
+                          </span>
+                          <div className="flex items-center gap-1.5 px-2 py-0.5 bg-green-100 dark:bg-green-900/30 rounded-full">
+                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-xs font-semibold text-green-700 dark:text-green-400">量产</span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">封装</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">SOT23-6</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">替代料</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">6</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">数量</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">3,201</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">包装</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">3000/T&R</span>
+                          </div>
+                          <div className="col-span-2 flex items-center gap-2">
+                            <span className="text-gray-500 dark:text-gray-400">工作温度</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">-40°至125°</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="ml-4 text-right">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                          <span className="text-sm font-medium text-blue-700 dark:text-blue-300">替代料</span>
+                          <span className="text-lg font-bold text-blue-800 dark:text-blue-200">3</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* 操作按钮区域 */}
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-4 text-sm">
-            {showAlternativeCount && (
-              <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
-                <Replace className="h-4 w-4" />
-                替代料: {displayAlternativeText}
-              </span>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-950/20"
-              onClick={toggleExpanded}
-            >
-              <span>查看订购信息</span>
-              {isExpanded ? (
-                <ChevronUp className="h-4 w-4 ml-1" />
-              ) : (
-                <ChevronDown className="h-4 w-4 ml-1" />
-              )}
-            </Button>
-          </div>
-        </div>
-
-        {/* 折叠展开的订购信息 - 紧跟在按钮下方 */}
-        {isExpanded && (
-          <div className="border-t border-gray-200 dark:border-gray-600 pt-4 mt-4 mb-4">
-            {/* 顶部标签栏 */}
-            <div className="flex items-center gap-4 mb-4 text-sm">
-              <span className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full">数据手册</span>
-              <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full">替代料: {displayAlternativeText}</span>
-              <span className="px-3 py-1 bg-purple-100 text-purple-600 rounded-full">替代料列表: 2</span>
-            </div>
-
-            {/* 替代料列表 */}
-            <div className="space-y-3">
-              {/* 第一个替代料 */}
-              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                        {chip.model}DOCT
-                      </span>
-                      <div className="flex items-center gap-1">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-xs text-green-600 dark:text-green-400">量产</span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
-                      <div>封装: SOT23-6</div>
-                      <div>替代料: 6</div>
-                      <div>数量: 3201</div>
-                      <div>包装: 3000/T&R</div>
-                      <div className="col-span-2">工作温度: -40°至125°</div>
-                    </div>
-                  </div>
-
-                  <div className="text-right ml-4">
-                    <div className="text-lg font-bold text-gray-800 dark:text-gray-200">替代料: 3</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 第二个替代料 */}
-              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                        {chip.model}DDCR
-                      </span>
-                      <div className="flex items-center gap-1">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-xs text-green-600 dark:text-green-400">量产</span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
-                      <div>封装: SOT23-6</div>
-                      <div>替代料: 6</div>
-                      <div>数量: 3201</div>
-                      <div>包装: 3000/T&R</div>
-                      <div className="col-span-2">工作温度: -40°至125°</div>
-                    </div>
-                  </div>
-
-                  <div className="text-right ml-4">
-                    <div className="text-lg font-bold text-gray-800 dark:text-gray-200">替代料: 3</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      {/* 替代料信息区域 */}
+      <div className="px-4 pb-4">
+        {showAlternativeCount && (
+          <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400 text-sm">
+            <Replace className="h-4 w-4" />
+            替代料: {displayAlternativeText}
           </div>
         )}
 
         {/* 参考设计 */}
-        <div className="mb-4">
-          <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-              参考设计
+        <div className="mb-6">
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 border border-indigo-200 dark:border-indigo-700/50 rounded-2xl p-6 shadow-lg">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-indigo-200 dark:border-indigo-600 mb-4">
+              <span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">参考设计</span>
             </div>
-            <div className="flex items-center gap-2 mb-2">
-              <Package className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                {chip.model}EVM-715
-              </span>
+
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+                  <Package className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                </div>
+              </div>
+
+              <div className="flex-1">
+                <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                  {chip.model}EVM-715
+                </h4>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400">品牌</span>
+                    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{chip.manufacturer || 'TI(德州仪器)'}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                    3A SWIFT 降压转换器评估模块
+                  </p>
+                </div>
+              </div>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
-              品牌：{chip.manufacturer || 'TI(德州仪器)'}
-            </p>
-            <p className="text-xs text-gray-700 dark:text-gray-300">
-              描述：3A SWIFT 降压转换器评估模块
-            </p>
           </div>
         </div>
 
-        {/* 技术文档 */}
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">技术文档</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Keeping DC/DC solutions (super) simple for cost-sensitive applications
-          </p>
-        </div>
+        {/* 技术资源 */}
+        <div className="space-y-4">
+          {/* 技术文档 */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+                <FileText className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+              </div>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white">技术文档</h4>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+              Keeping DC/DC solutions (super) simple for cost-sensitive applications
+            </p>
+          </div>
 
-        {/* 应用指南 */}
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">应用指南</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Keeping DC/DC solutions (super) simple for cost-sensitive applications
-          </p>
-        </div>
+          {/* 应用指南 */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                <Package className="h-4 w-4 text-green-600 dark:text-green-400" />
+              </div>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white">应用指南</h4>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+              Keeping DC/DC solutions (super) simple for cost-sensitive applications
+            </p>
+          </div>
 
-        {/* 行业资讯 */}
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">行业资讯</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Keeping DC/DC solutions (super) simple for cost-sensitive applications
-          </p>
+          {/* 行业资讯 */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                <ShieldCheck className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white">行业资讯</h4>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+              Keeping DC/DC solutions (super) simple for cost-sensitive applications
+            </p>
+          </div>
         </div>
       </div>
     </div>
