@@ -200,43 +200,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
   return (
     <div className="space-y-6">
         <>
-          {/* 搜索模式切换器 - 只在非隐藏状态下显示 */}
-          {!hideSearchBar && (
-            <div className="flex items-center justify-center">
-              <div className="inline-flex rounded-xl bg-white dark:bg-gray-800 p-1 shadow-md border border-gray-200 dark:border-gray-700">
-                {Object.entries(searchModes).map(([key, mode]) => {
-                  const IconComponent = mode.icon;
-                  const isActive = searchMode === key;
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => handleModeChange(key as SearchMode)}
-                      className={`
-                        inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200
-                        ${isActive
-                          ? 'bg-blue-500 text-white shadow-sm'
-                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
-                        }
-                      `}
-                    >
-                      <IconComponent className="h-4 w-4" />
-                      <span>{mode.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
 
-          {/* 当前模式描述 */}
-          {!hideSearchBar && (
-            <div className="text-center">
-              <p className="text-muted-foreground">
-                {/* 在此区域内 safeMode 必然是 datasheet */}
-                {searchModes.datasheet.description}
-              </p>
-            </div>
-          )}
 
           {/* 搜索控制区 - 简化版本 */}
           {!hideSearchBar && (
@@ -261,13 +225,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
           <div className="py-8">
             {/* 搜索提示和快捷入口 */}
             <div className="max-w-2xl mx-auto space-y-6">
-              {/* 当前模式的简要说明 */}
-              <div className="text-center">
-                <p className="text-muted-foreground">
-                   {/* 在此区域内 safeMode 必然是 datasheet */}
-                  {searchModes.datasheet.description}
-                </p>
-              </div>
+
 
               {/* 热门搜索 */}
               <div className="space-y-3">
@@ -296,12 +254,9 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                   搜索技巧
                 </h4>
                 <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
-                   {/* 在此区域内 safeMode 必然是 datasheet，只显示 datasheet 搜索技巧 */}
-                    <>
-                      <p>• 支持型号搜索：如 "STM32F407VGT6"</p>
-                      <p>• 支持制造商：如 "STMicroelectronics"</p>
-                      <p>• 支持特性搜索：如 "32位微控制器"</p>
-                    </>
+                  <p>• 支持型号搜索：如 "STM32F407VGT6"</p>
+                  <p>• 支持制造商：如 "STMicroelectronics"</p>
+                  <p>• 支持特性搜索：如 "32位微控制器"</p>
                 </div>
               </div>
             </div>
