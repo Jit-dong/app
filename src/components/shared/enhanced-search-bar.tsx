@@ -45,16 +45,16 @@ export default function EnhancedSearchBar({
   // 处理搜索建议
   useEffect(() => {
     if (!query.trim()) {
-      // 没有输入时显示最近搜索和热门搜索
+      // 没有输入时显示更多最近搜索和热门搜索
       const recentSearches = getRecentSearches();
-      const popularSuggestions = getSearchSuggestions('', 8);
+      const popularSuggestions = getSearchSuggestions('', 6);
       setSuggestions([
-        ...recentSearches.slice(0, 3),
+        ...recentSearches.slice(0, 8), // 显示更多最近搜索
         ...popularSuggestions,
-      ].slice(0, 8));
+      ].slice(0, 12)); // 总共显示更多项目
     } else {
       // 有输入时进行智能匹配
-      const matchedSuggestions = getSearchSuggestions(query, 8);
+      const matchedSuggestions = getSearchSuggestions(query, 10);
       setSuggestions(matchedSuggestions);
     }
   }, [query]);
@@ -211,13 +211,13 @@ export default function EnhancedSearchBar({
       {showSuggestions && isOpen && suggestions.length > 0 && (
         <Card className="absolute top-full left-0 right-0 mt-2 z-50 shadow-2xl border-orange-200/50 dark:border-orange-800/30">
           <CardContent className="p-0">
-            <div className="max-h-80 overflow-y-auto">
+            <div className="max-h-96 overflow-y-auto">
               {suggestions.map((suggestion, index) => (
                 <div
                   key={suggestion.id}
                   onClick={() => handleSuggestionClick(suggestion)}
                   className={cn(
-                    "flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0",
+                    "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0",
                     index === highlightedIndex
                       ? "bg-orange-50 dark:bg-orange-950/20"
                       : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
@@ -229,30 +229,30 @@ export default function EnhancedSearchBar({
                       <span className="text-sm font-medium truncate">
                         {suggestion.text}
                       </span>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
                         {getSuggestionLabel(suggestion.type)}
                       </Badge>
                     </div>
-                    {suggestion.description && (
-                      <div className="text-xs text-gray-500 mt-1 truncate">
+                    {/* 只为非最近搜索项目显示详细信息 */}
+                    {suggestion.description && suggestion.type !== 'recent' && (
+                      <div className="text-xs text-gray-500 mt-0.5 truncate">
                         {suggestion.description}
                       </div>
                     )}
-                    {suggestion.brand && suggestion.type !== 'brand' && (
-                      <div className="text-xs text-gray-400 mt-1">
+                    {suggestion.brand && suggestion.type !== 'brand' && suggestion.type !== 'recent' && (
+                      <div className="text-xs text-gray-400 mt-0.5">
                         品牌: {suggestion.brand}
                       </div>
                     )}
-                    {suggestion.category && (
-                      <div className="text-xs text-gray-400 mt-1">
+                    {suggestion.category && suggestion.type !== 'recent' && (
+                      <div className="text-xs text-gray-400 mt-0.5">
                         分类: {suggestion.category}
                       </div>
                     )}
                   </div>
                   {suggestion.count && (
-                    <div className="text-xs text-gray-400 flex flex-col items-end">
-                      <span>{suggestion.count}+</span>
-                      <span className="text-xs">搜索</span>
+                    <div className="text-xs text-gray-400 font-medium">
+                      {suggestion.count}+
                     </div>
                   )}
                 </div>

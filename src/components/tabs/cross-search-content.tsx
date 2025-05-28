@@ -16,7 +16,10 @@ export default function CrossSearchContent() {
   const [searchResults, setSearchResults] = useState<Chip[]>([]); // State for search results
   const [isLoading, setIsLoading] = useState(false); // State for loading indicator
   const [hasSearched, setHasSearched] = useState(false); // State to track if search has been performed
-  const [recentSearches, setRecentSearches] = useState<string[]>(["STM32F407", "TPS5430", "ESP32"]); // Recent searches
+  const [recentSearches, setRecentSearches] = useState<string[]>([
+    "STM32F407", "TPS5430", "ESP32", "LM358", "AMS1117", "ATmega328P",
+    "LM2596", "NE555", "74HC595", "Arduino", "Raspberry Pi", "STM32F103"
+  ]); // Recent searches - 更多项目
   const [showAllBrands, setShowAllBrands] = useState(false); // State to show more brands
 
   // Placeholder for brand data - in a real app, this would come from an API
@@ -274,11 +277,11 @@ export default function CrossSearchContent() {
 
         {/* Recent Searches Section */}
         {recentSearches.length > 0 && (
-          <div className="recent-searches-area space-y-3 sm:space-y-4 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
-              <History className="h-4 sm:h-5 w-4 sm:w-5 text-blue-500" /> 最近搜索
+          <div className="recent-searches-area space-y-3 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+              <History className="h-4 w-4 text-blue-500" /> 最近搜索
             </h3>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
               {recentSearches.map((search, index) => (
                 <button
                   key={index}
@@ -286,7 +289,8 @@ export default function CrossSearchContent() {
                     setModelKeyword(search);
                     handleSearch();
                   }}
-                  className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs sm:text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                  className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-xs hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors truncate text-center border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600"
+                  title={search}
                 >
                   {search}
                 </button>

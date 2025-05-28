@@ -242,13 +242,14 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                 <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
                   🔥 热门搜索
                 </h3>
-                <div className="flex flex-wrap justify-center gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
                   {/* 在此区域内 safeMode 必然是 datasheet，只显示 datasheet 热门搜索 */}
-                  {['STM32F407', 'ESP32', 'TPS5430', 'LM358', 'AMS1117', 'ATmega328P'].map((term) => (
+                  {['STM32F407', 'ESP32', 'TPS5430', 'LM358', 'AMS1117', 'ATmega328P', 'LM2596', 'NE555', '74HC595', 'Arduino', 'LM317', 'STM32F103'].map((term) => (
                     <button
                       key={term}
-                      className="px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:border-blue-300 dark:hover:border-blue-700 border border-gray-200 dark:border-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
+                      className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:border-blue-300 dark:hover:border-blue-700 border border-gray-200 dark:border-gray-700 rounded-md transition-all duration-200 hover:shadow-sm truncate text-center"
                       onClick={() => handleSearch(term)}
+                      title={term}
                     >
                       {term}
                     </button>

@@ -83,24 +83,24 @@ export function getSearchSuggestions(query: string = '', limit: number = 8): Sea
   ];
 
   // 精确匹配（开头匹配）
-  const exactMatches = allSuggestions.filter(s => 
+  const exactMatches = allSuggestions.filter(s =>
     s.text.toLowerCase().startsWith(lowerQuery)
   );
 
   // 包含匹配
-  const containsMatches = allSuggestions.filter(s => 
-    s.text.toLowerCase().includes(lowerQuery) && 
+  const containsMatches = allSuggestions.filter(s =>
+    s.text.toLowerCase().includes(lowerQuery) &&
     !s.text.toLowerCase().startsWith(lowerQuery)
   );
 
   // 描述匹配
-  const descriptionMatches = allSuggestions.filter(s => 
+  const descriptionMatches = allSuggestions.filter(s =>
     s.description?.toLowerCase().includes(lowerQuery) &&
     !s.text.toLowerCase().includes(lowerQuery)
   );
 
   // 品牌匹配
-  const brandMatches = allSuggestions.filter(s => 
+  const brandMatches = allSuggestions.filter(s =>
     s.brand?.toLowerCase().includes(lowerQuery) &&
     !s.text.toLowerCase().includes(lowerQuery) &&
     !s.description?.toLowerCase().includes(lowerQuery)
@@ -115,7 +115,7 @@ export function getSearchSuggestions(query: string = '', limit: number = 8): Sea
   ];
 
   // 去重并限制数量
-  const uniqueResults = results.filter((item, index, self) => 
+  const uniqueResults = results.filter((item, index, self) =>
     index === self.findIndex(t => t.id === item.id)
   );
 
@@ -124,14 +124,22 @@ export function getSearchSuggestions(query: string = '', limit: number = 8): Sea
 
 // 获取最近搜索记录（实际项目中应该从localStorage获取）
 export function getRecentSearches(): SearchSuggestion[] {
-  // 模拟从localStorage获取
+  // 模拟从localStorage获取 - 增加更多项目
   const mockRecent = [
     { id: 'r1', text: 'STM32F103', type: 'recent' as const },
     { id: 'r2', text: 'Arduino', type: 'recent' as const },
     { id: 'r3', text: 'LM2596', type: 'recent' as const },
     { id: 'r4', text: '运算放大器', type: 'recent' as const },
+    { id: 'r5', text: 'ESP32', type: 'recent' as const },
+    { id: 'r6', text: 'TPS5430', type: 'recent' as const },
+    { id: 'r7', text: 'LM358', type: 'recent' as const },
+    { id: 'r8', text: 'AMS1117', type: 'recent' as const },
+    { id: 'r9', text: 'NE555', type: 'recent' as const },
+    { id: 'r10', text: '74HC595', type: 'recent' as const },
+    { id: 'r11', text: 'ATmega328P', type: 'recent' as const },
+    { id: 'r12', text: 'Raspberry Pi', type: 'recent' as const },
   ];
-  
+
   return mockRecent;
 }
 
