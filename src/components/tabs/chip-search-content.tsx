@@ -370,111 +370,82 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
           </div>
         ) : searchResults.length > 0 ? (
           <div className="space-y-4">
-            {/* 搜索结果标题和筛选器 */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-
-
-              {/* 筛选器区域 - 移动端优化设计 */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-4 border border-blue-100 dark:border-blue-800/30 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-base font-bold text-gray-800 dark:text-gray-200 flex items-center gap-3">
-                    <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl shadow-md">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
-                      </svg>
-                    </div>
-                    筛选条件
-                  </h4>
-                  <div className="flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 px-3 py-1.5 rounded-full">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span className="text-sm font-semibold text-blue-700 dark:text-blue-400">
-                      {filteredResults.length} 个结果
-                    </span>
-                  </div>
+            {/* 简洁的筛选条件 */}
+            <div className="space-y-4">
+              {/* 一行显示所有筛选条件 */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {/* 品牌筛选 */}
+                <div className="space-y-1">
+                  <select
+                    value={selectedBrand}
+                    onChange={(e) => setSelectedBrand(e.target.value)}
+                    className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  >
+                    <option value="">品牌</option>
+                    {Array.from(new Set(searchResults.map(chip => chip.manufacturer))).map(brand => (
+                      <option key={brand} value={brand}>{brand}</option>
+                    ))}
+                  </select>
                 </div>
 
-                {/* 一行显示所有筛选条件 */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {/* 品牌筛选 */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400">品牌</label>
-                    <select
-                      value={selectedBrand}
-                      onChange={(e) => setSelectedBrand(e.target.value)}
-                      className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                    >
-                      <option value="">全部品牌</option>
-                      {Array.from(new Set(searchResults.map(chip => chip.manufacturer))).map(brand => (
-                        <option key={brand} value={brand}>{brand}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* 分类筛选 */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400">分类</label>
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                    >
-                      <option value="">全部分类</option>
-                      {Array.from(new Set(searchResults.map(chip => chip.category).filter(Boolean))).map(category => (
-                        <option key={category} value={category}>{category}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* 设计资源筛选 */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400">设计资源</label>
-                    <select
-                      value={selectedResource}
-                      onChange={(e) => setSelectedResource(e.target.value)}
-                      className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                    >
-                      <option value="">全部资源</option>
-                      <option value="reference-design">参考设计</option>
-                      <option value="application-guide">应用指南</option>
-                      <option value="technical-article">技术文章</option>
-                    </select>
-                  </div>
-
-                  {/* 排序方式 */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400">排序方式</label>
-                    <select
-                      value={selectedSort}
-                      onChange={(e) => setSelectedSort(e.target.value)}
-                      className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                    >
-                      <option value="">默认排序</option>
-                      <option value="relevance">相关性由强到弱</option>
-                      <option value="update-time">信息更新时间</option>
-                    </select>
-                  </div>
+                {/* 分类筛选 */}
+                <div className="space-y-1">
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  >
+                    <option value="">分类</option>
+                    {Array.from(new Set(searchResults.map(chip => chip.category).filter(Boolean))).map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
                 </div>
 
-                {/* 清除筛选按钮 - 移动端优化 */}
-                {(selectedBrand || selectedCategory || selectedResource || selectedSort) && (
-                  <div className="flex justify-center pt-2">
-                    <button
-                      onClick={() => {
-                        setSelectedBrand('');
-                        setSelectedCategory('');
-                        setSelectedResource('');
-                        setSelectedSort('');
-                      }}
-                      className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 font-medium"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                      清除所有筛选
-                    </button>
-                  </div>
-                )}
+                {/* 设计资源筛选 */}
+                <div className="space-y-1">
+                  <select
+                    value={selectedResource}
+                    onChange={(e) => setSelectedResource(e.target.value)}
+                    className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  >
+                    <option value="">设计资源</option>
+                    <option value="reference-design">参考设计</option>
+                    <option value="application-guide">应用指南</option>
+                    <option value="technical-article">技术文章</option>
+                  </select>
+                </div>
+
+                {/* 排序方式 */}
+                <div className="space-y-1">
+                  <select
+                    value={selectedSort}
+                    onChange={(e) => setSelectedSort(e.target.value)}
+                    className="w-full text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  >
+                    <option value="">排序方式</option>
+                    <option value="relevance">相关性由强到弱</option>
+                    <option value="update-time">信息更新时间</option>
+                  </select>
+                </div>
               </div>
+
+              {/* 清除筛选按钮 - 简化版 */}
+              {(selectedBrand || selectedCategory || selectedResource || selectedSort) && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => {
+                      setSelectedBrand('');
+                      setSelectedCategory('');
+                      setSelectedResource('');
+                      setSelectedSort('');
+                    }}
+                    className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  >
+                    清除筛选
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* AI增强提示 */}
