@@ -608,12 +608,9 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                             <h5 className="text-xs font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-1.5">
                               <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
                               订购详情
+                              <span className="font-bold text-blue-600 dark:text-blue-400">TPS563201DDCT</span>
                             </h5>
                             <div className="grid grid-cols-2 gap-2 text-xs">
-                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">编号 </span>
-                                <span className="font-bold text-gray-900 dark:text-gray-100">TPS563201DDCT</span>
-                              </div>
                               <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">封装 </span>
                                 <span className="font-bold text-gray-900 dark:text-gray-100">{chip.package || 'SOT23-6'}</span>
@@ -638,10 +635,6 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">状态 </span>
                                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                                 <span className="font-bold text-green-600 dark:text-green-400">量产</span>
-                              </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">替代料 </span>
-                                <span className="font-bold text-blue-600 dark:text-blue-400">3</span>
                               </div>
                             </div>
                           </div>
