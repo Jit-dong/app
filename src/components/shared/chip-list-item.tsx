@@ -111,54 +111,9 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
           </div>
         </div>
 
-        {/* 参考设计 */}
-        <div className="mb-4">
-          <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-              参考设计
-            </div>
-            <div className="flex items-center gap-2 mb-2">
-              <Package className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                {chip.model}EVM-715
-              </span>
-            </div>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
-              品牌：{chip.manufacturer || 'TI(德州仪器)'}
-            </p>
-            <p className="text-xs text-gray-700 dark:text-gray-300">
-              描述：3A SWIFT 降压转换器评估模块
-            </p>
-          </div>
-        </div>
-
-        {/* 技术文档 */}
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">技术文档</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Keeping DC/DC solutions (super) simple for cost-sensitive applications
-          </p>
-        </div>
-
-        {/* 应用指南 */}
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">应用指南</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Keeping DC/DC solutions (super) simple for cost-sensitive applications
-          </p>
-        </div>
-
-        {/* 行业资讯 */}
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">行业资讯</h4>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Keeping DC/DC solutions (super) simple for cost-sensitive applications
-          </p>
-        </div>
-
-        {/* 折叠展开的订购信息 */}
+        {/* 折叠展开的订购信息 - 紧跟在按钮下方 */}
         {isExpanded && (
-          <div className="border-t border-gray-200 dark:border-gray-600 pt-4 mt-4">
+          <div className="border-t border-gray-200 dark:border-gray-600 pt-4 mt-4 mb-4">
             {/* 顶部标签栏 */}
             <div className="flex items-center gap-4 mb-4 text-sm">
               <span className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full">数据手册</span>
@@ -228,6 +183,51 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
             </div>
           </div>
         )}
+
+        {/* 参考设计 */}
+        <div className="mb-4">
+          <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4">
+            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+              参考设计
+            </div>
+            <div className="flex items-center gap-2 mb-2">
+              <Package className="h-4 w-4 text-blue-600" />
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                {chip.model}EVM-715
+              </span>
+            </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+              品牌：{chip.manufacturer || 'TI(德州仪器)'}
+            </p>
+            <p className="text-xs text-gray-700 dark:text-gray-300">
+              描述：3A SWIFT 降压转换器评估模块
+            </p>
+          </div>
+        </div>
+
+        {/* 技术文档 */}
+        <div className="mb-4">
+          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">技术文档</h4>
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            Keeping DC/DC solutions (super) simple for cost-sensitive applications
+          </p>
+        </div>
+
+        {/* 应用指南 */}
+        <div className="mb-4">
+          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">应用指南</h4>
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            Keeping DC/DC solutions (super) simple for cost-sensitive applications
+          </p>
+        </div>
+
+        {/* 行业资讯 */}
+        <div className="mb-4">
+          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">行业资讯</h4>
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            Keeping DC/DC solutions (super) simple for cost-sensitive applications
+          </p>
+        </div>
       </div>
     </div>
   );
