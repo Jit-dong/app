@@ -482,12 +482,49 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {displayedResults.map((chip) => (
                       <div key={chip.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{chip.model}</h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{chip.description}</p>
+                        {/* 产品图片 */}
+                        <div className="flex items-start gap-3 mb-2">
+                          <div className="flex-shrink-0">
+                            <img
+                              src={`/brands/image_cp/${chip.model}.png`}
+                              alt={chip.model}
+                              className="w-12 h-12 object-contain bg-gray-50 dark:bg-gray-700 rounded border"
+                              onError={(e) => {
+                                // 如果图片加载失败，显示默认占位符
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                target.nextElementSibling?.classList.remove('hidden');
+                              }}
+                            />
+                            {/* 默认占位符 */}
+                            <div className="hidden w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded border flex items-center justify-center">
+                              <Package className="h-6 w-6 text-gray-400" />
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{chip.model}</h4>
+                              <div className="flex items-center gap-1">
+                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                <span className="text-xs text-green-600 dark:text-green-400">量产</span>
+                              </div>
+                            </div>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{chip.description}</p>
+                          </div>
+                        </div>
                         <div className="text-xs text-gray-500 dark:text-gray-500 mb-2">
                           <div>制造商: {chip.manufacturer}</div>
                           {chip.category && <div>分类: {chip.category}</div>}
+                          <div>替代料: <span className="text-blue-600 dark:text-blue-400 font-medium">6</span></div>
                           {chip.status && <div>状态: {chip.status}</div>}
+                        </div>
+
+                        {/* 数据手册按钮 */}
+                        <div className="mb-2">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 text-xs bg-orange-100 dark:bg-orange-950/20 hover:bg-orange-200 dark:hover:bg-orange-950/30 text-orange-700 dark:text-orange-300 rounded-md transition-colors border border-orange-200 dark:border-orange-800">
+                            <FileText className="h-3 w-3" />
+                            <span>数据手册</span>
+                          </button>
                         </div>
 
                         {/* 订购信息按钮 */}
@@ -511,42 +548,28 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                           <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-md border border-gray-200 dark:border-gray-600">
                             <div className="space-y-2 text-xs">
                               <div className="flex items-center justify-between">
-                                <span className="text-gray-600 dark:text-gray-400">库存状态:</span>
-                                <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                                  <Package className="h-3 w-3" />
-                                  量产
-                                </span>
+                                <span className="text-gray-600 dark:text-gray-400">封装:</span>
+                                <span className="font-medium">{chip.package || 'SOT23-6'}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-gray-600 dark:text-gray-400">最小订购量:</span>
-                                <span className="font-medium">1000 pcs</span>
+                                <span className="text-gray-600 dark:text-gray-400">管脚:</span>
+                                <span className="font-medium">6</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-gray-600 dark:text-gray-400">交货周期:</span>
-                                <span className="flex items-center gap-1">
-                                  <Truck className="h-3 w-3" />
-                                  8-12 周
-                                </span>
+                                <span className="text-gray-600 dark:text-gray-400">丝印:</span>
+                                <span className="font-medium">3201</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-gray-600 dark:text-gray-400">封装类型:</span>
-                                <span className="font-medium">{chip.package || 'SOIC-8'}</span>
+                                <span className="text-gray-600 dark:text-gray-400">包装:</span>
+                                <span className="font-medium">2500/T&R</span>
                               </div>
-                              {chip.price && (
-                                <div className="flex items-center justify-between">
-                                  <span className="text-gray-600 dark:text-gray-400">参考价格:</span>
-                                  <span className="font-medium text-blue-600 dark:text-blue-400">{chip.price}</span>
-                                </div>
-                              )}
-
-                              {/* 操作按钮 */}
-                              <div className="flex gap-2 mt-3 pt-2 border-t border-gray-200 dark:border-gray-600">
-                                <button className="flex-1 px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors">
-                                  立即询价
-                                </button>
-                                <button className="flex-1 px-2 py-1 text-xs bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors">
-                                  加入购物车
-                                </button>
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">工作温度:</span>
+                                <span className="font-medium">-40~120度</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">替代料:</span>
+                                <span className="font-medium text-blue-600 dark:text-blue-400">3</span>
                               </div>
                             </div>
                           </div>
@@ -597,12 +620,12 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     {referenceDesigns.map((design) => (
                       <div key={design.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
                         <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{design.title}</h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{design.description}</p>
-                        <div className="text-xs text-gray-500 dark:text-gray-500">
-                          {design.chipModel && <div>芯片: {design.chipModel}</div>}
-                          {design.manufacturer && <div>制造商: {design.manufacturer}</div>}
-                          {design.downloadCount && <div>下载: {design.downloadCount}</div>}
+                        <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                          品牌：{design.manufacturer}
                         </div>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                          描述：{design.description}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -626,12 +649,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     {technicalDocuments.map((doc) => (
                       <div key={doc.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
                         <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{doc.title}</h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{doc.description}</p>
-                        <div className="text-xs text-gray-500 dark:text-gray-500">
-                          {doc.chipModel && <div>芯片: {doc.chipModel}</div>}
-                          {doc.pageCount && <div>页数: {doc.pageCount}</div>}
-                          <div>类型: {doc.type}</div>
-                        </div>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{doc.description}</p>
                       </div>
                     ))}
                   </div>
@@ -655,12 +673,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     {applicationGuides.map((guide) => (
                       <div key={guide.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
                         <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{guide.title}</h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{guide.description}</p>
-                        <div className="text-xs text-gray-500 dark:text-gray-500">
-                          {guide.chipModel && <div>芯片: {guide.chipModel}</div>}
-                          <div>应用: {guide.applicationField}</div>
-                          <div>难度: {guide.difficulty}</div>
-                        </div>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{guide.description}</p>
                       </div>
                     ))}
                   </div>
@@ -684,12 +697,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                     {industryNews.map((news) => (
                       <div key={news.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow">
                         <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">{news.title}</h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{news.description}</p>
-                        <div className="text-xs text-gray-500 dark:text-gray-500">
-                          <div>发布: {news.publishDate}</div>
-                          {news.author && <div>作者: {news.author}</div>}
-                          {news.readTime && <div>阅读: {news.readTime}分钟</div>}
-                        </div>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{news.description}</p>
                       </div>
                     ))}
                   </div>
