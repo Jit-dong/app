@@ -32,40 +32,41 @@ export default function SearchBar({
 
   return (
     <form onSubmit={handleSubmit} className={`relative w-full ${className}`}>
-      {/* 艺术品级搜索容器 */}
+      {/* 现代化搜索容器 */}
       <div className="relative group">
         {/* 背景光晕效果 */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 rounded-2xl blur-sm opacity-30 group-hover:opacity-50 transition-all duration-500"></div>
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-400/20 via-amber-400/20 to-yellow-400/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
 
         {/* 主搜索容器 */}
-        <div className="relative bg-white dark:bg-gray-900 rounded-2xl border-2 border-orange-200/50 dark:border-orange-800/30 shadow-xl backdrop-blur-sm overflow-hidden">
-          {/* 内部渐变装饰 */}
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-50/30 via-amber-50/20 to-yellow-50/30 dark:from-orange-950/20 dark:via-amber-950/10 dark:to-yellow-950/20"></div>
-
+        <div className="relative bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
           {/* 搜索内容区 */}
-          <div className="relative flex items-center p-2">
+          <div className="relative flex items-center p-1">
+            {/* 搜索图标 */}
+            <div className="flex items-center justify-center w-12 h-12">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+
             {/* 搜索输入框 */}
-            <div className="flex-1 mx-4">
+            <div className="flex-1 px-2">
               <Input
                 type="search"
                 placeholder={placeholder}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full text-base font-semibold border-0 bg-transparent focus:ring-0 focus:outline-none placeholder:text-gray-600 dark:placeholder:text-gray-300 placeholder:font-medium text-gray-900 dark:text-gray-100"
+                className="w-full text-base border-0 bg-transparent focus:ring-0 focus:outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 text-gray-900 dark:text-gray-100 h-12"
                 aria-label="搜索查询"
               />
             </div>
 
-            {/* 分隔线 */}
-            <div className="w-px h-8 bg-gradient-to-b from-transparent via-orange-300/50 to-transparent dark:via-orange-700/50"></div>
-
             {/* 搜索按钮 */}
             <Button
               type="submit"
-              className="mx-2 px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:via-orange-700 hover:to-amber-700 text-white shadow-orange-500/25"
+              className="mx-2 px-6 py-2.5 rounded-xl font-medium transition-all duration-200 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-md hover:shadow-lg"
               aria-label="搜索"
             >
-              <span className="text-sm font-bold">搜索</span>
+              <span className="text-sm font-semibold">搜索</span>
             </Button>
           </div>
         </div>
