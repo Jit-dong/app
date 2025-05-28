@@ -373,7 +373,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
             {/* 简洁的筛选条件 */}
             <div className="space-y-4">
               {/* 一行显示所有筛选条件 */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-4 gap-3">
                 {/* 品牌筛选 */}
                 <div className="space-y-1">
                   <select
