@@ -524,81 +524,81 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                       ))}
                     </div>
                   ) : (
-                    // 展开模式：现代化移动端设计
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    // 展开模式：超紧凑设计
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                       {displayedResults.map((chip) => (
-                      <div key={chip.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 overflow-hidden">
-                        {/* 产品头部 */}
-                        <div className="p-4 pb-3">
-                          <div className="flex items-start gap-3 mb-3">
+                      <div key={chip.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 overflow-hidden">
+                        {/* 产品头部 - 紧凑版 */}
+                        <div className="p-3 pb-2">
+                          <div className="flex items-start gap-2 mb-2">
                             <div className="flex-shrink-0">
-                              <div className="w-12 h-12 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-xl border-2 border-white dark:border-gray-600 shadow-sm flex items-center justify-center overflow-hidden">
+                              <div className="w-10 h-10 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center justify-center overflow-hidden">
                                 <img
                                   src={`/brands/image_cp/${chip.model}.png`}
                                   alt={chip.model}
-                                  className="w-10 h-10 object-contain"
+                                  className="w-8 h-8 object-contain"
                                   onError={(e) => {
                                     const target = e.target as HTMLImageElement;
                                     target.style.display = 'none';
                                     target.nextElementSibling?.classList.remove('hidden');
                                   }}
                                 />
-                                <Package className="hidden h-6 w-6 text-gray-400" />
+                                <Package className="hidden h-5 w-5 text-gray-400" />
                               </div>
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h4 className="font-bold text-gray-900 dark:text-gray-100 text-base truncate">{chip.model}</h4>
-                                <div className="flex items-center gap-1 bg-green-100 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              <div className="flex items-center gap-1 mb-1">
+                                <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm truncate">{chip.model}</h4>
+                                <div className="flex items-center gap-0.5 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded-full">
+                                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                                   <span className="text-xs font-medium text-green-700 dark:text-green-400">量产</span>
                                 </div>
                               </div>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">{chip.description}</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-tight">{chip.description}</p>
                             </div>
                           </div>
                         </div>
 
-                        {/* 产品信息卡片 - 单行极简布局 */}
-                        <div className="px-4 pb-3">
-                          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2">
+                        {/* 产品信息卡片 - 超紧凑单行布局 */}
+                        <div className="px-3 pb-2">
+                          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-1.5">
                             <div className="flex items-center justify-between text-xs">
-                              <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <div className="flex items-center gap-1">
+                              <div className="flex items-center gap-2 flex-1 min-w-0">
+                                <div className="flex items-center gap-0.5">
                                   <span className="text-gray-500 dark:text-gray-400">制造商</span>
                                   <span className="font-medium text-gray-900 dark:text-gray-100">德州仪器-TI</span>
                                 </div>
-                                <div className="flex items-center gap-1">
+                                <div className="flex items-center gap-0.5">
                                   <span className="text-gray-500 dark:text-gray-400">分类</span>
                                   <span className="font-medium text-gray-900 dark:text-gray-100 truncate">开关稳压器-DC/DC转换器</span>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-1 flex-shrink-0">
+                              <div className="flex items-center gap-0.5 flex-shrink-0">
                                 <span className="text-gray-500 dark:text-gray-400">替代料</span>
-                                <span className="font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 rounded">6</span>
+                                <span className="font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-1 py-0.5 rounded text-xs">6</span>
                               </div>
                             </div>
                           </div>
                         </div>
 
-                        {/* 操作按钮区域 */}
-                        <div className="p-4 pt-0 space-y-2">
+                        {/* 操作按钮区域 - 紧凑版 */}
+                        <div className="p-3 pt-0 space-y-1.5">
                           {/* 数据手册按钮 */}
-                          <button className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl transition-all duration-200 shadow-sm hover:shadow-md">
-                            <FileText className="h-4 w-4" />
+                          <button className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg transition-all duration-200">
+                            <FileText className="h-3.5 w-3.5" />
                             <span>数据手册</span>
                           </button>
 
                           {/* 订购信息按钮 */}
                           <button
                             onClick={() => toggleOrderInfo(chip.id)}
-                            className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-xl transition-all duration-200 border border-blue-200 dark:border-blue-800"
+                            className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg transition-all duration-200 border border-blue-200 dark:border-blue-800"
                           >
-                            <div className="flex items-center gap-2">
-                              <ShoppingCart className="h-4 w-4" />
+                            <div className="flex items-center gap-1.5">
+                              <ShoppingCart className="h-3.5 w-3.5" />
                               <span>订购信息</span>
                             </div>
-                            <div className="p-1 bg-blue-100 dark:bg-blue-800/50 rounded-lg">
+                            <div className="p-0.5 bg-blue-100 dark:bg-blue-800/50 rounded">
                               {expandedOrders.has(chip.id) ? (
                                 <ChevronUp className="h-3 w-3" />
                               ) : (
@@ -608,38 +608,38 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                           </button>
                         </div>
 
-                        {/* 展开的订购信息 - 现代化设计 */}
+                        {/* 展开的订购信息 - 紧凑版 */}
                         {expandedOrders.has(chip.id) && (
-                          <div className="mx-4 mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border border-blue-100 dark:border-blue-800/30">
-                            <h5 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          <div className="mx-3 mb-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-3 border border-blue-100 dark:border-blue-800/30">
+                            <h5 className="text-xs font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-1.5">
+                              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
                               订购详情
                             </h5>
-                            <div className="grid grid-cols-2 gap-3 text-xs">
-                              <div className="bg-white dark:bg-gray-800/50 rounded-lg p-2 border border-white/50 dark:border-gray-700/50">
+                            <div className="grid grid-cols-2 gap-2 text-xs">
+                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">封装</span>
                                 <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">{chip.package || 'SOT23-6'}</div>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded-lg p-2 border border-white/50 dark:border-gray-700/50">
+                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">管脚</span>
                                 <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">6</div>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded-lg p-2 border border-white/50 dark:border-gray-700/50">
+                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">丝印</span>
                                 <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">3201</div>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded-lg p-2 border border-white/50 dark:border-gray-700/50">
+                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">包装</span>
                                 <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">2500/T&R</div>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded-lg p-2 border border-white/50 dark:border-gray-700/50">
+                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">工作温度</span>
                                 <div className="font-bold text-gray-900 dark:text-gray-100 mt-0.5">-40~120度</div>
                               </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded-lg p-2 border border-white/50 dark:border-gray-700/50">
+                              <div className="bg-white dark:bg-gray-800/50 rounded p-1.5 border border-white/50 dark:border-gray-700/50">
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">状态</span>
                                 <div className="flex items-center gap-1 mt-0.5">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                                   <span className="font-bold text-green-600 dark:text-green-400">量产</span>
                                 </div>
                               </div>
