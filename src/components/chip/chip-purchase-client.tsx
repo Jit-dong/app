@@ -162,8 +162,8 @@ export default function ChipPurchaseClient({ chip }: ChipPurchaseClientProps) {
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
           <div className="flex items-center gap-2 mb-3">
             <Search className="h-5 w-5 text-gray-400" />
-            <Input 
-              placeholder="tps563201" 
+            <Input
+              placeholder="tps563201"
               value="tps563201"
               className="flex-1 border-0 bg-gray-50 dark:bg-gray-700"
               readOnly
@@ -183,44 +183,68 @@ export default function ChipPurchaseClient({ chip }: ChipPurchaseClientProps) {
             <Filter className="h-4 w-4 text-gray-500" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">筛选条件</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            {/* 品牌筛选 - 基于查询结果 */}
             <Select value={selectedBrand} onValueChange={setSelectedBrand}>
               <SelectTrigger className="text-sm">
                 <SelectValue placeholder="品牌" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="全部">品牌</SelectItem>
-                <SelectItem value="TI">TI</SelectItem>
+                <SelectItem value="TI(德州仪器)">TI(德州仪器)</SelectItem>
+                <SelectItem value="STMicroelectronics">STMicroelectronics</SelectItem>
+                <SelectItem value="Analog Devices">Analog Devices</SelectItem>
               </SelectContent>
             </Select>
-            
+
+            {/* 分类筛选 - 基于查询结果 */}
             <Select value={selectedPackage} onValueChange={setSelectedPackage}>
               <SelectTrigger className="text-sm">
                 <SelectValue placeholder="分类" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="全部">分类</SelectItem>
-                <SelectItem value="SOT23-6">SOT23-6</SelectItem>
+                <SelectItem value="开关稳压器-DC/DC转换器">开关稳压器-DC/DC转换器</SelectItem>
+                <SelectItem value="微控制器">微控制器</SelectItem>
+                <SelectItem value="运算放大器">运算放大器</SelectItem>
               </SelectContent>
             </Select>
-            
+
+            {/* 设计资源筛选 */}
             <Select value={selectedTemp} onValueChange={setSelectedTemp}>
               <SelectTrigger className="text-sm">
-                <SelectValue placeholder="工作温度" />
+                <SelectValue placeholder="设计资源" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="全部">工作温度</SelectItem>
-                <SelectItem value="-40°C至125°">-40°C至125°</SelectItem>
+                <SelectItem value="全部">设计资源</SelectItem>
+                <SelectItem value="参考设计">参考设计</SelectItem>
+                <SelectItem value="应用指南">应用指南</SelectItem>
+                <SelectItem value="技术文章">技术文章</SelectItem>
               </SelectContent>
             </Select>
-            
+
+            {/* 排序方式 */}
             <Select value={selectedRohs} onValueChange={setSelectedRohs}>
               <SelectTrigger className="text-sm">
-                <SelectValue placeholder="环保等级" />
+                <SelectValue placeholder="排序方式" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="全部">环保等级</SelectItem>
-                <SelectItem value="2">RoHS 2</SelectItem>
+                <SelectItem value="全部">排序方式</SelectItem>
+                <SelectItem value="相关性由强到弱">相关性由强到弱</SelectItem>
+                <SelectItem value="信息更新时间">信息更新时间</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* 更多筛选 */}
+            <Select>
+              <SelectTrigger className="text-sm">
+                <SelectValue placeholder="更多" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="工作温度">工作温度</SelectItem>
+                <SelectItem value="环保等级">环保等级</SelectItem>
+                <SelectItem value="封装类型">封装类型</SelectItem>
+                <SelectItem value="供应商">供应商</SelectItem>
               </SelectContent>
             </Select>
           </div>

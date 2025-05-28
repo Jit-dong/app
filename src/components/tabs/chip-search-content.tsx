@@ -67,6 +67,38 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
   const [aiEnhanced, setAiEnhanced] = useState(false); // AI增强功能状态
   const [showAiTooltip, setShowAiTooltip] = useState(false); // AI提示显示状态
 
+  // 筛选器状态
+  const [selectedBrand, setSelectedBrand] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedResource, setSelectedResource] = useState('');
+  const [selectedSort, setSelectedSort] = useState('');
+
+  // 计算过滤后的结果
+  const filteredResults = React.useMemo(() => {
+    let filtered = [...searchResults];
+
+    // 品牌筛选
+    if (selectedBrand) {
+      filtered = filtered.filter(chip => chip.manufacturer === selectedBrand);
+    }
+
+    // 分类筛选
+    if (selectedCategory) {
+      filtered = filtered.filter(chip => chip.category === selectedCategory);
+    }
+
+    // 排序
+    if (selectedSort === 'relevance') {
+      // 按相关性排序（这里可以根据实际需求实现）
+      filtered.sort((a, b) => a.model.localeCompare(b.model));
+    } else if (selectedSort === 'update-time') {
+      // 按更新时间排序（这里使用模拟逻辑）
+      filtered.sort((a, b) => b.id.localeCompare(a.id));
+    }
+
+    return filtered;
+  }, [searchResults, selectedBrand, selectedCategory, selectedSort]);
+
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
@@ -280,21 +312,58 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
             <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  搜索结果：共 <span className="font-medium text-blue-600">{searchResults.length}</span> 个型号
+                  搜索结果：共 <span className="font-medium text-blue-600">{filteredResults.length}</span> 个型号
+                  {filteredResults.length !== searchResults.length && (
+                    <span className="text-gray-500 ml-1">（已筛选，原始结果 {searchResults.length} 个）</span>
+                  )}
                 </p>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" className="text-xs">
-                    品牌 <ChevronDown className="h-3 w-3 ml-1" />
-                  </Button>
-                  <Button variant="outline" size="sm" className="text-xs">
-                    分类 <ChevronDown className="h-3 w-3 ml-1" />
-                  </Button>
-                  <Button variant="outline" size="sm" className="text-xs">
-                    工作温度 <ChevronDown className="h-3 w-3 ml-1" />
-                  </Button>
-                  <Button variant="outline" size="sm" className="text-xs">
-                    环保等级 <ChevronDown className="h-3 w-3 ml-1" />
-                  </Button>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* 品牌筛选 */}
+                  <select
+                    value={selectedBrand}
+                    onChange={(e) => setSelectedBrand(e.target.value)}
+                    className="text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                  >
+                    <option value="">品牌</option>
+                    {Array.from(new Set(searchResults.map(chip => chip.manufacturer))).map(brand => (
+                      <option key={brand} value={brand}>{brand}</option>
+                    ))}
+                  </select>
+
+                  {/* 分类筛选 */}
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                  >
+                    <option value="">分类</option>
+                    {Array.from(new Set(searchResults.map(chip => chip.category).filter(Boolean))).map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+
+                  {/* 设计资源筛选 */}
+                  <select
+                    value={selectedResource}
+                    onChange={(e) => setSelectedResource(e.target.value)}
+                    className="text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                  >
+                    <option value="">设计资源</option>
+                    <option value="reference-design">参考设计</option>
+                    <option value="application-guide">应用指南</option>
+                    <option value="technical-article">技术文章</option>
+                  </select>
+
+                  {/* 排序方式 */}
+                  <select
+                    value={selectedSort}
+                    onChange={(e) => setSelectedSort(e.target.value)}
+                    className="text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                  >
+                    <option value="">排序方式</option>
+                    <option value="relevance">相关性由强到弱</option>
+                    <option value="update-time">信息更新时间</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -310,14 +379,31 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
             {/* 产品列表 */}
             <div className="space-y-3">
               <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">产品</h3>
-              {searchResults.map((chip, index) => (
-                <ChipListItem
-                  key={chip.id}
-                  chip={chip}
-                  // Conditional prop based on datasheet mode
-                  showAlternativeCount={chip.model === 'TPS5430' && chip.id === 'TPS5430-1'}
-                />
-              ))}
+              {filteredResults.length > 0 ? (
+                filteredResults.map((chip, index) => (
+                  <ChipListItem
+                    key={chip.id}
+                    chip={chip}
+                    // Conditional prop based on datasheet mode
+                    showAlternativeCount={chip.model === 'TPS5430' && chip.id === 'TPS5430-1'}
+                  />
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <p>没有符合筛选条件的产品</p>
+                  <button
+                    onClick={() => {
+                      setSelectedBrand('');
+                      setSelectedCategory('');
+                      setSelectedResource('');
+                      setSelectedSort('');
+                    }}
+                    className="mt-2 text-blue-600 hover:text-blue-700 text-sm"
+                  >
+                    清除筛选条件
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ) : (
