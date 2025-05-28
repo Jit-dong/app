@@ -52,7 +52,7 @@ function SearchPageContent() {
   const mode = searchParams.get('mode') as SearchMode | null;
   const initialMode: SearchMode = (mode && searchModes[mode]) ? mode : 'datasheet';
 
-  const query = searchParams.get('query'); // 也可以从URL获取query参数
+  const query = searchParams.get('q') || searchParams.get('query'); // 从URL获取q或query参数
   const initialQuery = query || '';
 
   // 处理返回按钮点击

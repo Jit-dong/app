@@ -387,8 +387,6 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                   <ChipListItem
                     key={chip.id}
                     chip={chip}
-                    // Conditional prop based on datasheet mode
-                    showAlternativeCount={chip.model === 'TPS5430' && chip.id === 'TPS5430-1'}
                   />
                 ))
               ) : (
