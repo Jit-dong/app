@@ -32,7 +32,7 @@ export default function ChipListItem({ chip, showAlternativeCount = false }: Chi
               </h3>
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-green-600 dark:text-green-400">正在供货</span>
+                <span className="text-xs text-green-600 dark:text-green-400">量产</span>
               </div>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">

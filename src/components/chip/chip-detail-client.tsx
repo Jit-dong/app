@@ -139,7 +139,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                 </h1>
                 <div className="flex items-center gap-1">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-green-600 dark:text-green-400">正在供货</span>
+                  <span className="text-sm text-green-600 dark:text-green-400">量产</span>
                 </div>
               </div>
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
