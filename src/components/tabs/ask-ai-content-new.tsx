@@ -1,375 +1,334 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileText, PackageSearch, Settings2, Lightbulb, MessageSquare, Sparkles, ArrowRight, Crown, Zap, Users, Brain } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { 
+  Cpu, 
+  BarChart3, 
+  BookOpen, 
+  FileSearch, 
+  Send, 
+  Star,
+  ArrowRight,
+  Brain,
+  Zap
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
-// AI场景化人物配置
-const aiPersonas = [
+// 重新设计的AI功能卡片 - 国际化专业版本
+const aiCapabilities = [
   {
-    id: 'omnipotent',
-    name: '全能助手',
-    avatar: '👑',
-    icon: Crown,
-    title: "全能助手",
-    description: "集成所有专业能力，智能调度各领域专家，为您提供全方位技术支持",
-    personality: "智慧全面，善于统筹协调，能够调用各专业助手的能力",
-    buttonText: "开始协作",
-    color: "from-gradient-start to-gradient-end",
-    gradientClass: "bg-gradient-to-br from-amber-400 via-rose-400 to-purple-600",
-    borderGlow: "shadow-2xl shadow-amber-500/25",
-    examples: ["综合分析芯片选型方案", "协调多个专家解决复杂问题", "提供端到端技术支持"],
-    isOmnipotent: true,
-    canDelegate: ['datasheet', 'selection', 'design', 'consultant']
-  },
-  {
-    id: 'datasheet',
-    name: '资料解读师',
-    avatar: '📚',
-    icon: FileText,
-    title: "资料解读",
-    description: "专业解读芯片手册，提炼关键信息，回答技术细节问题",
-    personality: "严谨专业，善于分析复杂技术文档",
-    buttonText: "开始解读",
-    color: "from-blue-500 to-cyan-500",
-    gradientClass: "bg-gradient-to-br from-blue-500 to-cyan-500",
-    borderGlow: "shadow-lg shadow-blue-500/25",
-    examples: ["解读这个芯片的关键参数", "分析电路应用注意事项", "总结芯片主要特性"]
-  },
-  {
-    id: 'selection',
-    name: '选型专家',
-    avatar: '🎯',
-    icon: PackageSearch,
-    title: "产品选型",
-    description: "根据您的需求推荐最适合的芯片，提供专业选型建议",
-    personality: "经验丰富，善于理解需求并提供精准推荐",
+    icon: Cpu,
+    title: "智能选型助手",
+    subtitle: "Smart Component Selection",
+    description: "基于您的技术规格和应用场景，AI将为您推荐最适合的芯片解决方案",
+    features: ["规格匹配", "性能分析", "成本优化"],
     buttonText: "开始选型",
-    color: "from-green-500 to-emerald-500",
-    gradientClass: "bg-gradient-to-br from-green-500 to-emerald-500",
-    borderGlow: "shadow-lg shadow-green-500/25",
-    examples: ["需要5V转3.3V的LDO", "找一个低功耗的MCU", "推荐高精度ADC"]
+    gradient: "from-blue-500 to-cyan-500",
+    bgGradient: "from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20"
   },
   {
-    id: 'design',
-    name: '参数设计师',
-    avatar: '⚡',
-    icon: Settings2,
-    title: "参数设计",
-    description: "协助电路设计，计算参数，优化性能，解决设计难题",
-    personality: "细致入微，擅长计算和电路分析",
-    buttonText: "开始设计",
-    color: "from-purple-500 to-violet-500",
-    gradientClass: "bg-gradient-to-br from-purple-500 to-violet-500",
-    borderGlow: "shadow-lg shadow-purple-500/25",
-    examples: ["计算滤波电容值", "设计反馈电阻", "优化PCB布局"]
+    icon: BarChart3,
+    title: "参数对比分析",
+    subtitle: "Performance Comparison",
+    description: "深度对比多款芯片的关键参数，提供专业的技术分析和选择建议",
+    features: ["多维对比", "性能评估", "优劣分析"],
+    buttonText: "开始对比",
+    gradient: "from-purple-500 to-pink-500",
+    bgGradient: "from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20"
   },
   {
-    id: 'consultant',
-    name: '行业顾问',
-    avatar: '🌟',
-    icon: Lightbulb,
-    title: "行业咨询",
-    description: "分享行业趋势，技术发展方向，市场动态和应用前景",
-    personality: "视野开阔，对行业发展有深刻洞察",
-    buttonText: "开始咨询",
-    color: "from-orange-500 to-red-500",
-    gradientClass: "bg-gradient-to-br from-orange-500 to-red-500",
-    borderGlow: "shadow-lg shadow-orange-500/25",
-    examples: ["AI芯片发展趋势", "新能源汽车芯片", "物联网芯片选择"]
+    icon: BookOpen,
+    title: "技术知识库",
+    subtitle: "Technical Knowledge Base",
+    description: "涵盖芯片技术原理、应用指南和行业标准的专业知识问答系统",
+    features: ["原理解析", "应用指南", "标准规范"],
+    buttonText: "咨询技术",
+    gradient: "from-green-500 to-emerald-500",
+    bgGradient: "from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20"
+  },
+  {
+    icon: FileSearch,
+    title: "文档智能解读",
+    subtitle: "Document Analysis",
+    description: "上传技术文档、数据手册，AI将提取关键信息并回答您的专业问题",
+    features: ["文档解析", "信息提取", "智能问答"],
+    buttonText: "上传文档",
+    gradient: "from-orange-500 to-red-500",
+    bgGradient: "from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20"
   }
 ];
 
-type ViewMode = 'personas' | 'chat';
+// AI统计数据
+const aiStats = [
+  { label: "知识库覆盖", value: "50K+", subtitle: "芯片型号", icon: Cpu },
+  { label: "技术文档", value: "10K+", subtitle: "数据手册", icon: FileSearch },
+  { label: "用户满意度", value: "98%", subtitle: "准确率", icon: Star },
+  { label: "响应速度", value: "<2s", subtitle: "平均时间", icon: Zap }
+];
 
-interface PersonaCardProps {
-  persona: typeof aiPersonas[0];
-  onSelect: (persona: typeof aiPersonas[0]) => void;
-}
+// 现代化AI功能卡片组件
+const ModernAiCard = ({ capability, onSelect }: { capability: any, onSelect: (title: string) => void }) => (
+  <Card className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+        onClick={() => onSelect(capability.title)}>
+    {/* 背景渐变 */}
+    <div className={`absolute inset-0 bg-gradient-to-br ${capability.bgGradient} opacity-60`} />
+    
+    {/* 装饰性光效 */}
+    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-white/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+    
+    <CardContent className="relative p-6 space-y-4">
+      {/* 图标和标题 */}
+      <div className="flex items-start justify-between">
+        <div className={`p-3 rounded-2xl bg-gradient-to-r ${capability.gradient} shadow-lg`}>
+          <capability.icon className="h-6 w-6 text-white" />
+        </div>
+        <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all duration-300" />
+      </div>
+      
+      {/* 标题和副标题 */}
+      <div className="space-y-1">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
+          {capability.title}
+        </h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+          {capability.subtitle}
+        </p>
+      </div>
+      
+      {/* 描述 */}
+      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+        {capability.description}
+      </p>
+      
+      {/* 功能特性标签 */}
+      <div className="flex flex-wrap gap-2">
+        {capability.features.map((feature: string, index: number) => (
+          <Badge key={index} variant="secondary" className="text-xs px-2 py-1 bg-white/60 dark:bg-gray-800/60 text-gray-700 dark:text-gray-300 border-0">
+            {feature}
+          </Badge>
+        ))}
+      </div>
+      
+      {/* 行动按钮 */}
+      <Button 
+        className={`w-full bg-gradient-to-r ${capability.gradient} hover:opacity-90 text-white border-0 shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105`}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect(capability.title);
+        }}
+      >
+        {capability.buttonText}
+      </Button>
+    </CardContent>
+  </Card>
+);
 
-function PersonaCard({ persona, onSelect }: PersonaCardProps) {
-  const IconComponent = persona.icon;
+// 统计卡片组件
+const StatCard = ({ stat }: { stat: any }) => (
+  <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+    <div className="flex items-center gap-3">
+      <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded-xl">
+        <stat.icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+      </div>
+      <div>
+        <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stat.value}</div>
+        <div className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</div>
+        <div className="text-xs text-gray-400 dark:text-gray-500">{stat.subtitle}</div>
+      </div>
+    </div>
+  </div>
+);
+
+export default function AskAiContentNew() {
+  const [viewMode, setViewMode] = useState<'welcome' | 'chat'>('welcome');
+  const [messages, setMessages] = useState<any[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isAiThinking, setIsAiThinking] = useState(false);
+  const { toast } = useToast();
+
+  const handleCapabilitySelect = (title: string) => {
+    setViewMode('chat');
+    toast({
+      title: "功能启动",
+      description: `正在启动 ${title} 功能...`,
+    });
+  };
+
+  const handleSendMessage = () => {
+    if (!inputMessage.trim()) return;
+    
+    setMessages(prev => [...prev, { type: 'user', content: inputMessage }]);
+    const currentMessage = inputMessage;
+    setInputMessage('');
+    setIsAiThinking(true);
+    
+    // 模拟AI响应
+    setTimeout(() => {
+      setIsAiThinking(false);
+      setMessages(prev => [...prev, { 
+        type: 'ai', 
+        content: `我收到了您的消息："${currentMessage}"。这是一个演示回复，实际使用中会连接到真实的AI服务。` 
+      }]);
+    }, 1500);
+  };
 
   return (
-    <Card className={`
-      group hover:shadow-2xl transition-all duration-500 cursor-pointer
-      border border-primary/10 hover:border-primary/30
-      backdrop-blur-md bg-gradient-to-br from-background/40 to-muted/40
-      ${persona.isOmnipotent ? 'bg-gradient-to-br from-amber-50/30 to-rose-50/30 dark:from-amber-950/30 dark:to-rose-950/30' : 'bg-card/30'}
-      relative overflow-hidden rounded-2xl
-      hover:scale-[1.02] hover:-translate-y-1
-    `}>
-      {/* 动态背景效果 */}
-      {persona.isOmnipotent && (
-        <>
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-rose-400/10 to-purple-600/10 animate-pulse" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]" />
-        </>
-      )}
-      
-      {/* 卡片内容 */}
-      <CardHeader className="pb-3 relative">
-        <div className="flex items-center gap-3 mb-2">
-          {/* 图标容器 */}
-          <div className={`
-            w-12 h-12 rounded-2xl ${persona.gradientClass}
-            flex items-center justify-center text-white shadow-lg
-            group-hover:scale-110 transition-transform duration-500
-            ${persona.isOmnipotent ? 'animate-pulse' : ''}
-            relative overflow-hidden
-          `}>
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
-            <IconComponent className="h-6 w-6 relative z-10" />
-          </div>
-          
-          {/* 标题区域 */}
-          <div className="flex-1">
-            <CardTitle className="text-lg font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent group-hover:from-primary/90 group-hover:to-primary/70 transition-all duration-300">
-              {persona.title}
-            </CardTitle>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-2xl transform group-hover:scale-110 transition-transform duration-300">{persona.avatar}</span>
-              <Badge variant="secondary" className={`
-                text-xs px-2 py-0.5 rounded-full
-                ${persona.isOmnipotent 
-                  ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-lg shadow-amber-500/25' 
-                  : 'bg-gradient-to-r from-muted to-muted/80'
-                }
-                group-hover:shadow-md transition-all duration-300
-              `}>
-                {persona.name}
-              </Badge>
-            </div>
-          </div>
-        </div>
-        
-        {/* 描述文本 */}
-        <CardDescription className="text-sm leading-relaxed text-muted-foreground/80 group-hover:text-muted-foreground transition-colors duration-300">
-          {persona.description}
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="pt-0 relative">
-        <div className="space-y-3">
-          {/* 擅长解决区域 */}
-          <div className="bg-gradient-to-br from-muted/50 to-background/50 rounded-xl p-3">
-            <p className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1">
-              <Sparkles className="h-3 w-3 text-primary/60" />
-              擅长解决：
-            </p>
-            <div className="space-y-1.5">
-              {persona.examples.map((example, index) => (
-                <div 
-                  key={index} 
-                  className="text-xs text-muted-foreground flex items-center gap-1.5 group/item hover:text-primary/80 transition-colors duration-200"
-                >
-                  <ArrowRight className="h-3 w-3 text-primary/60 group-hover/item:translate-x-0.5 transition-transform" />
-                  {example}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-blue-950/20 dark:to-purple-950/10">
+      {viewMode === 'welcome' ? (
+        <div className="container mx-auto px-4 py-8 space-y-8">
+          {/* 头部介绍区域 */}
+          <div className="text-center space-y-6 max-w-4xl mx-auto">
+            {/* AI头像和标题 */}
+            <div className="flex flex-col items-center space-y-4">
+              <div className="relative">
+                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl">
+                  <Brain className="h-10 w-10 text-white" />
                 </div>
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+                  AI 芯片助手
+                </h1>
+                <p className="text-lg text-gray-600 dark:text-gray-300 font-medium">
+                  Intelligent Semiconductor Assistant
+                </p>
+                <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                  基于先进的人工智能技术，为您提供专业的芯片选型、参数分析、技术咨询和文档解读服务
+                </p>
+              </div>
+            </div>
+
+            {/* 统计数据 */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+              {aiStats.map((stat, index) => (
+                <StatCard key={index} stat={stat} />
               ))}
             </div>
           </div>
 
-          {/* 按钮区域 */}
-          <Button
-            onClick={() => onSelect(persona)}
-            className={`
-              w-full ${persona.gradientClass} hover:opacity-90 transition-all duration-300
-              ${persona.isOmnipotent ? 'animate-pulse' : ''}
-              text-white font-medium rounded-xl
-              shadow-lg hover:shadow-xl
-              hover:scale-[1.02] hover:-translate-y-0.5
-              relative overflow-hidden
-            `}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <MessageSquare className="mr-2 h-4 w-4 relative z-10" />
-            <span className="relative z-10">{persona.buttonText}</span>
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-export default function AskAiContentNew() {
-  const [selectedPersona, setSelectedPersona] = useState<typeof aiPersonas[0] | null>(aiPersonas[0]);
-  const [showOtherAssistants, setShowOtherAssistants] = useState(true);
-  const [messages, setMessages] = useState<Array<{type: 'user' | 'assistant', content: string}>>([]);
-
-  const handlePersonaSelect = (personaId: string) => {
-    const persona = aiPersonas.find(p => p.id === personaId);
-    if (persona) {
-      setSelectedPersona(persona);
-      setShowOtherAssistants(false);
-    }
-  };
-
-  const handleSendMessage = (content: string) => {
-    if (!content.trim()) return;
-    setMessages(prev => [...prev, { type: 'user', content }]);
-    setShowOtherAssistants(false);
-    // TODO: 处理AI回复逻辑
-  };
-
-  const handleBackToOmnipotent = () => {
-    setSelectedPersona(aiPersonas[0]);
-    setShowOtherAssistants(true);
-  };
-
-  if (!selectedPersona) return null;
-
-  return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-background via-background/95 to-muted/30">
-      {/* 聊天界面头部 */}
-      <div className="flex items-center gap-1 px-1 py-0.5 border-b bg-background/95">
-        <div className={`
-          w-5 h-5 rounded-md ${selectedPersona.gradientClass}
-          flex items-center justify-center text-white
-        `}>
-          {React.createElement(selectedPersona.icon, { className: "h-2.5 w-2.5" })}
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-0.5 flex-wrap">
-            <h3 className="font-semibold text-sm truncate">
-              {selectedPersona.title}
-            </h3>
-            <span className="text-sm">{selectedPersona.avatar}</span>
-            <Badge variant="outline" className="text-xs px-0.5 py-0 rounded-full">
-              {selectedPersona.name}
-            </Badge>
-          </div>
-          <p className="text-xs text-muted-foreground truncate">{selectedPersona.personality}</p>
-        </div>
-        {selectedPersona.id !== 'omnipotent' && (
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={handleBackToOmnipotent}
-            className="h-5 px-1 text-xs"
-          >
-            返回全能
-          </Button>
-        )}
-      </div>
-
-      {/* 聊天内容区域 */}
-      <div className="flex-1 overflow-y-auto px-1 py-0.5 space-y-1">
-        {messages.length === 0 ? (
-          <div className="h-full flex items-center justify-center">
-            <div className="text-center space-y-1 px-1">
-              <div className={`
-                w-7 h-7 rounded-md ${selectedPersona.gradientClass}
-                flex items-center justify-center text-white mx-auto
-              `}>
-                {React.createElement(selectedPersona.icon, { className: "h-3.5 w-3.5" })}
-              </div>
-              <div>
-                <h4 className="text-sm font-semibold mb-0.5">
-                  {selectedPersona.name}为您服务
-                </h4>
-                <p className="text-xs text-muted-foreground mb-1">
-                  {selectedPersona.description}
-                </p>
-                <div className="space-y-0.5">
-                  <p className="text-xs font-medium flex items-center justify-center gap-0.5">
-                    <Sparkles className="h-2 w-2 text-primary/60" />
-                    您可以这样问我：
-                  </p>
-                  <div className="flex flex-wrap gap-0.5 justify-center">
-                    {selectedPersona.examples.map((example, index) => (
-                      <Badge 
-                        key={index} 
-                        variant="secondary" 
-                        className="text-xs px-0.5 py-0 rounded-full cursor-pointer hover:bg-muted/80"
-                        onClick={() => handleSendMessage(example)}
-                      >
-                        {example}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </div>
+          {/* AI功能卡片网格 */}
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                选择您需要的AI服务
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                Choose the AI service you need
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {aiCapabilities.map((capability, index) => (
+                <ModernAiCard 
+                  key={index} 
+                  capability={capability} 
+                  onSelect={handleCapabilitySelect}
+                />
+              ))}
             </div>
           </div>
-        ) : (
-          <div className="space-y-1">
-            {messages.map((message, index) => (
-              <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[95%] rounded-md p-1 text-sm ${
-                  message.type === 'user' 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'bg-muted'
-                }`}>
-                  {message.content}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
-      {/* 其他助手选择区域 */}
-      {showOtherAssistants && (
-        <div className="px-1 py-0.5 border-t bg-background/95">
-          <div className="text-xs text-muted-foreground mb-0.5 flex items-center gap-0.5">
-            <Sparkles className="h-2 w-2 text-primary/60" />
-            我可以调用其他专家，您也可以直接选择：
+          {/* 快速开始区域 */}
+          <div className="max-w-2xl mx-auto">
+            <Card className="border-0 shadow-xl bg-gradient-to-r from-blue-500/5 to-purple-500/5 dark:from-blue-500/10 dark:to-purple-500/10">
+              <CardContent className="p-6">
+                <div className="text-center space-y-4">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                    或者直接开始对话
+                  </h3>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="输入您的问题，例如：推荐一款低功耗的MCU..."
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                      className="flex-1"
+                    />
+                    <Button 
+                      onClick={handleSendMessage}
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-          <div className="grid grid-cols-2 gap-0.5">
-            {aiPersonas.slice(1).map((persona) => (
-              <div
-                key={persona.id}
-                className="flex items-center gap-0.5 p-0.5 rounded-md border cursor-pointer hover:bg-muted/50"
-                onClick={() => handlePersonaSelect(persona.id)}
-              >
-                <div className={`
-                  w-3.5 h-3.5 rounded-md ${persona.gradientClass}
-                  flex items-center justify-center text-white
-                `}>
-                  {React.createElement(persona.icon, { className: "h-1.5 w-1.5" })}
+        </div>
+      ) : (
+        // 聊天界面
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto">
+            <Button 
+              variant="outline" 
+              onClick={() => setViewMode('welcome')}
+              className="mb-4"
+            >
+              ← 返回主页
+            </Button>
+            
+            <Card className="h-[600px] flex flex-col">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5" />
+                  AI 对话
+                </CardTitle>
+              </CardHeader>
+              
+              <CardContent className="flex-1 flex flex-col">
+                <ScrollArea className="flex-1 mb-4">
+                  <div className="space-y-4">
+                    {messages.map((msg, index) => (
+                      <div key={index} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`max-w-[80%] p-3 rounded-lg ${
+                          msg.type === 'user' 
+                            ? 'bg-blue-500 text-white' 
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                        }`}>
+                          {msg.content}
+                        </div>
+                      </div>
+                    ))}
+                    {isAiThinking && (
+                      <div className="flex justify-start">
+                        <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                            AI正在思考...
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+                
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="输入您的消息..."
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    className="flex-1"
+                  />
+                  <Button onClick={handleSendMessage}>
+                    <Send className="h-4 w-4" />
+                  </Button>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-medium truncate">{persona.name}</div>
-                  <div className="text-[10px] text-muted-foreground truncate">{persona.title}</div>
-                </div>
-              </div>
-            ))}
+              </CardContent>
+            </Card>
           </div>
         </div>
       )}
-
-      {/* 输入区域 */}
-      <div className="px-1 py-0.5 border-t bg-background/95">
-        <div className="flex gap-0.5">
-          <input
-            type="text"
-            placeholder={`向${selectedPersona.name}提问...`}
-            className="flex-1 px-1.5 py-0.5 rounded-md focus:outline-none focus:ring-1 focus:ring-primary/20 bg-background/80 border text-sm"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && e.currentTarget.value.trim()) {
-                handleSendMessage(e.currentTarget.value);
-                e.currentTarget.value = '';
-              }
-            }}
-          />
-          <Button 
-            className={`${selectedPersona.gradientClass} text-white font-medium text-sm rounded-md h-6 px-1.5`}
-            onClick={() => {
-              const input = document.querySelector('input');
-              if (input?.value.trim()) {
-                handleSendMessage(input.value);
-                input.value = '';
-              }
-            }}
-          >
-            <Sparkles className="h-2.5 w-2.5" />
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

@@ -9,7 +9,8 @@ import ChatMessageDisplay from "@/components/ai/chat/chat-message-display";
 import type { ChatMessage } from "@/components/ai/chat/chat-message";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertCircle, BookOpen, Brain, ChevronDown, ClipboardList, FileText, GitCompareArrows, Lightbulb, MessageSquare, PackageSearch, Send, Settings2, Zap } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { AlertCircle, BookOpen, Brain, ChevronDown, ClipboardList, FileText, GitCompareArrows, Lightbulb, MessageSquare, PackageSearch, Send, Settings2, Zap, Sparkles, Cpu, TrendingUp, BarChart3, FileSearch, Layers, Globe, Star, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Placeholder for actual AI response generation
@@ -109,22 +110,22 @@ export default function AskAiContent() {
                   <p><strong>输出电流 Iout：</strong> 5 A</p>
                 </CardContent>
               </Card>
-              
+
               <p className="text-sm mt-2 mb-1">🔍 <strong>检索结果：</strong> 共找到 66 款可能符合的芯片。优先为您展示综合匹配度和常用性较高的前 3 款：</p>
-              
-              <MockAiChipResponse 
+
+              <MockAiChipResponse
                 chipName="1. NCP1077P100G (安森美 ONSEMI)"
                 details={["内置700V高雪崩坚固型MOSFET", "固定频率100kHz，动态自供电(DSS)", "过载、短路、过温保护", "封装: PDIP-7"]}
                 tip="此款的集成MOSFET耐压可能不满足1500V直接输入，请确认您的具体应用电路设计。"
                 onAction={(action) => handleSendMessage(action, "chip_action")}
               />
-              <MockAiChipResponse 
+              <MockAiChipResponse
                 chipName="2. LNK6777K (Power Integrations)"
                 details={["EcoSmart™ 技术，高效率", "集成725V MOSFET，支持反激/降压-升压拓扑", "精确的过流/过温保护，输出过压保护", "封装: eSIP-7C"]}
                 tip="同样，MOSFET耐压需关注。Power Integrations有更高耐压的系列，但可能需要更复杂的外部电路。"
                 onAction={(action) => handleSendMessage(action, "chip_action")}
               />
-               <MockAiChipResponse 
+               <MockAiChipResponse
                 chipName="3. UCC28740DR (德州仪器 TI)"
                 details={["反激式控制器，需外配高压MOSFET", "先进的谷值开关(VSR)技术", "全面的保护功能", "封装: SOIC-7"]}
                 tip="这是控制器IC，需要您配合选用合适的1500V以上耐压的MOSFET。"
@@ -142,7 +143,7 @@ export default function AskAiContent() {
         );
       } else if (context === "Datasheet解读" || text.startsWith("分析文件:")) {
         addMessage('ai', 'text', `小智已收到文件 ${text.replace("分析文件: ", "")}。请问您想了解关于这个文件的哪些信息？例如，可以问我“总结一下主要特性”或“找出额定电压”。`);
-      } 
+      }
       else {
         addMessage('ai', 'text', `小智收到了您的消息：“${text}”。现在我会根据这个信息进行处理。 (这是一个模拟回应)`);
       }
@@ -157,7 +158,7 @@ export default function AskAiContent() {
     }
     handleSendMessage(buttonText, cardTitle);
   };
-  
+
   const handleFileUpload = (file: File, context: string) => {
     toast({
       title: "文件上传成功",
@@ -191,7 +192,7 @@ export default function AskAiContent() {
             <p className="text-muted-foreground mb-5 text-sm max-w-md">在芯片的海洋里，我能帮您：</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 w-full max-w-2xl px-2">
               {guideCardsData.map(card => (
-                <GuideCard 
+                <GuideCard
                   key={card.title}
                   {...card}
                   onButtonClick={handleGuideCardClick}
@@ -206,7 +207,7 @@ export default function AskAiContent() {
         {viewMode === 'chat' && messages.map(msg => (
           <ChatMessageDisplay key={msg.id} message={msg} />
         ))}
-        
+
         {viewMode === 'chat' && isAiThinking && (
           <ChatMessageDisplay message={{id: 'thinking', sender: 'ai', type: 'loading', content: "小智正在全力检索...", timestamp: new Date()}} />
         )}
@@ -218,8 +219,8 @@ export default function AskAiContent() {
             </div>
         )}
       </ScrollArea>
-      
-      <ChatInputBar 
+
+      <ChatInputBar
         onSendMessage={handleSendMessage}
         onFileUpload={handleFileUpload}
         onClearChat={messages.length > 0 ? handleClearChat : undefined}
