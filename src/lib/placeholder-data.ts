@@ -767,3 +767,161 @@ export function searchIndustryNews(query: string): IndustryNews[] {
     news.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
   );
 }
+
+// 丝印反查数据类型
+export interface SilkscreenData {
+  id: string;
+  silkscreen: string; // 丝印内容
+  partNumber: string; // 订购型号
+  package: string; // 封装
+  manufacturer: string; // 品牌
+  category: string; // 分类
+  description: string; // 产品描述
+  pins: number; // 管脚数
+  imageUrl?: string; // 产品图片
+  datasheetUrl?: string; // 数据手册链接
+  alternativeSilkscreens?: string[]; // 可能的其他丝印变体
+}
+
+// 丝印反查模拟数据
+export const placeholderSilkscreenData: SilkscreenData[] = [
+  {
+    id: 'silk-1',
+    silkscreen: '5430',
+    partNumber: 'TPS5430',
+    package: 'SOIC-8',
+    manufacturer: 'TI（德州仪器）',
+    category: '电源管理 → 降压转换器',
+    description: '5.5V至36V输入、2A、500kHz降压转换器',
+    pins: 8,
+    imageUrl: '/brands/image_cp/TPS5430.png',
+    datasheetUrl: '/docs/TPS5430-datasheet.pdf',
+    alternativeSilkscreens: ['T5430', 'TPS5430']
+  },
+  {
+    id: 'silk-2',
+    silkscreen: '3201',
+    partNumber: 'TPS563201',
+    package: 'SOT583',
+    manufacturer: 'TI（德州仪器）',
+    category: '电源管理 → 同步降压转换器',
+    description: '4.2V至17V、3A同步降压转换器',
+    pins: 6,
+    imageUrl: '/brands/image_cp/TPS563201.png',
+    datasheetUrl: '/docs/TPS563201-datasheet.pdf',
+    alternativeSilkscreens: ['563201', 'T3201']
+  },
+  {
+    id: 'silk-3',
+    silkscreen: 'ALL',
+    partNumber: 'AMS1117-3.3',
+    package: 'SOT-223',
+    manufacturer: 'AMS（先进模拟）',
+    category: '电源管理 → LDO稳压器',
+    description: '1A低压差线性稳压器',
+    pins: 4,
+    imageUrl: '/brands/image_cp/AMS1117.png',
+    datasheetUrl: '/docs/AMS1117-datasheet.pdf',
+    alternativeSilkscreens: ['1117', 'AMS1117']
+  },
+  {
+    id: 'silk-4',
+    silkscreen: '358',
+    partNumber: 'LM358',
+    package: 'SOIC-8',
+    manufacturer: 'TI（德州仪器）',
+    category: '模拟器件 → 运算放大器',
+    description: '双路低功耗运算放大器',
+    pins: 8,
+    imageUrl: '/brands/image_cp/LM358.png',
+    datasheetUrl: '/docs/LM358-datasheet.pdf',
+    alternativeSilkscreens: ['LM358', 'L358']
+  },
+  {
+    id: 'silk-5',
+    silkscreen: '2596',
+    partNumber: 'LM2596',
+    package: 'TO-263',
+    manufacturer: 'TI（德州仪器）',
+    category: '电源管理 → 降压转换器',
+    description: '3A降压开关稳压器',
+    pins: 5,
+    imageUrl: '/brands/image_cp/LM2596.png',
+    datasheetUrl: '/docs/LM2596-datasheet.pdf',
+    alternativeSilkscreens: ['LM2596', 'L2596']
+  },
+  {
+    id: 'silk-6',
+    silkscreen: '555',
+    partNumber: 'NE555',
+    package: 'SOIC-8',
+    manufacturer: 'TI（德州仪器）',
+    category: '模拟器件 → 定时器',
+    description: '精密定时器',
+    pins: 8,
+    imageUrl: '/brands/image_cp/NE555.png',
+    datasheetUrl: '/docs/NE555-datasheet.pdf',
+    alternativeSilkscreens: ['NE555', 'N555']
+  },
+  {
+    id: 'silk-7',
+    silkscreen: '595',
+    partNumber: '74HC595',
+    package: 'SOIC-16',
+    manufacturer: 'TI（德州仪器）',
+    category: '数字逻辑 → 移位寄存器',
+    description: '8位串行输入/串行或并行输出移位寄存器',
+    pins: 16,
+    imageUrl: '/brands/image_cp/74HC595.png',
+    datasheetUrl: '/docs/74HC595-datasheet.pdf',
+    alternativeSilkscreens: ['74HC595', 'HC595']
+  },
+  {
+    id: 'silk-8',
+    silkscreen: '317',
+    partNumber: 'LM317',
+    package: 'TO-220',
+    manufacturer: 'TI（德州仪器）',
+    category: '电源管理 → 可调稳压器',
+    description: '1.2V-37V可调正电压稳压器',
+    pins: 3,
+    imageUrl: '/brands/image_cp/LM317.png',
+    datasheetUrl: '/docs/LM317-datasheet.pdf',
+    alternativeSilkscreens: ['LM317', 'L317']
+  }
+];
+
+// 丝印反查搜索函数
+export function searchSilkscreen(query: string): SilkscreenData[] {
+  if (!query.trim()) return [];
+
+  const lowerQuery = query.toLowerCase().trim();
+
+  return placeholderSilkscreenData.filter(item => {
+    // 精确匹配丝印
+    if (item.silkscreen.toLowerCase() === lowerQuery) return true;
+
+    // 模糊匹配丝印
+    if (item.silkscreen.toLowerCase().includes(lowerQuery)) return true;
+
+    // 匹配替代丝印
+    if (item.alternativeSilkscreens?.some(alt =>
+      alt.toLowerCase() === lowerQuery ||
+      alt.toLowerCase().includes(lowerQuery)
+    )) return true;
+
+    // 匹配订购型号
+    if (item.partNumber.toLowerCase().includes(lowerQuery)) return true;
+
+    return false;
+  }).sort((a, b) => {
+    // 精确匹配优先
+    const aExact = a.silkscreen.toLowerCase() === lowerQuery;
+    const bExact = b.silkscreen.toLowerCase() === lowerQuery;
+    if (aExact && !bExact) return -1;
+    if (!aExact && bExact) return 1;
+
+    // 按丝印长度排序（越短越相关）
+    return a.silkscreen.length - b.silkscreen.length;
+  });
+}

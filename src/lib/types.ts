@@ -92,3 +92,18 @@ export interface IndustryNews {
   readTime?: number; // 阅读时间（分钟）
 }
 
+// 丝印反查数据类型
+export interface SilkscreenData {
+  id: string;
+  silkscreen: string; // 丝印内容
+  partNumber: string; // 订购型号
+  package: string; // 封装
+  manufacturer: string; // 品牌
+  category: string; // 分类
+  description: string; // 产品描述
+  pins: number; // 管脚数
+  imageUrl?: string; // 产品图片
+  datasheetUrl?: string; // 数据手册链接
+  alternativeSilkscreens?: string[]; // 可能的其他丝印变体
+}
+
