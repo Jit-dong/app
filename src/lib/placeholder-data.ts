@@ -982,12 +982,95 @@ export const placeholderOrderDetails: OrderDetail[] = [
         rating: 4.8
       }
     ]
+  },
+
+  // TPS5430 的订购详情
+  {
+    id: 'TPS5430DDA',
+    model: 'TPS5430DDA',
+    chipId: 'TPS5430',
+    package: 'HSOIC (DDA)',
+    pins: 8,
+    silkscreen: '5430',
+    packagingQuantity: '75',
+    carrier: '管',
+    workTemp: '-40°C至125°C',
+    lifecycle: '量产',
+    rohs: '2',
+    suppliers: [
+      {
+        name: 'TI官方',
+        price: '$1.916',
+        stock: '1000+',
+        delivery: '现货',
+        moq: '1ku',
+        rating: 4.9
+      },
+      {
+        name: '立创商城',
+        price: '¥14.25',
+        stock: '856',
+        delivery: '现货',
+        moq: '1',
+        rating: 4.8
+      }
+    ]
+  },
+  {
+    id: 'TPS5430DDAR',
+    model: 'TPS5430DDAR',
+    chipId: 'TPS5430',
+    package: 'HSOIC (DDA)',
+    pins: 8,
+    silkscreen: '5430',
+    packagingQuantity: '2,500',
+    carrier: '大型 T&R',
+    workTemp: '-40°C至125°C',
+    lifecycle: '量产',
+    rohs: '2',
+    suppliers: [
+      {
+        name: 'TI官方',
+        price: '$1.517',
+        stock: '2500+',
+        delivery: '现货',
+        moq: '1ku',
+        rating: 4.9
+      },
+      {
+        name: '立创商城',
+        price: '¥11.85',
+        stock: '1200',
+        delivery: '现货',
+        moq: '1',
+        rating: 4.8
+      },
+      {
+        name: '得捷电子',
+        price: '¥12.50',
+        stock: '800',
+        delivery: '1-2天',
+        moq: '10',
+        rating: 4.7
+      }
+    ]
   }
 ];
 
 // 根据芯片ID查找订购详情
 export function findOrderDetailsByChipId(chipId: string): OrderDetail[] {
-  return placeholderOrderDetails.filter(order => order.chipId === chipId);
+  // 先通过chipId直接查找
+  let results = placeholderOrderDetails.filter(order => order.chipId === chipId);
+
+  // 如果没找到，尝试通过芯片model查找
+  if (results.length === 0) {
+    const chip = findChipById(chipId);
+    if (chip) {
+      results = placeholderOrderDetails.filter(order => order.chipId === chip.model);
+    }
+  }
+
+  return results;
 }
 
 // 根据订购详情ID查找单个订购详情

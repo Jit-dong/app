@@ -248,7 +248,7 @@ export default function ChipPurchaseClient({ chip }: ChipPurchaseClientProps) {
                           <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.package}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <span className="text-gray-500 dark:text-gray-400 font-medium">管脚:</span>
+                          <span className="text-gray-500 dark:text-gray-400 font-medium">引脚:</span>
                           <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.pins}</span>
                         </div>
                         <div className="flex items-center gap-1">
