@@ -827,28 +827,29 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                     {designDevSections.cadModels && (
                       <div className="pl-1 pr-3 pb-3 border-t border-gray-200 dark:border-gray-700">
                         <div className="pt-3">
-                          {/* CAD 资源表格 - 现代卡片式 */}
-                          <div className="space-y-2">
-                            {/* 表头 */}
-                            <div className="grid grid-cols-3 gap-4 p-3 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 rounded-t-lg font-medium text-gray-900 dark:text-gray-100 shadow-sm">
-                              <div className="text-sm">封装</div>
-                              <div className="text-sm">引脚</div>
-                              <div className="text-sm">CAD 符号、封装和 3D 模型</div>
+                          {/* CAD 资源信息 - 横向布局 */}
+                          <div className="flex items-center gap-6 flex-wrap">
+                            {/* 封装信息 */}
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-600 dark:text-gray-400">封装:</span>
+                              <span className="text-blue-600 dark:text-blue-400 font-medium">
+                                SOT-23-THIN <span className="text-gray-500 dark:text-gray-400 text-xs">(DDC)</span>
+                              </span>
                             </div>
 
-                            {/* 数据行 */}
-                            <div className="grid grid-cols-3 gap-4 p-3 bg-white dark:bg-gray-800 rounded-b-lg border border-gray-200 dark:border-gray-700 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-700 transition-all duration-300 group">
-                              <div className="text-blue-600 dark:text-blue-400 font-medium">
-                                SOT-23-THIN<br/>
-                                <span className="text-gray-500 dark:text-gray-400 text-xs">(DDC)</span>
-                              </div>
-                              <div className="text-gray-900 dark:text-gray-100 font-medium">6</div>
-                              <div>
-                                <Link href="#" className="text-blue-600 dark:text-blue-400 hover:text-orange-600 dark:hover:text-orange-400 hover:underline inline-flex items-center gap-1 transition-colors duration-200 group-hover:translate-x-1">
-                                  <Download className="h-4 w-4" />
-                                  Ultra Librarian
-                                </Link>
-                              </div>
+                            {/* 引脚信息 */}
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-600 dark:text-gray-400">引脚:</span>
+                              <span className="text-gray-900 dark:text-gray-100 font-medium">6</span>
+                            </div>
+
+                            {/* CAD 下载 */}
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-600 dark:text-gray-400">CAD:</span>
+                              <Link href="#" className="text-blue-600 dark:text-blue-400 hover:text-orange-600 dark:hover:text-orange-400 hover:underline inline-flex items-center gap-1 transition-colors duration-200">
+                                <Download className="h-4 w-4" />
+                                Ultra Librarian
+                              </Link>
                             </div>
                           </div>
                         </div>
