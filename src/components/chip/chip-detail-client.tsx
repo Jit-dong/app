@@ -237,9 +237,9 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                       {chip.model}
                     </h1>
-                    <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-accent-100 to-accent-50 dark:from-accent-900/30 dark:to-accent-800/20 rounded-full border border-accent-200 dark:border-accent-700">
-                      <div className="w-2 h-2 bg-accent-500 rounded-full animate-pulse"></div>
-                      <span className="text-xs font-medium text-accent-700 dark:text-accent-400">量产</span>
+                    <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/20 rounded-full border border-green-200 dark:border-green-700">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-xs font-medium text-green-700 dark:text-green-400">量产</span>
                     </div>
                   </div>
                   <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
@@ -292,17 +292,17 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
 
             {/* 详细信息标签页 */}
             <Tabs defaultValue="product-details" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-neutral-100 to-neutral-50 dark:from-neutral-700 dark:to-neutral-800 p-1 rounded-lg mb-4 shadow-sm">
-                <TabsTrigger value="product-details" className="text-xs data-[state=active]:bg-primary-500 data-[state=active]:text-white transition-all duration-300">
+              <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-gray-200 to-gray-100 dark:from-gray-600 dark:to-gray-700 p-1 rounded-lg mb-4 shadow-sm">
+                <TabsTrigger value="product-details" className="text-xs font-medium text-gray-700 dark:text-gray-300 data-[state=active]:bg-gray-800 data-[state=active]:text-white dark:data-[state=active]:bg-gray-200 dark:data-[state=active]:text-gray-900 transition-all duration-300">
                   产品详情
                 </TabsTrigger>
-                <TabsTrigger value="technical-articles" className="text-xs data-[state=active]:bg-primary-500 data-[state=active]:text-white transition-all duration-300">
+                <TabsTrigger value="technical-articles" className="text-xs font-medium text-gray-700 dark:text-gray-300 data-[state=active]:bg-gray-800 data-[state=active]:text-white dark:data-[state=active]:bg-gray-200 dark:data-[state=active]:text-gray-900 transition-all duration-300">
                   技术文章
                 </TabsTrigger>
-                <TabsTrigger value="design-development" className="text-xs data-[state=active]:bg-primary-500 data-[state=active]:text-white transition-all duration-300">
+                <TabsTrigger value="design-development" className="text-xs font-medium text-gray-700 dark:text-gray-300 data-[state=active]:bg-gray-800 data-[state=active]:text-white dark:data-[state=active]:bg-gray-200 dark:data-[state=active]:text-gray-900 transition-all duration-300">
                   设计开发
                 </TabsTrigger>
-                <TabsTrigger value="product-ordering" className="text-xs data-[state=active]:bg-primary-500 data-[state=active]:text-white transition-all duration-300">
+                <TabsTrigger value="product-ordering" className="text-xs font-medium text-gray-700 dark:text-gray-300 data-[state=active]:bg-gray-800 data-[state=active]:text-white dark:data-[state=active]:bg-gray-200 dark:data-[state=active]:text-gray-900 transition-all duration-300">
                   产品订购
                 </TabsTrigger>
               </TabsList>
