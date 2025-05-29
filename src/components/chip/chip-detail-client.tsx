@@ -131,34 +131,75 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
       <div className="px-4 py-4 space-y-4">
         {/* 芯片标题和基本信息 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-          <div className="flex items-start justify-between mb-4">
+          <div className="flex items-start gap-4 mb-4">
+            {/* 产品图片 */}
+            {chip.imageUrl && (
+              <div className="flex-shrink-0">
+                <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                  <Image
+                    src={chip.imageUrl}
+                    alt={chip.model}
+                    width={80}
+                    height={80}
+                    className="object-contain"
+                    onError={(e) => {
+                      // 如果图片加载失败，显示默认图标
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                  <Cpu className="h-8 w-8 text-gray-400" />
+                </div>
+              </div>
+            )}
+
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {chip.model}
                 </h1>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 rounded-full">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-green-600 dark:text-green-400">量产</span>
+                  <span className="text-xs font-medium text-green-600 dark:text-green-400">量产</span>
                 </div>
               </div>
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
                 {chip.displayDescription}
               </p>
-              <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                <span>制造商: {chip.displayManufacturer}</span>
-                <span>分类: {chip.displayCategory}</span>
+              <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                <div>封装: <span className="font-medium text-gray-900 dark:text-gray-100">SOT-23-THN</span></div>
+                <div>分类: <span className="font-medium text-gray-900 dark:text-gray-100">电源管理芯片\直流直流变换器\降压型稳压器</span></div>
               </div>
             </div>
-            <div className="flex flex-col gap-2 ml-4">
-              <Button variant="outline" size="sm" className="text-blue-600 border-blue-200">
-                <FileText className="h-4 w-4 mr-1" />
-                数据表
-              </Button>
-              <Button className="bg-red-600 hover:bg-red-700 text-white">
-                立即订购
-              </Button>
-            </div>
+          </div>
+
+          {/* 操作按钮 */}
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full text-blue-600 border-blue-200 hover:bg-blue-50"
+              onClick={() => {
+                if (chip.datasheetUrl) {
+                  // 创建一个临时的下载链接
+                  const link = document.createElement('a');
+                  link.href = chip.datasheetUrl;
+                  link.download = `${chip.model}_datasheet.pdf`;
+                  link.target = '_blank';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+
+                  // 显示下载提示
+                  toast({
+                    title: "数据手册下载",
+                    description: `正在下载 ${chip.model} 数据手册...`,
+                  });
+                }
+              }}
+            >
+              <Download className="h-4 w-4 mr-1" />
+              数据手册
+            </Button>
           </div>
         </div>
 
@@ -343,69 +384,69 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
 
               {/* 参数标签页 */}
               <TabsContent value="parameters" className="mt-0">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Rating</span>
-                      <span className="font-medium">Catalog</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Topology</span>
-                      <span className="font-medium">Buck</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Iout (max) (A)</span>
-                      <span className="font-medium">3</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Vin (max) (V)</span>
-                      <span className="font-medium">17</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Vin (min) (V)</span>
-                      <span className="font-medium">4.5</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Vout (max) (V)</span>
-                      <span className="font-medium">7</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Vout (min) (V)</span>
-                      <span className="font-medium">0.76</span>
+                <div className="space-y-3">
+                  {/* 基本参数 */}
+                  <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-3">
+                    <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">基本参数</h4>
+                    <div className="grid grid-cols-1 gap-2 text-sm">
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">拓扑架构 (Topology)</span>
+                        <span className="font-medium">{chip.parameters?.['Topology'] || 'Buck'}</span>
+                      </div>
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">输入电压范围 (Vin)</span>
+                        <span className="font-medium">{chip.parameters?.['Input Voltage Min']}V - {chip.parameters?.['Input Voltage Max']}V</span>
+                      </div>
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">输出电压范围 (Vout)</span>
+                        <span className="font-medium">{chip.parameters?.['Output Voltage Min']}V - {chip.parameters?.['Output Voltage Max']}V</span>
+                      </div>
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">输出电流 (Iout max)</span>
+                        <span className="font-medium">{chip.parameters?.['Output Current Max']}A</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-3">
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Features</span>
-                      <span className="font-medium text-right">Enable, Light Load Efficiency, Soft Start Fixed, Synchronous Rectification</span>
+
+                  {/* 控制参数 */}
+                  <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-3">
+                    <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-2">控制参数</h4>
+                    <div className="grid grid-cols-1 gap-2 text-sm">
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">控制模式</span>
+                        <span className="font-medium">{chip.parameters?.['Control Mode'] || 'D-CAP2™'}</span>
+                      </div>
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">开关频率</span>
+                        <span className="font-medium">{chip.parameters?.['Switching Frequency'] || '580 kHz'}</span>
+                      </div>
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">最大占空比</span>
+                        <span className="font-medium">{chip.parameters?.['Duty Cycle Max'] || '80%'}</span>
+                      </div>
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">关断电流</span>
+                        <span className="font-medium">{chip.parameters?.['Shutdown Current'] || '< 10µA'}</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Operating temperature range (°C)</span>
-                      <span className="font-medium">-40 to 125</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Switching frequency (min) (kHz)</span>
-                      <span className="font-medium">580</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Switching frequency (max) (kHz)</span>
-                      <span className="font-medium">580</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Iq (typ) (μA)</span>
-                      <span className="font-medium">400</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Control mode</span>
-                      <span className="font-medium">D-CAP2</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Duty cycle (max) (%)</span>
-                      <span className="font-medium">80</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Type</span>
-                      <span className="font-medium">Converter</span>
+                  </div>
+
+                  {/* 工作条件 */}
+                  <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-3">
+                    <h4 className="font-medium text-green-900 dark:text-green-100 mb-2">工作条件</h4>
+                    <div className="grid grid-cols-1 gap-2 text-sm">
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">工作温度范围</span>
+                        <span className="font-medium">{chip.parameters?.['Operating Temperature Min']}°C 至 {chip.parameters?.['Operating Temperature Max']}°C</span>
+                      </div>
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">效率</span>
+                        <span className="font-medium">{chip.parameters?.['Efficiency'] || '95%'}</span>
+                      </div>
+                      <div className="flex justify-between py-1">
+                        <span className="text-gray-600 dark:text-gray-400">封装类型</span>
+                        <span className="font-medium">{chip.packageTypes?.join(', ') || 'SOT-23 (DDC)'}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -451,22 +492,79 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
               {/* 说明标签页 */}
               <TabsContent value="description" className="mt-0">
                 <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                  <p>
-                    TPS563201 和 TPS563208 是采用小外形尺寸晶体管 (SOT)-23 封装的简单易用型 3A 同步降压转换器。
-                  </p>
-                  <p>
-                    这些器件的设计初衷是使用尽可能少的外部元件即可运行，还可以实现低待机电流。
-                  </p>
-                  <p>
-                    这些开关模式电源 (SMPS) 器件采用 D-CAP2 控制拓扑，从而提供快速瞬态响应，并且在无需外部补偿元件的情况下支持专用聚合物等低效串联电阻 (ESR) 输出电容器以及超低 ESR 陶瓷电容器。
-                  </p>
-                  <p>
-                    TPS563201 可在脉冲跳跃模式下运行，从而能在轻载运行期间保持高效率。TPS563201 和 TPS563208 采用 6 引脚 1.6mm x 2.9mm SOT (DDC) 封装，额定结温范围为 –40°C 至 125°C。
-                  </p>
+                  <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-4">
+                    <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">产品概述</h4>
+                    <p>
+                      TPS563201 是一款易于使用、具有成本效益的同步降压转换器。采用 D-CAP2™ 控制模式，提供快速的瞬态响应，并支持低 ESR 输出电容器（如 POSCAP 或 SP-CAP），无需外部补偿组件。
+                    </p>
+                  </div>
+
+                  {/* 典型应用电路图 */}
+                  <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4">
+                    <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-3">典型应用电路图</h4>
+                    <div className="flex justify-center">
+                      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <Image
+                          src="/brands/image_cp/TPS563201_.png"
+                          alt="TPS563201典型应用电路图"
+                          width={400}
+                          height={300}
+                          className="object-contain max-w-full h-auto"
+                          onError={(e) => {
+                            // 如果图片加载失败，显示占位符
+                            e.currentTarget.style.display = 'none';
+                            const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
+                            if (placeholder) placeholder.style.display = 'flex';
+                          }}
+                        />
+                        <div className="hidden items-center justify-center h-48 bg-gray-100 dark:bg-gray-700 rounded text-gray-500 dark:text-gray-400">
+                          <div className="text-center">
+                            <FileImage className="h-12 w-12 mx-auto mb-2" />
+                            <p>典型应用电路图</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-4">
+                    <h4 className="font-medium text-green-900 dark:text-green-100 mb-2">主要特性</h4>
+                    <ul className="space-y-1">
+                      <li>• D-CAP2™ 控制模式，实现快速瞬态响应</li>
+                      <li>• 输入电压范围: 4.5V 至 17V</li>
+                      <li>• 输出电压范围: 0.76V 至 7V (可调)</li>
+                      <li>• 3A 持续输出电流</li>
+                      <li>• 集成 FETs (65mΩ 高侧, 36mΩ 低侧)</li>
+                      <li>• Eco-mode™ 轻载高效工作模式</li>
+                      <li>• 固定开关频率: 580 kHz</li>
+                      <li>• 低关断电流: &lt; 10µA (典型值)</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-orange-50 dark:bg-orange-950/20 rounded-lg p-4">
+                    <h4 className="font-medium text-orange-900 dark:text-orange-100 mb-2">典型应用</h4>
+                    <ul className="space-y-1">
+                      {chip.applications?.map((app, index) => (
+                        <li key={index}>• {app}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4">
+                    <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-2">保护功能</h4>
+                    <ul className="space-y-1">
+                      <li>• 过流保护 (OCP): 逐周期谷值电流限制</li>
+                      <li>• 欠压保护 (UVP): Hiccup mode</li>
+                      <li>• 热关断 (TSD): Non-latch</li>
+                      <li>• 支持预偏置启动</li>
+                      <li>• 可调软启动时间</li>
+                    </ul>
+                  </div>
+
                   <div className="mt-4 flex items-center gap-2 text-blue-600">
                     <GitBranch className="h-4 w-4" />
                     <Link href="#" className="hover:underline">
-                      查找其他 AC/DC 和 DC/DC 转换器（集成 FET）
+                      查看更多 TI 降压转换器产品
                     </Link>
                   </div>
                 </div>

@@ -10,12 +10,13 @@ import {
   searchTechnicalDocuments,
   searchApplicationGuides,
   searchIndustryNews,
-  findOrderDetailsByChipId
+  findOrderDetailsByChipIdAndQuery
 } from "@/lib/placeholder-data";
 import ContentItem from '@/components/shared/content-item';
 import LoadingSpinner from "@/components/shared/loading-spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { SearchX, FileText, RefreshCw, Zap, Sparkles, HelpCircle, Shuffle, MoreHorizontal, ChevronDown, ChevronUp, ShoppingCart, Package, Truck } from "lucide-react";
+import Link from 'next/link';
 import BrandListWithFilter from './brand-list-with-filter';
 import AlternativeSearchPage from './alternative-search-page';
 import SilkscreenReversePage from './silkscreen-reverse-page';
@@ -526,24 +527,38 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between mb-1">
                                 <div className="flex items-center gap-2 flex-1 min-w-0">
-                                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{chip.model}</h4>
-                                  <span className="text-xs text-gray-500 dark:text-gray-400 truncate">开关稳压器-DC/DC转换器</span>
+                                  <Link
+                                    href={`/chip/${chip.id}`}
+                                    className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm hover:underline transition-colors"
+                                  >
+                                    {chip.model}
+                                  </Link>
+                                  <span className="text-xs text-gray-500 dark:text-gray-400 truncate">{chip.category}</span>
                                   <div className="flex items-center gap-0.5 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded-full flex-shrink-0">
                                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                                     <span className="text-xs font-medium text-green-700 dark:text-green-400">量产</span>
                                   </div>
                                 </div>
-                                {/* PDF数据手册链接 */}
-                                <a
-                                  href={`/datasheets/${chip.model}.pdf`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                {/* PDF数据手册下载链接 */}
+                                <button
+                                  onClick={() => {
+                                    if (chip.datasheetUrl) {
+                                      // 创建一个临时的下载链接
+                                      const link = document.createElement('a');
+                                      link.href = chip.datasheetUrl;
+                                      link.download = `${chip.model}_datasheet.pdf`;
+                                      link.target = '_blank';
+                                      document.body.appendChild(link);
+                                      link.click();
+                                      document.body.removeChild(link);
+                                    }
+                                  }}
                                   className="flex items-center gap-1 px-2 py-1 text-xs bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400 rounded transition-colors flex-shrink-0"
-                                  title="查看数据手册PDF"
+                                  title="下载数据手册PDF"
                                 >
                                   <FileText className="h-3 w-3" />
                                   <span>PDF</span>
-                                </a>
+                                </button>
                               </div>
                               <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-tight">{chip.description}</p>
                             </div>
@@ -554,7 +569,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                         <div className="px-3 pb-3">
                           <div className="flex items-center justify-between text-xs">
                             <div className="flex items-center gap-3 flex-1 min-w-0">
-                              <span className="font-medium text-gray-900 dark:text-gray-100">德州仪器-TI</span>
+                              <span className="font-medium text-gray-900 dark:text-gray-100">{chip.manufacturer}</span>
                             </div>
                             <div className="flex items-center gap-2 flex-shrink-0">
                               <span className="font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded text-xs">替代料 6</span>
@@ -576,7 +591,7 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
 
                         {/* 展开的订购信息 - 紧凑版 */}
                         {expandedOrders.has(chip.id) && (() => {
-                          const chipOrderDetails = findOrderDetailsByChipId(chip.id);
+                          const chipOrderDetails = findOrderDetailsByChipIdAndQuery(chip.id, currentQuery);
                           return (
                             <div className="mx-3 mb-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-3 border border-blue-100 dark:border-blue-800/30">
                               <h5 className="text-xs font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-1.5">

@@ -104,26 +104,32 @@ export const placeholderChips: Chip[] = [
     manufacturer: '德州仪器-TI',
     series: true,
     category: '开关稳压器-DC/DC转换器',
-    description: '采用 SOT583 封装且具有 1% 精度、PG/SS 和 PFM/强制 PWM 的 4.2V 至 17V、3A 同步降压转换器',
-    applications: ['工业自动化', '通信设备', '测试测量设备', '医疗设备', '汽车电子', 'POL应用'],
+    description: '4.5V 至 17V 输入、3A 输出、Eco 模式下的同步降压转换器',
+    applications: ['数字电视 (DTV) 电源', '高清蓝光™播放器', '网络家庭终端', '数字机顶盒 (STB)', '安防监控'],
     datasheetUrl: 'https://www.ti.com/lit/ds/symlink/tps563201.pdf',
     automotiveGrade: true,
     lifecycleStatus: 'Active',
-    packageTypes: ['SOT583'],
+    packageTypes: ['SOT-23 (DDC)', 'HSOIC (DDA)'],
     parameters: {
-      'Input Voltage Min': 4.2,
+      'Input Voltage Min': 4.5,
       'Input Voltage Max': 17,
+      'Output Voltage Min': 0.76,
+      'Output Voltage Max': 7,
       'Output Current Max': 3,
-      'Switching Frequency': '2.1 MHz',
-      'Accuracy': '1%',
-      'Efficiency': '95%',
+      'Switching Frequency': '580 kHz',
+      'Control Mode': 'D-CAP2™',
+      'Shutdown Current': '< 10µA',
       'Operating Temperature Min': -40,
       'Operating Temperature Max': 125,
-      'Interface Types': 'PG/SS'
+      'Topology': 'Buck',
+      'Efficiency': '95%',
+      'Duty Cycle Max': '80%'
     },
-    tags: ['DC-DC', '降压转换器', '电源管理', '高精度', 'SOT583'],
+    tags: ['DC-DC', '降压转换器', '电源管理', 'D-CAP2', 'Eco-mode', 'SOT-23'],
     rohsCompliant: true,
     lowPower: false,
+    imageUrl: '/brands/image_cp/TPS563201.png',
+    applicationImageUrl: '/brands/image_cp/TPS563201_.png'
   },
   {
     id: 'STM32F407VGT6',
@@ -272,10 +278,22 @@ export function searchChips(query: string, filters: ChipFilters = {}): Chip[] {
                         (chip.tags?.some(tag => tag.toLowerCase().includes(lowerQuery)) ?? false);
 
       // 订购详情匹配：通过订购型号匹配到芯片
-      const orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
-        orderDetail.chipId === chip.model &&
-        orderDetail.model.toLowerCase().includes(lowerQuery)
+      // 检查是否是精确的订购型号搜索
+      const exactOrderDetail = placeholderOrderDetails.find(orderDetail =>
+        orderDetail.model.toLowerCase() === lowerQuery
       );
+
+      let orderDetailMatch = false;
+      if (exactOrderDetail) {
+        // 如果是精确的订购型号搜索，只匹配对应的芯片
+        orderDetailMatch = exactOrderDetail.chipId === chip.model;
+      } else {
+        // 否则进行模糊匹配
+        orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
+          orderDetail.chipId === chip.model &&
+          orderDetail.model.toLowerCase().includes(lowerQuery)
+        );
+      }
 
       matchesQuery = basicMatch || orderDetailMatch;
     }
@@ -737,10 +755,22 @@ export function searchReferenceDesigns(query: string): ReferenceDesign[] {
                       design.tags?.some(tag => tag.toLowerCase().includes(lowerQuery));
 
     // 订购详情匹配：通过订购型号匹配到芯片，再匹配参考设计
-    const orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
-      orderDetail.model.toLowerCase().includes(lowerQuery) &&
-      design.chipModel?.toLowerCase() === orderDetail.chipId.toLowerCase()
+    // 检查是否是精确的订购型号搜索
+    const exactOrderDetail = placeholderOrderDetails.find(orderDetail =>
+      orderDetail.model.toLowerCase() === lowerQuery
     );
+
+    let orderDetailMatch = false;
+    if (exactOrderDetail) {
+      // 如果是精确的订购型号搜索，只匹配对应的芯片
+      orderDetailMatch = design.chipModel?.toLowerCase() === exactOrderDetail.chipId.toLowerCase();
+    } else {
+      // 否则进行模糊匹配
+      orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
+        orderDetail.model.toLowerCase().includes(lowerQuery) &&
+        design.chipModel?.toLowerCase() === orderDetail.chipId.toLowerCase()
+      );
+    }
 
     return basicMatch || orderDetailMatch;
   });
@@ -759,10 +789,22 @@ export function searchTechnicalDocuments(query: string): TechnicalDocument[] {
                       doc.tags?.some(tag => tag.toLowerCase().includes(lowerQuery));
 
     // 订购详情匹配：通过订购型号匹配到芯片，再匹配技术文档
-    const orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
-      orderDetail.model.toLowerCase().includes(lowerQuery) &&
-      doc.chipModel?.toLowerCase() === orderDetail.chipId.toLowerCase()
+    // 检查是否是精确的订购型号搜索
+    const exactOrderDetail = placeholderOrderDetails.find(orderDetail =>
+      orderDetail.model.toLowerCase() === lowerQuery
     );
+
+    let orderDetailMatch = false;
+    if (exactOrderDetail) {
+      // 如果是精确的订购型号搜索，只匹配对应的芯片
+      orderDetailMatch = doc.chipModel?.toLowerCase() === exactOrderDetail.chipId.toLowerCase();
+    } else {
+      // 否则进行模糊匹配
+      orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
+        orderDetail.model.toLowerCase().includes(lowerQuery) &&
+        doc.chipModel?.toLowerCase() === orderDetail.chipId.toLowerCase()
+      );
+    }
 
     return basicMatch || orderDetailMatch;
   });
@@ -782,10 +824,22 @@ export function searchApplicationGuides(query: string): ApplicationGuide[] {
                       guide.tags?.some(tag => tag.toLowerCase().includes(lowerQuery));
 
     // 订购详情匹配：通过订购型号匹配到芯片，再匹配应用指南
-    const orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
-      orderDetail.model.toLowerCase().includes(lowerQuery) &&
-      guide.chipModel?.toLowerCase() === orderDetail.chipId.toLowerCase()
+    // 检查是否是精确的订购型号搜索
+    const exactOrderDetail = placeholderOrderDetails.find(orderDetail =>
+      orderDetail.model.toLowerCase() === lowerQuery
     );
+
+    let orderDetailMatch = false;
+    if (exactOrderDetail) {
+      // 如果是精确的订购型号搜索，只匹配对应的芯片
+      orderDetailMatch = guide.chipModel?.toLowerCase() === exactOrderDetail.chipId.toLowerCase();
+    } else {
+      // 否则进行模糊匹配
+      orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
+        orderDetail.model.toLowerCase().includes(lowerQuery) &&
+        guide.chipModel?.toLowerCase() === orderDetail.chipId.toLowerCase()
+      );
+    }
 
     return basicMatch || orderDetailMatch;
   });
@@ -1126,4 +1180,28 @@ export function findOrderDetailsByChipId(chipId: string): OrderDetail[] {
 // 根据订购详情ID查找单个订购详情
 export function findOrderDetailById(orderId: string): OrderDetail | undefined {
   return placeholderOrderDetails.find(order => order.id === orderId);
+}
+
+// 根据芯片ID和搜索查询查找订购详情（支持精确匹配特定订购型号）
+export function findOrderDetailsByChipIdAndQuery(chipId: string, searchQuery?: string): OrderDetail[] {
+  // 先获取该芯片的所有订购详情
+  let results = findOrderDetailsByChipId(chipId);
+
+  // 如果有搜索查询，检查是否是精确的订购型号搜索
+  if (searchQuery && searchQuery.trim()) {
+    const lowerQuery = searchQuery.toLowerCase().trim();
+
+    // 检查搜索查询是否是完整的订购型号
+    const exactOrderDetail = placeholderOrderDetails.find(orderDetail =>
+      orderDetail.model.toLowerCase() === lowerQuery
+    );
+
+    if (exactOrderDetail && exactOrderDetail.chipId === chipId) {
+      // 如果是精确的订购型号搜索，只返回该订购详情
+      results = [exactOrderDetail];
+    }
+    // 否则返回所有订购详情（默认行为）
+  }
+
+  return results;
 }

@@ -24,6 +24,8 @@ export interface Chip {
   status?: string; // 产品状态：量产、停产等
   package?: string; // 封装类型
   price?: string; // 参考价格
+  // 图片相关字段
+  applicationImageUrl?: string; // 应用图片URL
 }
 
 export interface AlternativeChip extends Chip {
