@@ -855,7 +855,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                               <div>封装</div>
                               <div>引脚</div>
                               <div className="text-left">
-                                CAD 符号、封装和 3D 模型
+                                CAD 模型
                               </div>
                             </div>
 
