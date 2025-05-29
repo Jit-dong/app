@@ -194,53 +194,59 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
             )}
 
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {chip.model}
-                </h1>
-                <div className="flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 rounded-full">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-xs font-medium text-green-600 dark:text-green-400">量产</span>
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      {chip.model}
+                    </h1>
+                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 rounded-full">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-xs font-medium text-green-600 dark:text-green-400">量产</span>
+                    </div>
+                  </div>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
+                    {chip.displayDescription}
+                  </p>
+                  <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                    <div>封装: <span className="font-medium text-gray-900 dark:text-gray-100">SOT-23-THN</span></div>
+                    <div>分类: <span className="font-medium text-gray-900 dark:text-gray-100">电源管理芯片\直流直流变换器\降压型稳压器</span></div>
+                  </div>
                 </div>
-              </div>
-              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
-                {chip.displayDescription}
-              </p>
-              <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                <div>封装: <span className="font-medium text-gray-900 dark:text-gray-100">SOT-23-THN</span></div>
-                <div>分类: <span className="font-medium text-gray-900 dark:text-gray-100">电源管理芯片\直流直流变换器\降压型稳压器</span></div>
+
+                {/* 数据手册按钮 - 右上角 */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-blue-600 border-blue-200 hover:bg-blue-50 flex-shrink-0 ml-4"
+                  onClick={() => {
+                    if (chip.datasheetUrl) {
+                      // 创建一个临时的下载链接
+                      const link = document.createElement('a');
+                      link.href = chip.datasheetUrl;
+                      link.download = `${chip.model}_datasheet.pdf`;
+                      link.target = '_blank';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+
+                      // 显示下载提示
+                      toast({
+                        title: "数据手册下载",
+                        description: `正在下载 ${chip.model} 数据手册...`,
+                      });
+                    }
+                  }}
+                >
+                  <Download className="h-4 w-4 mr-1" />
+                  数据手册
+                </Button>
               </div>
             </div>
           </div>
 
-          {/* 操作按钮 */}
+          {/* 产品订购区域 */}
           <div className="space-y-3">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full text-blue-600 border-blue-200 hover:bg-blue-50"
-              onClick={() => {
-                if (chip.datasheetUrl) {
-                  // 创建一个临时的下载链接
-                  const link = document.createElement('a');
-                  link.href = chip.datasheetUrl;
-                  link.download = `${chip.model}_datasheet.pdf`;
-                  link.target = '_blank';
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-
-                  // 显示下载提示
-                  toast({
-                    title: "数据手册下载",
-                    description: `正在下载 ${chip.model} 数据手册...`,
-                  });
-                }
-              }}
-            >
-              <Download className="h-4 w-4 mr-1" />
-              数据手册
-            </Button>
 
             {/* 产品订购区域 - 仅对TPS563201显示 */}
             {chip.model === 'TPS563201' && (
@@ -347,20 +353,23 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                     <div className="relative">
                       <div className="flex justify-center">
                         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 relative">
-                          <Image
-                            src={productImages[currentImageIndex].src}
-                            alt={productImages[currentImageIndex].alt}
-                            width={500}
-                            height={400}
-                            className="object-contain max-w-full h-auto transition-all duration-300"
-                            onError={(e) => {
-                              // 如果图片加载失败，显示占位符
-                              e.currentTarget.style.display = 'none';
-                              const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
-                              if (placeholder) placeholder.style.display = 'flex';
-                            }}
-                          />
-                          <div className="hidden items-center justify-center h-64 bg-gray-100 dark:bg-gray-700 rounded text-gray-500 dark:text-gray-400">
+                          {/* 固定尺寸的图片容器 */}
+                          <div className="w-[500px] h-[400px] flex items-center justify-center">
+                            <Image
+                              src={productImages[currentImageIndex].src}
+                              alt={productImages[currentImageIndex].alt}
+                              width={500}
+                              height={400}
+                              className="object-contain max-w-full max-h-full transition-all duration-300"
+                              onError={(e) => {
+                                // 如果图片加载失败，显示占位符
+                                e.currentTarget.style.display = 'none';
+                                const placeholder = e.currentTarget.parentElement?.nextElementSibling as HTMLElement;
+                                if (placeholder) placeholder.style.display = 'flex';
+                              }}
+                            />
+                          </div>
+                          <div className="hidden items-center justify-center w-[500px] h-[400px] bg-gray-100 dark:bg-gray-700 rounded text-gray-500 dark:text-gray-400">
                             <div className="text-center">
                               <FileImage className="h-16 w-16 mx-auto mb-3" />
                               <p className="text-lg font-medium">{productImages[currentImageIndex].title}</p>
