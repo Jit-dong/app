@@ -1,13 +1,15 @@
 // 搜索建议数据
+import { placeholderChips, placeholderOrderDetails, placeholderReferenceDesigns, placeholderTechnicalDocuments, placeholderApplicationGuides } from './placeholder-data';
 
 export interface SearchSuggestion {
   id: string;
   text: string;
-  type: 'recent' | 'popular' | 'match' | 'category' | 'brand' | 'series';
+  type: 'recent' | 'popular' | 'match' | 'category' | 'brand' | 'series' | 'model' | 'package' | 'parameter' | 'application' | 'tag';
   category?: string;
   count?: number;
   description?: string;
   brand?: string;
+  source?: 'chip' | 'order' | 'reference' | 'document' | 'guide'; // 数据来源
 }
 
 // 热门搜索建议
@@ -64,13 +66,150 @@ export const seriesSuggestions: SearchSuggestion[] = [
   { id: 's8', text: 'AD系列', type: 'series', brand: 'Analog Devices', description: '模拟器件' },
 ];
 
+// 从项目数据动态生成搜索建议
+function generateDynamicSuggestions(): SearchSuggestion[] {
+  const suggestions: SearchSuggestion[] = [];
+
+  // 1. 从芯片数据生成建议
+  placeholderChips.forEach((chip, index) => {
+    // 芯片型号
+    suggestions.push({
+      id: `chip-model-${chip.id}`,
+      text: chip.model,
+      type: 'model',
+      description: chip.description,
+      brand: chip.manufacturer,
+      source: 'chip'
+    });
+
+    // 制造商
+    if (chip.manufacturer && !suggestions.find(s => s.text === chip.manufacturer && s.type === 'brand')) {
+      suggestions.push({
+        id: `chip-brand-${chip.manufacturer.replace(/\s+/g, '-')}`,
+        text: chip.manufacturer,
+        type: 'brand',
+        description: `${chip.manufacturer}的产品`,
+        source: 'chip'
+      });
+    }
+
+    // 分类
+    if (chip.category && !suggestions.find(s => s.text === chip.category && s.type === 'category')) {
+      suggestions.push({
+        id: `chip-category-${chip.category.replace(/\s+/g, '-')}`,
+        text: chip.category,
+        type: 'category',
+        description: `${chip.category}相关产品`,
+        source: 'chip'
+      });
+    }
+
+    // 封装类型
+    chip.packageTypes?.forEach(pkg => {
+      if (!suggestions.find(s => s.text === pkg && s.type === 'package')) {
+        suggestions.push({
+          id: `chip-package-${pkg.replace(/\s+/g, '-')}`,
+          text: pkg,
+          type: 'package',
+          description: `${pkg}封装的芯片`,
+          source: 'chip'
+        });
+      }
+    });
+
+    // 应用领域
+    chip.applications?.forEach(app => {
+      if (!suggestions.find(s => s.text === app && s.type === 'application')) {
+        suggestions.push({
+          id: `chip-app-${app.replace(/\s+/g, '-')}`,
+          text: app,
+          type: 'application',
+          description: `${app}应用的芯片`,
+          source: 'chip'
+        });
+      }
+    });
+
+    // 标签
+    chip.tags?.forEach(tag => {
+      if (!suggestions.find(s => s.text === tag && s.type === 'tag')) {
+        suggestions.push({
+          id: `chip-tag-${tag.replace(/\s+/g, '-')}`,
+          text: tag,
+          type: 'tag',
+          description: `${tag}相关芯片`,
+          source: 'chip'
+        });
+      }
+    });
+
+    // 参数（只取一些关键参数）
+    if (chip.parameters) {
+      Object.entries(chip.parameters).forEach(([key, value]) => {
+        if (value && ['Input Voltage', 'Output Current', 'Switching Frequency'].includes(key)) {
+          const paramText = `${key}: ${value}`;
+          if (!suggestions.find(s => s.text === paramText && s.type === 'parameter')) {
+            suggestions.push({
+              id: `chip-param-${key.replace(/\s+/g, '-')}-${index}`,
+              text: paramText,
+              type: 'parameter',
+              description: `具有${paramText}参数的芯片`,
+              source: 'chip'
+            });
+          }
+        }
+      });
+    }
+  });
+
+  // 2. 从订购详情生成建议
+  placeholderOrderDetails.forEach(order => {
+    // 订购型号
+    suggestions.push({
+      id: `order-model-${order.id}`,
+      text: order.model,
+      type: 'model',
+      description: `${order.model} - ${order.package}封装`,
+      source: 'order'
+    });
+
+    // 封装类型
+    if (!suggestions.find(s => s.text === order.package && s.type === 'package')) {
+      suggestions.push({
+        id: `order-package-${order.package.replace(/\s+/g, '-')}`,
+        text: order.package,
+        type: 'package',
+        description: `${order.package}封装的产品`,
+        source: 'order'
+      });
+    }
+
+    // 丝印
+    if (order.silkscreen && !suggestions.find(s => s.text === order.silkscreen && s.type === 'tag')) {
+      suggestions.push({
+        id: `order-silk-${order.silkscreen}`,
+        text: order.silkscreen,
+        type: 'tag',
+        description: `丝印${order.silkscreen}的芯片`,
+        source: 'order'
+      });
+    }
+  });
+
+  return suggestions;
+}
+
 // 获取搜索建议的函数
 export function getSearchSuggestions(query: string = '', limit: number = 8): SearchSuggestion[] {
+  // 获取动态生成的建议
+  const dynamicSuggestions = generateDynamicSuggestions();
+
   if (!query.trim()) {
-    // 没有查询时返回热门搜索和分类
+    // 没有查询时返回热门搜索、分类和一些动态建议
     return [
-      ...popularSuggestions.slice(0, 5),
-      ...categorySuggestions.slice(0, 3),
+      ...popularSuggestions.slice(0, 3),
+      ...categorySuggestions.slice(0, 2),
+      ...dynamicSuggestions.filter(s => s.type === 'model').slice(0, 3),
     ].slice(0, limit);
   }
 
@@ -80,33 +219,34 @@ export function getSearchSuggestions(query: string = '', limit: number = 8): Sea
     ...categorySuggestions,
     ...brandSuggestions,
     ...seriesSuggestions,
+    ...dynamicSuggestions,
   ];
 
-  // 精确匹配（开头匹配）
+  // 精确匹配（开头匹配）- 优先级最高
   const exactMatches = allSuggestions.filter(s =>
     s.text.toLowerCase().startsWith(lowerQuery)
   );
 
-  // 包含匹配
+  // 包含匹配 - 优先级中等
   const containsMatches = allSuggestions.filter(s =>
     s.text.toLowerCase().includes(lowerQuery) &&
     !s.text.toLowerCase().startsWith(lowerQuery)
   );
 
-  // 描述匹配
+  // 描述匹配 - 优先级较低
   const descriptionMatches = allSuggestions.filter(s =>
     s.description?.toLowerCase().includes(lowerQuery) &&
     !s.text.toLowerCase().includes(lowerQuery)
   );
 
-  // 品牌匹配
+  // 品牌匹配 - 优先级较低
   const brandMatches = allSuggestions.filter(s =>
     s.brand?.toLowerCase().includes(lowerQuery) &&
     !s.text.toLowerCase().includes(lowerQuery) &&
     !s.description?.toLowerCase().includes(lowerQuery)
   );
 
-  // 合并结果并标记为匹配类型
+  // 合并结果并标记为匹配类型，保持优先级顺序
   const results = [
     ...exactMatches.map(s => ({ ...s, type: 'match' as const })),
     ...containsMatches.map(s => ({ ...s, type: 'match' as const })),

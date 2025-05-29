@@ -140,6 +140,11 @@ export default function EnhancedSearchBar({
       case 'category': return '分类';
       case 'brand': return '品牌';
       case 'series': return '系列';
+      case 'model': return '型号';
+      case 'package': return '封装';
+      case 'parameter': return '参数';
+      case 'application': return '应用';
+      case 'tag': return '标签';
       default: return '';
     }
   };
