@@ -26,6 +26,8 @@ export interface Chip {
   price?: string; // 参考价格
   // 图片相关字段
   applicationImageUrl?: string; // 应用图片URL
+  // 技术文章相关字段
+  technicalArticles?: TechnicalArticle[]; // 技术文章列表
 }
 
 export interface AlternativeChip extends Chip {
@@ -115,6 +117,17 @@ export interface OrderDetail {
     moq: string;
     rating: number;
   }[];
+}
+
+// 技术文章接口（用于芯片详情页）
+export interface TechnicalArticle {
+  id: number;
+  title: string;
+  type: string; // 文档类型：数据表、应用说明、技术文章等
+  date: string; // 发布日期
+  author: string; // 作者
+  pdfUrl?: string; // PDF链接
+  htmlUrl?: string | null; // HTML链接
 }
 
 // 丝印反查数据类型

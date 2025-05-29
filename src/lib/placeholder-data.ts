@@ -129,7 +129,99 @@ export const placeholderChips: Chip[] = [
     rohsCompliant: true,
     lowPower: false,
     imageUrl: '/brands/image_cp/TPS563201.png',
-    applicationImageUrl: '/brands/image_cp/TPS563201_.png'
+    applicationImageUrl: '/brands/image_cp/TPS563201_.png',
+    technicalArticles: [
+      {
+        id: 1,
+        title: '采用 SOT-23 封装的 TPS56320x 4.5V 至 17V 输入、3A 同步降压稳压器数据表 (Rev. B)',
+        type: '数据表',
+        date: '2024年9月3日',
+        author: 'Texas Instruments',
+        pdfUrl: 'https://www.ti.com/lit/ds/symlink/tps563201.pdf',
+        htmlUrl: 'https://www.ti.com/product/TPS563201'
+      },
+      {
+        id: 2,
+        title: '中档 VIN 的 3A DC/DC 降压转换器选择指南',
+        type: '应用说明',
+        date: '2023年8月3日',
+        author: 'Texas Instruments',
+        pdfUrl: '#',
+        htmlUrl: '#'
+      },
+      {
+        id: 3,
+        title: '如何实现 SOT-563 封装与 SOT-236 封装之间的协同布局 (Rev. A)',
+        type: '应用说明',
+        date: '2023年7月10日',
+        author: 'Texas Instruments',
+        pdfUrl: '#',
+        htmlUrl: '#'
+      },
+      {
+        id: 4,
+        title: 'TPS563201 降压转换器评估模块用户指南 (Rev. A)',
+        type: 'EVM 用户指南',
+        date: '2021年7月8日',
+        author: 'Texas Instruments',
+        pdfUrl: '#',
+        htmlUrl: '#'
+      },
+      {
+        id: 5,
+        title: '降压转换器快速参考指南 (Rev. B)',
+        type: '选择指南',
+        date: '2021年4月8日',
+        author: 'Texas Instruments',
+        pdfUrl: '#',
+        htmlUrl: null
+      },
+      {
+        id: 6,
+        title: '了解和管理降压调节器输出纹波',
+        type: '技术文章',
+        date: '2020年6月18日',
+        author: 'Texas Instruments',
+        pdfUrl: '#',
+        htmlUrl: '#'
+      },
+      {
+        id: 7,
+        title: '可扩展性的优势：从 Peter Parker 到 pin-strapping',
+        type: '技术文章',
+        date: '2020年4月30日',
+        author: 'Texas Instruments',
+        pdfUrl: '#',
+        htmlUrl: '#'
+      },
+      {
+        id: 8,
+        title: '具有不同类型电容器的 D-CAP2TM 转换器的稳定性',
+        type: '应用说明',
+        date: '2019年12月1日',
+        author: 'Texas Instruments',
+        pdfUrl: '#',
+        htmlUrl: null
+      },
+      {
+        id: 9,
+        title: '减少 DC/DC 开关调节器 MLCC 数量的选项',
+        type: '技术文章',
+        date: '2019年9月17日',
+        author: 'Texas Instruments',
+        pdfUrl: '#',
+        htmlUrl: '#'
+      },
+      {
+        id: 10,
+        title: 'SOT23 封装热考虑',
+        type: '应用说明',
+        date: '2018年3月2日',
+        author: 'Texas Instruments',
+        pdfUrl: '#',
+        htmlUrl: null
+      }
+    ]
   },
   {
     id: 'STM32F407VGT6',

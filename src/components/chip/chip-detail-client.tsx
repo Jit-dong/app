@@ -42,6 +42,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ProcessedChip extends Chip {
   displayManufacturer: string;
@@ -57,6 +58,8 @@ interface ChipDetailClientProps {
 export default function ChipDetailClient({ chip, featuresList }: ChipDetailClientProps) {
   const { toast } = useToast();
   const [currentUrl, setCurrentUrl] = useState('');
+  const [isOrderInfoExpanded, setIsOrderInfoExpanded] = useState(false);
+  const [showAllArticles, setShowAllArticles] = useState(false);
 
   useEffect(() => {
     // Ensure window object is available before accessing location
@@ -173,7 +176,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
           </div>
 
           {/* 操作按钮 */}
-          <div className="flex gap-2">
+          <div className="space-y-3">
             <Button
               variant="outline"
               size="sm"
@@ -200,6 +203,74 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
               <Download className="h-4 w-4 mr-1" />
               数据手册
             </Button>
+
+            {/* 产品订购区域 - 仅对TPS563201显示 */}
+            {chip.model === 'TPS563201' && (
+              <div className="border border-orange-200 dark:border-orange-700 rounded-lg overflow-hidden">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 justify-between p-3"
+                  onClick={() => setIsOrderInfoExpanded(!isOrderInfoExpanded)}
+                >
+                  <div className="flex items-center gap-2">
+                    <ShoppingCart className="h-4 w-4" />
+                    <span>产品订购</span>
+                  </div>
+                  {isOrderInfoExpanded ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </Button>
+
+                {isOrderInfoExpanded && (
+                  <div className="p-4 bg-orange-50 dark:bg-orange-950/10 border-t border-orange-200 dark:border-orange-700">
+                    <div className="space-y-3 text-sm">
+                      {/* 产品订购型号 */}
+                      <div>
+                        <h5 className="font-medium text-orange-900 dark:text-orange-100 mb-2">产品订购型号 (Orderable Part Numbers):</h5>
+                        <ul className="space-y-1 text-gray-700 dark:text-gray-300">
+                          <li>• TPS563201DDCR (SOT-23-6, Tape and Reel)</li>
+                          <li>• TPS563201DDA (HSOIC-8, Tape and Reel)</li>
+                        </ul>
+                        <Link href={`/chip/${chip.id}/purchase`} passHref legacyBehavior>
+                          <Button variant="outline" size="sm" className="mt-2 text-xs">
+                            查看完整订购信息
+                          </Button>
+                        </Link>
+                      </div>
+
+                      <Separator className="bg-orange-200 dark:bg-orange-700" />
+
+                      {/* 其他订购信息 */}
+                      <div className="grid grid-cols-1 gap-2 text-xs">
+                        <div>
+                          <span className="font-medium text-orange-900 dark:text-orange-100">生命周期 (订购时状态):</span>
+                          <span className="ml-2 text-green-600 dark:text-green-400">ACTIVE (量产)</span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-orange-900 dark:text-orange-100">工作温度:</span>
+                          <span className="ml-2">–40°C to 125°C (Junction Temperature)</span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-orange-900 dark:text-orange-100">应用等级:</span>
+                          <span className="ml-2">汽车级</span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-orange-900 dark:text-orange-100">环保等级:</span>
+                          <span className="ml-2">RoHS Compliant, Green (Lead/Halogen-Free)</span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-orange-900 dark:text-orange-100">潮湿等级 (MSL):</span>
+                          <span className="ml-2">Level 1</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -366,21 +437,57 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
             <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">详细信息</h2>
 
             {/* 详细信息标签页 */}
-            <Tabs defaultValue="parameters" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg mb-4">
-                <TabsTrigger value="parameters" className="text-sm">
+            <Tabs defaultValue="circuit" className="w-full">
+              <TabsList className="grid w-full grid-cols-5 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg mb-4">
+                <TabsTrigger value="circuit" className="text-xs">
+                  典型应用电路图
+                </TabsTrigger>
+                <TabsTrigger value="parameters" className="text-xs">
                   参数
                 </TabsTrigger>
-                <TabsTrigger value="package" className="text-sm">
+                <TabsTrigger value="package" className="text-xs">
                   封装 | 引脚 | 尺寸
                 </TabsTrigger>
-                <TabsTrigger value="features" className="text-sm">
+                <TabsTrigger value="features" className="text-xs">
                   特性
                 </TabsTrigger>
-                <TabsTrigger value="description" className="text-sm">
+                <TabsTrigger value="description" className="text-xs">
                   说明
                 </TabsTrigger>
               </TabsList>
+
+              {/* 典型应用电路图标签页 */}
+              <TabsContent value="circuit" className="mt-0">
+                <div className="space-y-4">
+                  <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4">
+                    <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-3">典型应用电路图</h4>
+                    <div className="flex justify-center">
+                      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <Image
+                          src="/brands/image_cp/TPS563201_.png"
+                          alt="TPS563201典型应用电路图"
+                          width={500}
+                          height={400}
+                          className="object-contain max-w-full h-auto"
+                          onError={(e) => {
+                            // 如果图片加载失败，显示占位符
+                            e.currentTarget.style.display = 'none';
+                            const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
+                            if (placeholder) placeholder.style.display = 'flex';
+                          }}
+                        />
+                        <div className="hidden items-center justify-center h-64 bg-gray-100 dark:bg-gray-700 rounded text-gray-500 dark:text-gray-400">
+                          <div className="text-center">
+                            <FileImage className="h-16 w-16 mx-auto mb-3" />
+                            <p className="text-lg font-medium">典型应用电路图</p>
+                            <p className="text-sm">TPS563201_.png</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
 
               {/* 参数标签页 */}
               <TabsContent value="parameters" className="mt-0">
@@ -499,34 +606,6 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                     </p>
                   </div>
 
-                  {/* 典型应用电路图 */}
-                  <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4">
-                    <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-3">典型应用电路图</h4>
-                    <div className="flex justify-center">
-                      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-                        <Image
-                          src="/brands/image_cp/TPS563201_.png"
-                          alt="TPS563201典型应用电路图"
-                          width={400}
-                          height={300}
-                          className="object-contain max-w-full h-auto"
-                          onError={(e) => {
-                            // 如果图片加载失败，显示占位符
-                            e.currentTarget.style.display = 'none';
-                            const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
-                            if (placeholder) placeholder.style.display = 'flex';
-                          }}
-                        />
-                        <div className="hidden items-center justify-center h-48 bg-gray-100 dark:bg-gray-700 rounded text-gray-500 dark:text-gray-400">
-                          <div className="text-center">
-                            <FileImage className="h-12 w-12 mx-auto mb-2" />
-                            <p>典型应用电路图</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                   <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-4">
                     <h4 className="font-medium text-green-900 dark:text-green-100 mb-2">主要特性</h4>
                     <ul className="space-y-1">
@@ -572,6 +651,83 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
             </Tabs>
           </div>
         </div>
+
+        {/* 技术文章板块 - 仅对TPS563201显示 */}
+        {chip.model === 'TPS563201' && chip.technicalArticles && chip.technicalArticles.length > 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 bg-indigo-500 rounded flex items-center justify-center">
+                  <BookOpen className="h-4 w-4 text-white" />
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">技术文章</h3>
+              </div>
+            </div>
+
+            <div className="p-4">
+              <div className="space-y-4 text-sm">
+                {chip.technicalArticles.slice(0, showAllArticles ? undefined : 5).map((article, index) => (
+                  <div key={article.id} className="border-l-2 border-gray-200 dark:border-gray-700 pl-4">
+                    <div className="flex items-start gap-2">
+                      <span className="text-gray-500 dark:text-gray-400 font-mono text-xs mt-1">
+                        [{index + 1}]
+                      </span>
+                      <div className="flex-1">
+                        <div className="text-gray-900 dark:text-gray-100 leading-relaxed">
+                          <span className="font-medium">{article.author}.</span>{' '}
+                          <span className="italic">"{article.title}"</span>{' '}
+                          <span className="text-blue-600 dark:text-blue-400">{article.type}</span>,{' '}
+                          <span className="text-gray-600 dark:text-gray-400">{article.date}</span>.
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                          {article.pdfUrl && article.pdfUrl !== '#' && (
+                            <button
+                              onClick={() => window.open(article.pdfUrl, '_blank')}
+                              className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400 rounded transition-colors"
+                            >
+                              <FileText className="h-3 w-3" />
+                              PDF
+                            </button>
+                          )}
+                          {article.htmlUrl && article.htmlUrl !== '#' && (
+                            <button
+                              onClick={() => window.open(article.htmlUrl!, '_blank')}
+                              className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-400 rounded transition-colors"
+                            >
+                              <Eye className="h-3 w-3" />
+                              HTML
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {chip.technicalArticles.length > 5 && (
+                  <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={() => setShowAllArticles(!showAllArticles)}
+                      className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                    >
+                      {showAllArticles ? (
+                        <>
+                          <ChevronUp className="h-4 w-4" />
+                          显示较少文章
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="h-4 w-4" />
+                          显示更多文章 ({chip.technicalArticles.length - 5}篇)
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
