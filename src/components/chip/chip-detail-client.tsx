@@ -11,7 +11,7 @@ import {
   Share2,
   FileText,
   Phone,
-  ChevronRight,
+
   Square,
   Download,
   Mail,
@@ -22,27 +22,17 @@ import {
   BookOpen,
   FileImage,
   Users,
-  Settings,
-  Code,
+
   ShoppingCart,
-  Star,
   Heart,
   Eye,
-  Layers,
-  Shield,
-  Award,
-  Target,
-  Briefcase,
-  Database,
-  GitBranch,
-  BarChart3,
-  Wrench
+  GitBranch
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ProcessedChip extends Chip {
   displayManufacturer: string;
@@ -60,6 +50,43 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
   const [currentUrl, setCurrentUrl] = useState('');
   const [isOrderInfoExpanded, setIsOrderInfoExpanded] = useState(false);
   const [showAllArticles, setShowAllArticles] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  // 产品详情图片数据
+  const productImages = [
+    {
+      src: "/brands/image_cp/TPS563201_.png",
+      title: "典型应用电路图",
+      alt: "TPS563201典型应用电路图"
+    },
+    {
+      src: "/brands/image_cp/TPS563201.png",
+      title: "引脚图",
+      alt: "TPS563201引脚图"
+    }
+  ];
+
+  // 切换到下一张图片
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
+    setIsAutoPlaying(false); // 手动操作时暂停自动播放
+    setTimeout(() => setIsAutoPlaying(true), 8000); // 8秒后恢复自动播放
+  };
+
+  // 切换到上一张图片
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + productImages.length) % productImages.length);
+    setIsAutoPlaying(false); // 手动操作时暂停自动播放
+    setTimeout(() => setIsAutoPlaying(true), 8000); // 8秒后恢复自动播放
+  };
+
+  // 切换到指定图片
+  const goToImage = (index: number) => {
+    setCurrentImageIndex(index);
+    setIsAutoPlaying(false); // 手动操作时暂停自动播放
+    setTimeout(() => setIsAutoPlaying(true), 8000); // 8秒后恢复自动播放
+  };
 
   useEffect(() => {
     // Ensure window object is available before accessing location
@@ -67,6 +94,17 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
       setCurrentUrl(window.location.href);
     }
   }, []);
+
+  // 自动轮播效果
+  useEffect(() => {
+    if (!isAutoPlaying || productImages.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
+    }, 4000); // 每4秒切换一次
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, productImages.length]);
 
 
   const handleShare = async () => {
@@ -274,163 +312,6 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
           </div>
         </div>
 
-        {/* 芯片产品功能模块 - 严格按照层级图设计 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
-                <Cpu className="h-4 w-4 text-white" />
-              </div>
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100">芯片产品</h3>
-            </div>
-          </div>
-
-          <div className="p-4 space-y-3">
-            {/* 产品详情 */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-              <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/20 hover:bg-green-100 dark:hover:bg-green-950/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                    <BookOpen className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">产品详情</h4>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                  <div>• 特性、说明、典型应用</div>
-                  <div>• 典型应用电路图、封装引脚图、功能框图</div>
-                </div>
-              </div>
-            </div>
-
-            {/* 功能参数 */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-              <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-950/20 hover:bg-purple-100 dark:hover:bg-purple-950/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                    <Settings className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">功能参数</h4>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <div className="text-xs text-gray-600 dark:text-gray-400">
-                  • 拓扑架构、参数指标、保护功能、辅助功能
-                </div>
-              </div>
-            </div>
-
-            {/* 相似产品 */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-              <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 hover:bg-orange-100 dark:hover:bg-orange-950/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                    <GitBranch className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">相似产品</h4>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                  <div>• 完全兼容、p2p兼容、功能相似、封装相同</div>
-                  <div>• 国产品牌、国外品牌、相同品牌</div>
-                </div>
-              </div>
-            </div>
-
-            {/* 技术文章 */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-              <div className="flex items-center justify-between p-3 bg-teal-50 dark:bg-teal-950/20 hover:bg-teal-100 dark:hover:bg-teal-950/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
-                    <FileImage className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">技术文章</h4>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <div className="text-xs text-gray-600 dark:text-gray-400">
-                  • 应用指南、产品介绍、测试报告等
-                </div>
-              </div>
-            </div>
-
-            {/* 参考设计 */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-              <div className="flex items-center justify-between p-3 bg-indigo-50 dark:bg-indigo-950/20 hover:bg-indigo-100 dark:hover:bg-indigo-950/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
-                    <Code className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">参考设计</h4>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <div className="text-xs text-gray-600 dark:text-gray-400">
-                  • 参考设计名称、介绍、SCH、PCB、BOM、测试报告等
-                </div>
-              </div>
-            </div>
-
-            {/* 设计开发 */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-              <div className="flex items-center justify-between p-3 bg-pink-50 dark:bg-pink-950/20 hover:bg-pink-100 dark:hover:bg-pink-950/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
-                    <Target className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">设计开发</h4>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <div className="text-xs text-gray-600 dark:text-gray-400">
-                  • CAD符号、封装、仿真模型
-                </div>
-              </div>
-            </div>
-
-            {/* 产品订购 */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-              <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-950/20 hover:bg-red-100 dark:hover:bg-red-950/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
-                    <ShoppingCart className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">产品订购</h4>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                  <div>• 器件网络号、生命周期、工作温度、应用等级、环保等级</div>
-                  <div>• 采购渠道、价格、库存、交期</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* 详细信息展示区域 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
           <div className="p-4">
@@ -440,7 +321,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
             <Tabs defaultValue="circuit" className="w-full">
               <TabsList className="grid w-full grid-cols-5 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg mb-4">
                 <TabsTrigger value="circuit" className="text-xs">
-                  典型应用电路图
+                  产品详情
                 </TabsTrigger>
                 <TabsTrigger value="parameters" className="text-xs">
                   参数
@@ -456,33 +337,69 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                 </TabsTrigger>
               </TabsList>
 
-              {/* 典型应用电路图标签页 */}
+              {/* 产品详情标签页 */}
               <TabsContent value="circuit" className="mt-0">
                 <div className="space-y-4">
                   <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4">
-                    <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-3">典型应用电路图</h4>
-                    <div className="flex justify-center">
-                      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-                        <Image
-                          src="/brands/image_cp/TPS563201_.png"
-                          alt="TPS563201典型应用电路图"
-                          width={500}
-                          height={400}
-                          className="object-contain max-w-full h-auto"
-                          onError={(e) => {
-                            // 如果图片加载失败，显示占位符
-                            e.currentTarget.style.display = 'none';
-                            const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
-                            if (placeholder) placeholder.style.display = 'flex';
-                          }}
-                        />
-                        <div className="hidden items-center justify-center h-64 bg-gray-100 dark:bg-gray-700 rounded text-gray-500 dark:text-gray-400">
-                          <div className="text-center">
-                            <FileImage className="h-16 w-16 mx-auto mb-3" />
-                            <p className="text-lg font-medium">典型应用电路图</p>
-                            <p className="text-sm">TPS563201_.png</p>
+                    <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-3 transition-all duration-300">
+                      {productImages[currentImageIndex].title}
+                    </h4>
+                    <div className="relative">
+                      <div className="flex justify-center">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 relative">
+                          <Image
+                            src={productImages[currentImageIndex].src}
+                            alt={productImages[currentImageIndex].alt}
+                            width={500}
+                            height={400}
+                            className="object-contain max-w-full h-auto transition-all duration-300"
+                            onError={(e) => {
+                              // 如果图片加载失败，显示占位符
+                              e.currentTarget.style.display = 'none';
+                              const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
+                              if (placeholder) placeholder.style.display = 'flex';
+                            }}
+                          />
+                          <div className="hidden items-center justify-center h-64 bg-gray-100 dark:bg-gray-700 rounded text-gray-500 dark:text-gray-400">
+                            <div className="text-center">
+                              <FileImage className="h-16 w-16 mx-auto mb-3" />
+                              <p className="text-lg font-medium">{productImages[currentImageIndex].title}</p>
+                              <p className="text-sm">{productImages[currentImageIndex].src.split('/').pop()}</p>
+                            </div>
                           </div>
+
+                          {/* 左右切换按钮 */}
+                          <button
+                            onClick={prevImage}
+                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full p-2 shadow-md border border-gray-200 dark:border-gray-600 transition-colors"
+                            aria-label="上一张图片"
+                          >
+                            <ChevronLeft className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                          </button>
+                          <button
+                            onClick={nextImage}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full p-2 shadow-md border border-gray-200 dark:border-gray-600 transition-colors"
+                            aria-label="下一张图片"
+                          >
+                            <ChevronRight className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                          </button>
                         </div>
+                      </div>
+
+                      {/* 指示器圆点 */}
+                      <div className="flex justify-center mt-4 space-x-2">
+                        {productImages.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => goToImage(index)}
+                            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                              index === currentImageIndex
+                                ? 'bg-purple-500 dark:bg-purple-400'
+                                : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                            }`}
+                            aria-label={`切换到第${index + 1}张图片`}
+                          />
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -668,38 +585,39 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
               <div className="space-y-4 text-sm">
                 {chip.technicalArticles.slice(0, showAllArticles ? undefined : 5).map((article, index) => (
                   <div key={article.id} className="border-l-2 border-gray-200 dark:border-gray-700 pl-4">
-                    <div className="flex items-start gap-2">
-                      <span className="text-gray-500 dark:text-gray-400 font-mono text-xs mt-1">
-                        [{index + 1}]
-                      </span>
-                      <div className="flex-1">
-                        <div className="text-gray-900 dark:text-gray-100 leading-relaxed">
-                          <span className="font-medium">{article.author}.</span>{' '}
-                          <span className="italic">"{article.title}"</span>{' '}
-                          <span className="text-blue-600 dark:text-blue-400">{article.type}</span>,{' '}
-                          <span className="text-gray-600 dark:text-gray-400">{article.date}</span>.
-                        </div>
-                        <div className="flex items-center gap-2 mt-2">
-                          {article.pdfUrl && article.pdfUrl !== '#' && (
-                            <button
-                              onClick={() => window.open(article.pdfUrl, '_blank')}
-                              className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-700 dark:text-red-400 rounded transition-colors"
-                            >
-                              <FileText className="h-3 w-3" />
-                              PDF
-                            </button>
-                          )}
-                          {article.htmlUrl && article.htmlUrl !== '#' && (
-                            <button
-                              onClick={() => window.open(article.htmlUrl!, '_blank')}
-                              className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-400 rounded transition-colors"
-                            >
-                              <Eye className="h-3 w-3" />
-                              HTML
-                            </button>
-                          )}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-2 flex-1">
+                        <span className="text-gray-500 dark:text-gray-400 font-mono text-xs mt-1">
+                          [{index + 1}]
+                        </span>
+                        <div className="flex-1">
+                          <div className="text-gray-900 dark:text-gray-100 leading-relaxed">
+                            <span className="font-medium">{article.author}.</span>{' '}
+                            <span className="italic">"{article.title}"</span>{' '}
+                            <span className="text-blue-600 dark:text-blue-400">{article.type}</span>,{' '}
+                            <span className="text-gray-600 dark:text-gray-400">{article.date}</span>.
+                          </div>
                         </div>
                       </div>
+
+                      {/* PDF下载图标 */}
+                      <button
+                        onClick={() => {
+                          if (article.pdfUrl && article.pdfUrl !== '#') {
+                            window.open(article.pdfUrl, '_blank');
+                          } else {
+                            toast({
+                              title: "PDF暂不可用",
+                              description: "该文档的PDF版本暂时无法下载",
+                              variant: "destructive",
+                            });
+                          }
+                        }}
+                        className="flex-shrink-0 p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                        title="下载PDF"
+                      >
+                        <FileText className="h-5 w-5" />
+                      </button>
                     </div>
                   </div>
                 ))}
