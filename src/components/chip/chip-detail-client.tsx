@@ -31,7 +31,7 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ProcessedChip extends Chip {
   displayManufacturer: string;
@@ -44,37 +44,7 @@ interface ChipDetailClientProps {
   featuresList: { text: string; subItems?: string[] }[];
 }
 
-// 滚动文字组件
-const ScrollingText = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
-  const textRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [shouldScroll, setShouldScroll] = useState(false);
 
-  useEffect(() => {
-    const checkOverflow = () => {
-      if (textRef.current && containerRef.current) {
-        const textWidth = textRef.current.scrollWidth;
-        const containerWidth = containerRef.current.clientWidth;
-        setShouldScroll(textWidth > containerWidth);
-      }
-    };
-
-    checkOverflow();
-    window.addEventListener('resize', checkOverflow);
-    return () => window.removeEventListener('resize', checkOverflow);
-  }, [children]);
-
-  return (
-    <div ref={containerRef} className={`overflow-hidden ${className}`}>
-      <div
-        ref={textRef}
-        className={`whitespace-nowrap ${shouldScroll ? 'animate-marquee' : ''}`}
-      >
-        {children}
-      </div>
-    </div>
-  );
-};
 
 export default function ChipDetailClient({ chip, featuresList }: ChipDetailClientProps) {
   const { toast } = useToast();
@@ -881,18 +851,16 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                           {/* CAD 资源表格 */}
                           <div className="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden">
                             {/* 表头 */}
-                            <div className="grid grid-cols-3 gap-4 p-3 bg-gray-100 dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            <div className="grid grid-cols-3 gap-2 px-2 py-3 bg-gray-100 dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-gray-100">
                               <div>封装</div>
                               <div>引脚</div>
-                              <div>
-                                <ScrollingText>
-                                  CAD 符号、封装和 3D 模型
-                                </ScrollingText>
+                              <div className="text-left">
+                                CAD 符号、封装和 3D 模型
                               </div>
                             </div>
 
                             {/* 表格内容 */}
-                            <div className="grid grid-cols-3 gap-4 p-3 text-sm">
+                            <div className="grid grid-cols-3 gap-2 px-2 py-3 text-sm">
                               <div className="text-blue-600 dark:text-blue-400">
                                 SOT-23-THIN<br/>
                                 <span className="text-gray-500 dark:text-gray-400 text-xs">(DDC)</span>
