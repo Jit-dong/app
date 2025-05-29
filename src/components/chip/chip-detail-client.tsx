@@ -696,25 +696,66 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
               {/* 设计开发标签页 */}
               <TabsContent value="design-development" className="mt-0">
                 <div className="space-y-4">
-                  {/* 设计工具的资源 */}
+                  {/* 设计工具和模拟 */}
                   <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
                     <button
                       onClick={() => toggleDesignDevSection('designTools')}
                       className="w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <span className="font-medium text-gray-900 dark:text-gray-100">设计工具的资源</span>
+                      <span className="font-medium text-gray-900 dark:text-gray-100">设计工具和模拟</span>
                       <ChevronDown className={`h-5 w-5 text-gray-500 transition-transform ${designDevSections.designTools ? 'rotate-180' : ''}`} />
                     </button>
                     {designDevSections.designTools && (
                       <div className="px-3 pb-3 border-t border-gray-200 dark:border-gray-700">
-                        <div className="pt-3 text-sm text-gray-600 dark:text-gray-400">
-                          <p>设计工具资源内容正在准备中...</p>
-                          <ul className="mt-2 space-y-1 text-xs">
-                            <li>• 功率损耗计算器</li>
-                            <li>• 效率计算器</li>
-                            <li>• 热阻计算器</li>
-                            <li>• 设计指南文档</li>
-                          </ul>
+                        <div className="pt-3">
+                          {/* 仿真模型卡片 */}
+                          <div className="flex items-center gap-4 p-4 bg-orange-50/50 dark:bg-orange-950/20 rounded-lg border border-orange-200 dark:border-orange-700">
+                            {/* 设计工具图片 */}
+                            <div className="flex-shrink-0">
+                              <Image
+                                src="/brands/image_cp/sjkf.png"
+                                alt="设计工具"
+                                width={80}
+                                height={60}
+                                className="rounded-lg border border-gray-200 dark:border-gray-600 object-contain bg-white dark:bg-gray-800 p-2"
+                                onError={(e) => {
+                                  // 如果图片加载失败，显示占位符
+                                  e.currentTarget.style.display = 'none';
+                                  const placeholder = e.currentTarget.parentElement?.nextElementSibling as HTMLElement;
+                                  if (placeholder) placeholder.style.display = 'flex';
+                                }}
+                              />
+                              {/* 图片加载失败的占位符 */}
+                              <div className="hidden items-center justify-center w-20 h-15 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                <Package className="h-8 w-8 text-gray-400" />
+                              </div>
+                            </div>
+
+                            {/* 仿真模型信息 */}
+                            <div className="flex-1">
+                              <h5 className="text-orange-600 dark:text-orange-400 font-medium text-sm hover:underline cursor-pointer transition-colors">
+                                TPS563201 未加密 PSpice 瞬态模型包 (Rev. B)
+                              </h5>
+                              <p className="text-gray-600 dark:text-gray-400 text-xs mt-1">
+                                SLVMBD1B.ZIP (100 KB) - PSpice 模型
+                              </p>
+                            </div>
+
+                            {/* 下载按钮 - 橙色主题 */}
+                            <Button
+                              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 text-sm font-medium transition-all duration-300 hover:shadow-lg hover:shadow-orange-200/50 dark:hover:shadow-orange-900/30 flex-shrink-0"
+                              onClick={() => {
+                                toast({
+                                  title: "模型下载",
+                                  description: "正在下载 TPS563201 PSpice 模型包...",
+                                });
+                              }}
+                              title="下载 PSpice 仿真模型"
+                            >
+                              <Download className="h-4 w-4 mr-1.5" />
+                              下载
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     )}
