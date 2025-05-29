@@ -11,7 +11,6 @@ import {
   Share2,
   FileText,
   Phone,
-
   Square,
   Download,
   Mail,
@@ -21,17 +20,24 @@ import {
   Package,
   BookOpen,
   FileImage,
-
-
   ShoppingCart,
   Heart,
-  Eye
+  Eye,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from 'react';
-import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ProcessedChip extends Chip {
   displayManufacturer: string;
@@ -151,6 +157,66 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
     return () => clearInterval(interval);
   }, [isAutoPlaying, productImages.length]);
 
+
+  // 数据手册处理函数
+  const handleDatasheetOpen = () => {
+    if (chip.datasheetUrl) {
+      window.open(chip.datasheetUrl, '_blank');
+      toast({
+        title: "数据手册打开",
+        description: `正在新窗口中打开 ${chip.model} 数据手册...`,
+      });
+    } else {
+      toast({
+        title: "数据手册不可用",
+        description: "该芯片的数据手册暂时无法访问。",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDatasheetDownload = () => {
+    if (chip.datasheetUrl) {
+      const link = document.createElement('a');
+      link.href = chip.datasheetUrl;
+      link.download = `${chip.model}_datasheet.pdf`;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast({
+        title: "数据手册下载",
+        description: `正在下载 ${chip.model} 数据手册...`,
+      });
+    } else {
+      toast({
+        title: "数据手册不可用",
+        description: "该芯片的数据手册暂时无法下载。",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDatasheetEmail = () => {
+    if (chip.datasheetUrl) {
+      const subject = `${chip.model} 数据手册`;
+      const body = `您好，\n\n请查看 ${chip.model} 的数据手册：\n${chip.datasheetUrl}\n\n芯片信息：\n- 型号：${chip.model}\n- 制造商：${chip.manufacturer}\n- 描述：${chip.displayDescription}\n\n此邮件由芯片查询系统自动生成。`;
+      const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailtoUrl;
+
+      toast({
+        title: "邮件客户端已打开",
+        description: `已为您准备好 ${chip.model} 数据手册的邮件内容。`,
+      });
+    } else {
+      toast({
+        title: "数据手册不可用",
+        description: "该芯片的数据手册暂时无法通过邮件分享。",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleShare = async () => {
     if (navigator.share && currentUrl) {
@@ -278,33 +344,34 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                   </div>
                 </div>
 
-                {/* 数据手册按钮 - 右上角 */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-primary-600 border-primary-200 hover:bg-primary-50 dark:hover:bg-primary-950/20 flex-shrink-0 ml-4 transition-all duration-300 hover:shadow-primary hover:-translate-y-0.5"
-                  onClick={() => {
-                    if (chip.datasheetUrl) {
-                      // 创建一个临时的下载链接
-                      const link = document.createElement('a');
-                      link.href = chip.datasheetUrl;
-                      link.download = `${chip.model}_datasheet.pdf`;
-                      link.target = '_blank';
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-
-                      // 显示下载提示
-                      toast({
-                        title: "数据手册下载",
-                        description: `正在下载 ${chip.model} 数据手册...`,
-                      });
-                    }
-                  }}
-                >
-                  <Download className="h-4 w-4 mr-1" />
-                  数据手册
-                </Button>
+                {/* 数据手册下拉菜单 - 右上角 */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-primary-600 border-primary-200 hover:bg-primary-50 dark:hover:bg-primary-950/20 flex-shrink-0 ml-4 transition-all duration-300 hover:shadow-primary hover:-translate-y-0.5"
+                    >
+                      <FileText className="h-4 w-4 mr-1" />
+                      数据手册
+                      <ChevronDown className="h-3 w-3 ml-1" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-32">
+                    <DropdownMenuItem onClick={handleDatasheetOpen} className="cursor-pointer">
+                      <FileText className="h-4 w-4 mr-2" />
+                      打开
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleDatasheetDownload} className="cursor-pointer">
+                      <Download className="h-4 w-4 mr-2" />
+                      下载
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleDatasheetEmail} className="cursor-pointer">
+                      <Mail className="h-4 w-4 mr-2" />
+                      邮件
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>
