@@ -72,15 +72,17 @@ function generateDynamicSuggestions(): SearchSuggestion[] {
 
   // 1. 从芯片数据生成建议
   placeholderChips.forEach((chip, index) => {
-    // 芯片型号
-    suggestions.push({
-      id: `chip-model-${chip.id}`,
-      text: chip.model,
-      type: 'model',
-      description: chip.description,
-      brand: chip.manufacturer,
-      source: 'chip'
-    });
+    // 芯片型号 - 避免重复，只为每个唯一的 model 添加一次
+    if (!suggestions.find(s => s.text === chip.model && s.type === 'model')) {
+      suggestions.push({
+        id: `chip-model-${chip.model.replace(/\s+/g, '-')}-${index}`,
+        text: chip.model,
+        type: 'model',
+        description: chip.description,
+        brand: chip.manufacturer,
+        source: 'chip'
+      });
+    }
 
     // 制造商
     if (chip.manufacturer && !suggestions.find(s => s.text === chip.manufacturer && s.type === 'brand')) {
@@ -254,9 +256,9 @@ export function getSearchSuggestions(query: string = '', limit: number = 8): Sea
     ...brandMatches.map(s => ({ ...s, type: 'match' as const })),
   ];
 
-  // 去重并限制数量
+  // 去重并限制数量 - 按文本内容去重，而不是按ID
   const uniqueResults = results.filter((item, index, self) =>
-    index === self.findIndex(t => t.id === item.id)
+    index === self.findIndex(t => t.text === item.text && t.type === item.type)
   );
 
   return uniqueResults.slice(0, limit);
