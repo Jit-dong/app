@@ -31,7 +31,7 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface ProcessedChip extends Chip {
   displayManufacturer: string;
@@ -43,6 +43,38 @@ interface ChipDetailClientProps {
   chip: ProcessedChip;
   featuresList: { text: string; subItems?: string[] }[];
 }
+
+// 滚动文字组件
+const ScrollingText = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+  const textRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [shouldScroll, setShouldScroll] = useState(false);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (textRef.current && containerRef.current) {
+        const textWidth = textRef.current.scrollWidth;
+        const containerWidth = containerRef.current.clientWidth;
+        setShouldScroll(textWidth > containerWidth);
+      }
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [children]);
+
+  return (
+    <div ref={containerRef} className={`overflow-hidden ${className}`}>
+      <div
+        ref={textRef}
+        className={`whitespace-nowrap ${shouldScroll ? 'animate-marquee' : ''}`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
 
 export default function ChipDetailClient({ chip, featuresList }: ChipDetailClientProps) {
   const { toast } = useToast();
@@ -521,7 +553,6 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                         <div className="px-3 pb-3 border-t border-gray-200 dark:border-gray-700">
                           <div className="pt-3 space-y-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                             <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-4">
-                              <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">产品概述</h4>
                               <p>
                                 TPS563201 是一款易于使用、具有成本效益的同步降压转换器。采用 D-CAP2™ 控制模式，提供快速的瞬态响应，并支持低 ESR 输出电容器（如 POSCAP 或 SP-CAP），无需外部补偿组件。
                               </p>
@@ -570,7 +601,6 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                           <div className="pt-3 space-y-3">
                             {/* 基本参数 */}
                             <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-3">
-                              <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">基本参数</h4>
                               <div className="grid grid-cols-1 gap-2 text-sm">
                                 <div className="flex justify-between py-1">
                                   <span className="text-gray-600 dark:text-gray-400">拓扑架构 (Topology)</span>
@@ -858,18 +888,17 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                               <div>CAD 符号、封装和 3D 模型</div>
                             </div>
 
-                            {/* 表格内容 */}
-                            <div className="grid grid-cols-3 gap-4 p-3 text-sm">
-                              <div className="text-blue-600 dark:text-blue-400">
-                                SOT-23-THIN<br/>
-                                <span className="text-gray-500 dark:text-gray-400 text-xs">(DDC)</span>
-                              </div>
-                              <div className="text-gray-900 dark:text-gray-100">6</div>
-                              <div>
-                                <Link href="#" className="text-blue-600 dark:text-blue-400 hover:underline text-sm">
-                                  Ultra Librarian
+                            {/* 表格内容 - 优化为单行显示 */}
+                            <div className="p-3 text-sm">
+                              <ScrollingText className="text-gray-900 dark:text-gray-100">
+                                <span className="text-blue-600 dark:text-blue-400 font-medium">SOT-23-THIN (DDC)</span>
+                                <span className="mx-2 text-gray-400">•</span>
+                                <span>6引脚</span>
+                                <span className="mx-2 text-gray-400">•</span>
+                                <Link href="#" className="text-blue-600 dark:text-blue-400 hover:underline">
+                                  Ultra Librarian 下载
                                 </Link>
-                              </div>
+                              </ScrollingText>
                             </div>
                           </div>
                         </div>
