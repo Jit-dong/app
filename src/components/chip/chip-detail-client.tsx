@@ -207,7 +207,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
             {/* 产品图片 */}
             {chip.imageUrl && (
               <div className="flex-shrink-0">
-                <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden mb-2">
                   <Image
                     src={chip.imageUrl}
                     alt={chip.model}
@@ -220,6 +220,12 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                     }}
                   />
                   <Cpu className="h-8 w-8 text-gray-400" />
+                </div>
+                {/* 品牌标识 */}
+                <div className="text-center">
+                  <div className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                    德州仪器-TI
+                  </div>
                 </div>
               </div>
             )}
