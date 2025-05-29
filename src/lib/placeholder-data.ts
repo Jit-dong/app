@@ -728,53 +728,94 @@ export function searchReferenceDesigns(query: string): ReferenceDesign[] {
   if (!query.trim()) return placeholderReferenceDesigns;
 
   const lowerQuery = query.toLowerCase();
-  return placeholderReferenceDesigns.filter(design =>
-    design.title.toLowerCase().includes(lowerQuery) ||
-    design.description.toLowerCase().includes(lowerQuery) ||
-    design.chipModel?.toLowerCase().includes(lowerQuery) ||
-    design.manufacturer?.toLowerCase().includes(lowerQuery) ||
-    design.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
-  );
+  return placeholderReferenceDesigns.filter(design => {
+    // 基础匹配
+    const basicMatch = design.title.toLowerCase().includes(lowerQuery) ||
+                      design.description.toLowerCase().includes(lowerQuery) ||
+                      design.chipModel?.toLowerCase().includes(lowerQuery) ||
+                      design.manufacturer?.toLowerCase().includes(lowerQuery) ||
+                      design.tags?.some(tag => tag.toLowerCase().includes(lowerQuery));
+
+    // 订购详情匹配：通过订购型号匹配到芯片，再匹配参考设计
+    const orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
+      orderDetail.model.toLowerCase().includes(lowerQuery) &&
+      design.chipModel?.toLowerCase() === orderDetail.chipId.toLowerCase()
+    );
+
+    return basicMatch || orderDetailMatch;
+  });
 }
 
 export function searchTechnicalDocuments(query: string): TechnicalDocument[] {
   if (!query.trim()) return placeholderTechnicalDocuments;
 
   const lowerQuery = query.toLowerCase();
-  return placeholderTechnicalDocuments.filter(doc =>
-    doc.title.toLowerCase().includes(lowerQuery) ||
-    doc.description.toLowerCase().includes(lowerQuery) ||
-    doc.chipModel?.toLowerCase().includes(lowerQuery) ||
-    doc.manufacturer?.toLowerCase().includes(lowerQuery) ||
-    doc.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
-  );
+  return placeholderTechnicalDocuments.filter(doc => {
+    // 基础匹配
+    const basicMatch = doc.title.toLowerCase().includes(lowerQuery) ||
+                      doc.description.toLowerCase().includes(lowerQuery) ||
+                      doc.chipModel?.toLowerCase().includes(lowerQuery) ||
+                      doc.manufacturer?.toLowerCase().includes(lowerQuery) ||
+                      doc.tags?.some(tag => tag.toLowerCase().includes(lowerQuery));
+
+    // 订购详情匹配：通过订购型号匹配到芯片，再匹配技术文档
+    const orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
+      orderDetail.model.toLowerCase().includes(lowerQuery) &&
+      doc.chipModel?.toLowerCase() === orderDetail.chipId.toLowerCase()
+    );
+
+    return basicMatch || orderDetailMatch;
+  });
 }
 
 export function searchApplicationGuides(query: string): ApplicationGuide[] {
   if (!query.trim()) return placeholderApplicationGuides;
 
   const lowerQuery = query.toLowerCase();
-  return placeholderApplicationGuides.filter(guide =>
-    guide.title.toLowerCase().includes(lowerQuery) ||
-    guide.description.toLowerCase().includes(lowerQuery) ||
-    guide.chipModel?.toLowerCase().includes(lowerQuery) ||
-    guide.manufacturer?.toLowerCase().includes(lowerQuery) ||
-    guide.applicationField.toLowerCase().includes(lowerQuery) ||
-    guide.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
-  );
+  return placeholderApplicationGuides.filter(guide => {
+    // 基础匹配
+    const basicMatch = guide.title.toLowerCase().includes(lowerQuery) ||
+                      guide.description.toLowerCase().includes(lowerQuery) ||
+                      guide.chipModel?.toLowerCase().includes(lowerQuery) ||
+                      guide.manufacturer?.toLowerCase().includes(lowerQuery) ||
+                      guide.applicationField.toLowerCase().includes(lowerQuery) ||
+                      guide.tags?.some(tag => tag.toLowerCase().includes(lowerQuery));
+
+    // 订购详情匹配：通过订购型号匹配到芯片，再匹配应用指南
+    const orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
+      orderDetail.model.toLowerCase().includes(lowerQuery) &&
+      guide.chipModel?.toLowerCase() === orderDetail.chipId.toLowerCase()
+    );
+
+    return basicMatch || orderDetailMatch;
+  });
 }
 
 export function searchIndustryNews(query: string): IndustryNews[] {
   if (!query.trim()) return placeholderIndustryNews;
 
   const lowerQuery = query.toLowerCase();
-  return placeholderIndustryNews.filter(news =>
-    news.title.toLowerCase().includes(lowerQuery) ||
-    news.description.toLowerCase().includes(lowerQuery) ||
-    news.content?.toLowerCase().includes(lowerQuery) ||
-    news.category.toLowerCase().includes(lowerQuery) ||
-    news.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
-  );
+  return placeholderIndustryNews.filter(news => {
+    // 基础匹配
+    const basicMatch = news.title.toLowerCase().includes(lowerQuery) ||
+                      news.description.toLowerCase().includes(lowerQuery) ||
+                      news.content?.toLowerCase().includes(lowerQuery) ||
+                      news.category.toLowerCase().includes(lowerQuery) ||
+                      news.tags?.some(tag => tag.toLowerCase().includes(lowerQuery));
+
+    // 订购详情匹配：通过订购型号匹配到芯片，再匹配相关新闻
+    const orderDetailMatch = placeholderOrderDetails.some(orderDetail => {
+      if (orderDetail.model.toLowerCase().includes(lowerQuery)) {
+        // 检查新闻标签或内容中是否包含对应的芯片型号
+        return news.tags?.some(tag => tag.toLowerCase().includes(orderDetail.chipId.toLowerCase())) ||
+               news.content?.toLowerCase().includes(orderDetail.chipId.toLowerCase()) ||
+               news.title.toLowerCase().includes(orderDetail.chipId.toLowerCase());
+      }
+      return false;
+    });
+
+    return basicMatch || orderDetailMatch;
+  });
 }
 
 // 丝印反查数据类型
