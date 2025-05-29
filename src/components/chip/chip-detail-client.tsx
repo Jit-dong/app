@@ -48,6 +48,20 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
   const { toast } = useToast();
   const [currentUrl, setCurrentUrl] = useState('');
 
+  // 从产品订购数据中提取封装信息
+  const getPackageTypes = (chipModel: string) => {
+    if (chipModel === 'TPS563201') {
+      return [
+        { package: 'SOT-23-6', code: 'DDC' },
+        { package: 'HSOIC-8', code: 'DDA' }
+      ];
+    }
+    // 其他芯片可以在这里添加
+    return [{ package: 'SOT-23-THN', code: '' }]; // 默认值
+  };
+
+  const packageTypes = getPackageTypes(chip.model);
+
   const [showAllArticles, setShowAllArticles] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -245,8 +259,21 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                   <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
                     {chip.displayDescription}
                   </p>
-                  <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                    <div>封装: <span className="font-medium text-gray-900 dark:text-gray-100">SOT-23-THN</span></div>
+                  <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                    {/* 封装信息 - 毛玻璃橘黄色卡片 */}
+                    <div className="flex items-center gap-2">
+                      <span>封装:</span>
+                      <div className="flex flex-wrap gap-2">
+                        {packageTypes.map((pkg, index) => (
+                          <div
+                            key={index}
+                            className="px-3 py-1 bg-orange-500/10 dark:bg-orange-400/10 backdrop-blur-sm border border-orange-200/50 dark:border-orange-400/30 rounded-full text-orange-700 dark:text-orange-300 font-medium text-xs shadow-sm"
+                          >
+                            {pkg.package}{pkg.code && ` (${pkg.code})`}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                     <div>分类: <span className="font-medium text-gray-900 dark:text-gray-100">电源管理芯片\直流直流变换器\降压型稳压器</span></div>
                   </div>
                 </div>
