@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 引入色彩系统 */
+@import '../styles/colors.css';
+
 /*
   The body font-family is set via the `font-sans` class in `layout.tsx`
   and configured in `tailwind.config.ts` to use `var(--font-geist-sans)`.

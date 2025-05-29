@@ -179,10 +179,10 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-950">
       {/* 页面顶部导航栏 */}
-      <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between py-3 px-4">
+      <div className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between py-3 px-4 animate-fade-in">
           <Link href="/" passHref legacyBehavior>
             <Button variant="ghost" size="icon" aria-label="返回">
               <ArrowLeft className="h-5 w-5" />
@@ -200,9 +200,9 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
         </div>
       </div>
 
-      <div className="px-4 py-4 space-y-4">
+      <div className="px-4 py-4 space-y-4 animate-fade-in-up">
         {/* 芯片标题和基本信息 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+        <div className="card-enhanced bg-white dark:bg-gray-800 p-4 animate-delay-100">
           <div className="flex items-start gap-4 mb-4">
             {/* 产品图片 */}
             {chip.imageUrl && (
@@ -231,9 +231,9 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                       {chip.model}
                     </h1>
-                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 rounded-full">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-xs font-medium text-green-600 dark:text-green-400">量产</span>
+                    <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-accent-100 to-accent-50 dark:from-accent-900/30 dark:to-accent-800/20 rounded-full border border-accent-200 dark:border-accent-700">
+                      <div className="w-2 h-2 bg-accent-500 rounded-full animate-pulse"></div>
+                      <span className="text-xs font-medium text-accent-700 dark:text-accent-400">量产</span>
                     </div>
                   </div>
                   <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
@@ -249,7 +249,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                 <Button
                   variant="outline"
                   size="sm"
-                  className="text-blue-600 border-blue-200 hover:bg-blue-50 flex-shrink-0 ml-4"
+                  className="text-primary-600 border-primary-200 hover:bg-primary-50 dark:hover:bg-primary-950/20 flex-shrink-0 ml-4 transition-all duration-300 hover:shadow-primary hover:-translate-y-0.5"
                   onClick={() => {
                     if (chip.datasheetUrl) {
                       // 创建一个临时的下载链接
@@ -280,23 +280,23 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
         </div>
 
         {/* 详细信息展示区域 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+        <div className="card-enhanced bg-white dark:bg-gray-800 animate-delay-200">
           <div className="p-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">详细信息</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 animate-slide-in-right animate-delay-300">详细信息</h2>
 
             {/* 详细信息标签页 */}
             <Tabs defaultValue="product-details" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg mb-4">
-                <TabsTrigger value="product-details" className="text-xs">
+              <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-neutral-100 to-neutral-50 dark:from-neutral-700 dark:to-neutral-800 p-1 rounded-lg mb-4 shadow-sm">
+                <TabsTrigger value="product-details" className="text-xs data-[state=active]:bg-primary-500 data-[state=active]:text-white transition-all duration-300">
                   产品详情
                 </TabsTrigger>
-                <TabsTrigger value="technical-articles" className="text-xs">
+                <TabsTrigger value="technical-articles" className="text-xs data-[state=active]:bg-primary-500 data-[state=active]:text-white transition-all duration-300">
                   技术文章
                 </TabsTrigger>
-                <TabsTrigger value="design-development" className="text-xs">
+                <TabsTrigger value="design-development" className="text-xs data-[state=active]:bg-primary-500 data-[state=active]:text-white transition-all duration-300">
                   设计开发
                 </TabsTrigger>
-                <TabsTrigger value="product-ordering" className="text-xs">
+                <TabsTrigger value="product-ordering" className="text-xs data-[state=active]:bg-primary-500 data-[state=active]:text-white transition-all duration-300">
                   产品订购
                 </TabsTrigger>
               </TabsList>
@@ -305,21 +305,21 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
               <TabsContent value="product-details" className="mt-0">
                 <div className="space-y-4">
                   {/* 图片轮播区域 */}
-                  <div className="bg-purple-50 dark:bg-purple-950/20 rounded-lg p-4">
-                    <h4 className="font-medium text-purple-900 dark:text-purple-100 mb-3 transition-all duration-300">
+                  <div className="bg-gradient-to-br from-primary-50 to-primary-100/50 dark:from-primary-950/20 dark:to-primary-900/10 rounded-lg p-4 border border-primary-200/50 dark:border-primary-800/30">
+                    <h4 className="font-medium text-primary-900 dark:text-primary-100 mb-3 transition-all duration-300 animate-count-up">
                       {productImages[currentImageIndex].title}
                     </h4>
                     <div className="relative">
                       <div className="flex justify-center">
-                        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 relative">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-lg border border-gray-200 dark:border-gray-700 relative overflow-hidden">
                           {/* 固定尺寸的图片容器 */}
-                          <div className="w-[500px] h-[400px] flex items-center justify-center">
+                          <div className="w-[500px] h-[400px] flex items-center justify-center relative">
                             <Image
                               src={productImages[currentImageIndex].src}
                               alt={productImages[currentImageIndex].alt}
                               width={500}
                               height={400}
-                              className="object-contain max-w-full max-h-full transition-all duration-300"
+                              className="object-contain max-w-full max-h-full transition-all duration-500 ease-in-out animate-fade-in"
                               onError={(e) => {
                                 // 如果图片加载失败，显示占位符
                                 e.currentTarget.style.display = 'none';
@@ -339,17 +339,17 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                           {/* 左右切换按钮 */}
                           <button
                             onClick={prevImage}
-                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full p-2 shadow-md border border-gray-200 dark:border-gray-600 transition-colors"
+                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-full p-2 shadow-lg border border-primary-200 dark:border-primary-700 transition-all duration-300 hover:scale-110 hover:shadow-primary"
                             aria-label="上一张图片"
                           >
-                            <ChevronLeft className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                            <ChevronLeft className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                           </button>
                           <button
                             onClick={nextImage}
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full p-2 shadow-md border border-gray-200 dark:border-gray-600 transition-colors"
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/90 dark:bg-gray-800/90 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-full p-2 shadow-lg border border-primary-200 dark:border-primary-700 transition-all duration-300 hover:scale-110 hover:shadow-primary"
                             aria-label="下一张图片"
                           >
-                            <ChevronRight className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                            <ChevronRight className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                           </button>
                         </div>
                       </div>
@@ -360,10 +360,10 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                           <button
                             key={index}
                             onClick={() => goToImage(index)}
-                            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                            className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-125 ${
                               index === currentImageIndex
-                                ? 'bg-purple-500 dark:bg-purple-400'
-                                : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                                ? 'bg-primary-500 dark:bg-primary-400 shadow-primary'
+                                : 'bg-neutral-300 dark:bg-neutral-600 hover:bg-primary-300 dark:hover:bg-primary-600'
                             }`}
                             aria-label={`切换到第${index + 1}张图片`}
                           />
