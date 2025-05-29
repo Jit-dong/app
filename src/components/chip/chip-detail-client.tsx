@@ -851,16 +851,16 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                           {/* CAD 资源表格 */}
                           <div className="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden">
                             {/* 表头 */}
-                            <div className="grid grid-cols-3 gap-2 px-2 py-3 bg-gray-100 dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            <div className="grid grid-cols-3 gap-1 px-1 py-3 bg-gray-100 dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-gray-100">
                               <div>封装</div>
                               <div>引脚</div>
                               <div className="text-left">
-                                CAD 模型
+                                CAD 符号、封装和 3D 模型
                               </div>
                             </div>
 
                             {/* 表格内容 */}
-                            <div className="grid grid-cols-3 gap-2 px-2 py-3 text-sm">
+                            <div className="grid grid-cols-3 gap-1 px-1 py-3 text-sm">
                               <div className="text-blue-600 dark:text-blue-400">
                                 SOT-23-THIN<br/>
                                 <span className="text-gray-500 dark:text-gray-400 text-xs">(DDC)</span>
@@ -886,32 +886,87 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
               <TabsContent value="product-ordering" className="mt-0">
                 <div className="space-y-4">
                   {chip.model === 'TPS563201' ? (
-                    <div>
-                      <h5 className="font-medium text-orange-900 dark:text-orange-100 mb-3">产品订购型号 (Orderable Part Numbers):</h5>
-                      <div className="space-y-3">
-                        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-orange-200 dark:border-orange-700">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="font-medium text-gray-900 dark:text-gray-100">TPS563201DDCR</span>
-                            <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded">量产</span>
-                          </div>
-                          <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
-                            <div>封装: SOT-23-6 (DDC)</div>
-                            <div>包装: 3000/Tape and Reel</div>
-                            <div>工作温度: -40°C to 125°C</div>
-                            <div>应用等级: Industrial</div>
+                    <div className="space-y-4">
+                      {/* TPS563201DDCR */}
+                      <div className="bg-white dark:bg-gray-800 rounded-lg border border-orange-200 dark:border-orange-700 overflow-hidden">
+                        <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 border-b border-orange-200 dark:border-orange-700">
+                          <span className="font-medium text-gray-900 dark:text-gray-100">TPS563201DDCR</span>
+                          <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded">量产</span>
+                        </div>
+                        <div className="p-3">
+                          <div className="grid grid-cols-2 gap-4">
+                            {/* 左列 */}
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">封装</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">SOT-23-6 (DDC)</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">管脚</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">6</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">尺寸</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">2.9×1.6×1.0mm</span>
+                              </div>
+                            </div>
+                            {/* 右列 */}
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">包装</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">3000/Tape and Reel</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">工作温度</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">-40°C to 125°C</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">应用等级</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">Industrial</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
+                      </div>
 
-                        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-orange-200 dark:border-orange-700">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="font-medium text-gray-900 dark:text-gray-100">TPS563201DDA</span>
-                            <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded">量产</span>
-                          </div>
-                          <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
-                            <div>封装: HSOIC-8 (DDA)</div>
-                            <div>包装: 2500/Tape and Reel</div>
-                            <div>工作温度: -40°C to 125°C</div>
-                            <div>应用等级: Industrial</div>
+                      {/* TPS563201DDA */}
+                      <div className="bg-white dark:bg-gray-800 rounded-lg border border-orange-200 dark:border-orange-700 overflow-hidden">
+                        <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 border-b border-orange-200 dark:border-orange-700">
+                          <span className="font-medium text-gray-900 dark:text-gray-100">TPS563201DDA</span>
+                          <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded">量产</span>
+                        </div>
+                        <div className="p-3">
+                          <div className="grid grid-cols-2 gap-4">
+                            {/* 左列 */}
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">封装</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">HSOIC-8 (DDA)</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">管脚</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">8</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">尺寸</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">4.9×3.9×1.5mm</span>
+                              </div>
+                            </div>
+                            {/* 右列 */}
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">包装</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">2500/Tape and Reel</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">工作温度</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">-40°C to 125°C</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <span className="text-gray-600 dark:text-gray-400">应用等级</span>
+                                <span className="font-medium text-gray-900 dark:text-gray-100">Industrial</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
