@@ -265,10 +265,19 @@ export function searchChips(query: string, filters: ChipFilters = {}): Chip[] {
   return placeholderChips.filter(chip => {
     let matchesQuery = true;
     if (query) {
-      matchesQuery = chip.model.toLowerCase().includes(lowerQuery) ||
-                     chip.description.toLowerCase().includes(lowerQuery) ||
-                     chip.manufacturer.toLowerCase().includes(lowerQuery) ||
-                     (chip.tags?.some(tag => tag.toLowerCase().includes(lowerQuery)) ?? false);
+      // 基础匹配：芯片型号、描述、制造商、标签
+      const basicMatch = chip.model.toLowerCase().includes(lowerQuery) ||
+                        chip.description.toLowerCase().includes(lowerQuery) ||
+                        chip.manufacturer.toLowerCase().includes(lowerQuery) ||
+                        (chip.tags?.some(tag => tag.toLowerCase().includes(lowerQuery)) ?? false);
+
+      // 订购详情匹配：通过订购型号匹配到芯片
+      const orderDetailMatch = placeholderOrderDetails.some(orderDetail =>
+        orderDetail.chipId === chip.model &&
+        orderDetail.model.toLowerCase().includes(lowerQuery)
+      );
+
+      matchesQuery = basicMatch || orderDetailMatch;
     }
 
     if (!matchesQuery) return false;
