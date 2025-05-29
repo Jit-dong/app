@@ -784,45 +784,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                     )}
                   </div>
 
-                  {/* 订购和质量 */}
-                  <div className="mt-6">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3">订购和质量</h4>
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden">
-                      {/* 表头 */}
-                      <div className="grid grid-cols-5 gap-2 p-3 bg-gray-100 dark:bg-gray-700 text-xs font-medium text-gray-900 dark:text-gray-100">
-                        <div>产品订购型号</div>
-                        <div>封装</div>
-                        <div>工作温度</div>
-                        <div>封装</div>
-                        <div>包装</div>
-                      </div>
 
-                      {/* 产品行 */}
-                      <div className="divide-y divide-gray-200 dark:divide-gray-600">
-                        <div className="grid grid-cols-5 gap-2 p-3 text-xs">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span className="text-gray-900 dark:text-gray-100">TPS563201DDCR</span>
-                          </div>
-                          <div className="text-gray-700 dark:text-gray-300">SOT23-6</div>
-                          <div className="text-gray-700 dark:text-gray-300">-40° TO 125°</div>
-                          <div className="text-gray-700 dark:text-gray-300">3201</div>
-                          <div className="text-gray-700 dark:text-gray-300">3000/T&R</div>
-                        </div>
-
-                        <div className="grid grid-cols-5 gap-2 p-3 text-xs">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span className="text-gray-900 dark:text-gray-100">TPS563201DDA</span>
-                          </div>
-                          <div className="text-gray-700 dark:text-gray-300">HSOIC-8</div>
-                          <div className="text-gray-700 dark:text-gray-300">-40° TO 125°</div>
-                          <div className="text-gray-700 dark:text-gray-300">3201</div>
-                          <div className="text-gray-700 dark:text-gray-300">2500/T&R</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </TabsContent>
 
