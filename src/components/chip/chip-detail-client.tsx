@@ -593,28 +593,6 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                         </div>
                       )}
                     </div>
-
-                    {/* 封装|引脚|尺寸 */}
-                    <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-                      <button
-                        onClick={() => toggleSection('package')}
-                        className="w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-                      >
-                        <span className="font-medium text-gray-900 dark:text-gray-100">封装|引脚|尺寸</span>
-                        <ChevronDown className={`h-5 w-5 text-gray-500 transition-transform ${expandedSections.package ? 'rotate-180' : ''}`} />
-                      </button>
-                      {expandedSections.package && (
-                        <div className="px-3 pb-3 border-t border-gray-200 dark:border-gray-700">
-                          <div className="pt-3">
-                            <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                              <div className="font-medium text-blue-600">SOT-23-THIN (DDC)</div>
-                              <div className="text-center">6</div>
-                              <div className="text-right">8.12 mm² 2.9 x 2.8</div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </div>
               </TabsContent>
