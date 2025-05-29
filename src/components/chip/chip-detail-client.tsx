@@ -772,14 +772,66 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                     </button>
                     {designDevSections.referenceDesign && (
                       <div className="px-3 pb-3 border-t border-gray-200 dark:border-gray-700">
-                        <div className="pt-3 text-sm text-gray-600 dark:text-gray-400">
-                          <p>参考设计内容正在准备中...</p>
-                          <ul className="mt-2 space-y-1 text-xs">
-                            <li>• TPS563201 评估板</li>
-                            <li>• 典型应用电路</li>
-                            <li>• PCB 布局指南</li>
-                            <li>• 物料清单 (BOM)</li>
-                          </ul>
+                        <div className="pt-3">
+                          <div className="space-y-4">
+                            {/* TIDA-01635 - 蓝色主题 */}
+                            <div className="bg-blue-50/50 dark:bg-blue-950/20 rounded-lg p-4 border border-blue-200 dark:border-blue-700">
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                  <h6 className="font-medium text-blue-600 dark:text-blue-400 text-sm mb-2 leading-snug">
+                                    TIDA-01635 — 适用于 90 Hz 刷新率虚拟/增强现实显示器的背光和 LCD 偏置参考设计
+                                  </h6>
+                                  <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
+                                    该参考设计描述了可穿戴设备（尤其是增强现实 (AR) 和虚拟现实 (VR) 头戴式设备）中 LCD 显示屏的电源解决方案。高电流精度背光驱动器由 LP8556 实现，可在小占空比下提供高电流，并与 (...) 同步。
+                                  </p>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="text-red-600 dark:text-red-400 border-red-200 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 flex-shrink-0 transition-colors"
+                                  onClick={() => {
+                                    toast({
+                                      title: "PDF下载",
+                                      description: "正在下载 TIDA-01635 参考设计文档...",
+                                    });
+                                  }}
+                                  title="下载 TIDA-01635 参考设计PDF"
+                                >
+                                  <FileText className="h-4 w-4 mr-1" />
+                                  PDF
+                                </Button>
+                              </div>
+                            </div>
+
+                            {/* PMP21065 - 绿色主题 */}
+                            <div className="bg-green-50/50 dark:bg-green-950/20 rounded-lg p-4 border border-green-200 dark:border-green-700">
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                  <h6 className="font-medium text-green-600 dark:text-green-400 text-sm mb-2 leading-snug">
+                                    PMP21065 — 适用于机顶盒的超低待机功耗、高效 DC-DC 电源参考设计
+                                  </h6>
+                                  <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
+                                    PMP21065 参考设计采用典型的 12V 直流输入，可产生目前机顶盒中常见的几种常见电源轨。该设计的主要目标是低成本、小尺寸、低待机功耗和高效率，以帮助客户满足新法规 (...) 的要求。
+                                  </p>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="text-red-600 dark:text-red-400 border-red-200 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 flex-shrink-0 transition-colors"
+                                  onClick={() => {
+                                    toast({
+                                      title: "PDF下载",
+                                      description: "正在下载 PMP21065 参考设计文档...",
+                                    });
+                                  }}
+                                  title="下载 PMP21065 参考设计PDF"
+                                >
+                                  <FileText className="h-4 w-4 mr-1" />
+                                  PDF
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )}
