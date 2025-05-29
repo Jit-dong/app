@@ -575,7 +575,6 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                         <div className="px-3 pb-3 border-t border-gray-200 dark:border-gray-700">
                           <div className="pt-3">
                             <div className="bg-orange-50 dark:bg-orange-950/20 rounded-lg p-4">
-                              <h4 className="font-medium text-orange-900 dark:text-orange-100 mb-2">典型应用</h4>
                               <ul className="space-y-1 text-sm">
                                 {chip.applications?.map((app, index) => (
                                   <li key={index}>• {app}</li>
@@ -885,20 +884,25 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                             <div className="grid grid-cols-3 gap-4 p-3 bg-gray-100 dark:bg-gray-700 text-sm font-medium text-gray-900 dark:text-gray-100">
                               <div>封装</div>
                               <div>引脚</div>
-                              <div>CAD 符号、封装和 3D 模型</div>
+                              <div>
+                                <ScrollingText>
+                                  CAD 符号、封装和 3D 模型
+                                </ScrollingText>
+                              </div>
                             </div>
 
-                            {/* 表格内容 - 优化为单行显示 */}
-                            <div className="p-3 text-sm">
-                              <ScrollingText className="text-gray-900 dark:text-gray-100">
-                                <span className="text-blue-600 dark:text-blue-400 font-medium">SOT-23-THIN (DDC)</span>
-                                <span className="mx-2 text-gray-400">•</span>
-                                <span>6引脚</span>
-                                <span className="mx-2 text-gray-400">•</span>
-                                <Link href="#" className="text-blue-600 dark:text-blue-400 hover:underline">
-                                  Ultra Librarian 下载
+                            {/* 表格内容 */}
+                            <div className="grid grid-cols-3 gap-4 p-3 text-sm">
+                              <div className="text-blue-600 dark:text-blue-400">
+                                SOT-23-THIN<br/>
+                                <span className="text-gray-500 dark:text-gray-400 text-xs">(DDC)</span>
+                              </div>
+                              <div className="text-gray-900 dark:text-gray-100">6</div>
+                              <div>
+                                <Link href="#" className="text-blue-600 dark:text-blue-400 hover:underline text-sm">
+                                  Ultra Librarian
                                 </Link>
-                              </ScrollingText>
+                              </div>
                             </div>
                           </div>
                         </div>
