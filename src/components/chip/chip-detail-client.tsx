@@ -361,18 +361,23 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                       </div>
 
                       {/* 指示器圆点 */}
-                      <div className="flex justify-center mt-4 space-x-2">
+                      <div className="flex justify-center mt-6 space-x-3">
                         {productImages.map((_, index) => (
                           <button
                             key={index}
                             onClick={() => goToImage(index)}
-                            className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-125 ${
+                            className={`relative transition-all duration-300 hover:scale-110 ${
                               index === currentImageIndex
-                                ? 'bg-primary-500 dark:bg-primary-400 shadow-primary'
-                                : 'bg-neutral-300 dark:bg-neutral-600 hover:bg-primary-300 dark:hover:bg-primary-600'
+                                ? 'w-8 h-3 bg-orange-500 dark:bg-orange-400 rounded-full shadow-lg'
+                                : 'w-3 h-3 bg-gray-400 dark:bg-gray-500 rounded-full hover:bg-orange-300 dark:hover:bg-orange-600 shadow-md'
                             }`}
                             aria-label={`切换到第${index + 1}张图片`}
-                          />
+                          >
+                            {/* 激活状态的内部高亮 */}
+                            {index === currentImageIndex && (
+                              <div className="absolute inset-0 bg-white/30 rounded-full animate-pulse"></div>
+                            )}
+                          </button>
                         ))}
                       </div>
                     </div>
