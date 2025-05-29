@@ -9,7 +9,8 @@ import {
   searchReferenceDesigns,
   searchTechnicalDocuments,
   searchApplicationGuides,
-  searchIndustryNews
+  searchIndustryNews,
+  findOrderDetailsByChipId
 } from "@/lib/placeholder-data";
 import ContentItem from '@/components/shared/content-item';
 import LoadingSpinner from "@/components/shared/loading-spinner";
@@ -574,42 +575,73 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
                         </div>
 
                         {/* 展开的订购信息 - 紧凑版 */}
-                        {expandedOrders.has(chip.id) && (
-                          <div className="mx-3 mb-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-3 border border-blue-100 dark:border-blue-800/30">
-                            <h5 className="text-xs font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-1.5">
-                              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-                              订购详情
-                              <span className="font-bold text-blue-600 dark:text-blue-400">TPS563201DDCT</span>
-                            </h5>
-                            <div className="grid grid-cols-2 gap-2 text-xs">
-                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">封装 </span>
-                                <span className="font-bold text-gray-900 dark:text-gray-100">{chip.package || 'SOT23-6'}</span>
-                              </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">管脚 </span>
-                                <span className="font-bold text-gray-900 dark:text-gray-100">6</span>
-                              </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">丝印 </span>
-                                <span className="font-bold text-gray-900 dark:text-gray-100">3201</span>
-                              </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">包装 </span>
-                                <span className="font-bold text-gray-900 dark:text-gray-100">2500/T&R</span>
-                              </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">工作温度 </span>
-                                <span className="font-bold text-gray-900 dark:text-gray-100">-40~120度</span>
-                              </div>
-                              <div className="bg-white dark:bg-gray-800/50 rounded px-2 py-1.5 border border-white/50 dark:border-gray-700/50 flex items-center gap-1">
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">状态 </span>
-                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                                <span className="font-bold text-green-600 dark:text-green-400">量产</span>
+                        {expandedOrders.has(chip.id) && (() => {
+                          const chipOrderDetails = findOrderDetailsByChipId(chip.id);
+                          return (
+                            <div className="mx-3 mb-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-3 border border-blue-100 dark:border-blue-800/30">
+                              <h5 className="text-xs font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-1.5">
+                                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                                订购详情 ({chipOrderDetails.length} 个型号)
+                              </h5>
+                              <div className="space-y-3">
+                                {chipOrderDetails.map((orderDetail) => (
+                                  <div key={orderDetail.id} className="bg-white dark:bg-gray-800/70 rounded-lg p-3 border border-white/50 dark:border-gray-700/50">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <span className="text-xs font-bold text-blue-600 dark:text-blue-400">{orderDetail.model}</span>
+                                      <div className="w-1 h-1 bg-green-500 rounded-full"></div>
+                                      <span className="text-xs text-green-600 dark:text-green-400">{orderDetail.lifecycle}</span>
+                                    </div>
+                                    <div className="space-y-1.5 text-xs">
+                                      {/* 第一行：封装、管脚、工作温度 */}
+                                      <div className="flex items-center gap-4">
+                                        <div className="flex items-center gap-1">
+                                          <span className="text-gray-500 dark:text-gray-400 font-medium">封装:</span>
+                                          <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.package}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                          <span className="text-gray-500 dark:text-gray-400 font-medium">管脚:</span>
+                                          <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.pins}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                          <span className="text-gray-500 dark:text-gray-400 font-medium">工作温度:</span>
+                                          <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.workTemp}</span>
+                                        </div>
+                                      </div>
+
+                                      {/* 第二行：包装数量、承运商、状态 */}
+                                      <div className="flex items-center gap-4">
+                                        {orderDetail.packagingQuantity ? (
+                                          <>
+                                            <div className="flex items-center gap-1">
+                                              <span className="text-gray-500 dark:text-gray-400 font-medium">包装数量:</span>
+                                              <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.packagingQuantity}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                              <span className="text-gray-500 dark:text-gray-400 font-medium">承运商:</span>
+                                              <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.carrier}</span>
+                                            </div>
+                                          </>
+                                        ) : (
+                                          <div className="flex items-center gap-1">
+                                            <span className="text-gray-500 dark:text-gray-400 font-medium">包装:</span>
+                                            <span className="font-bold text-gray-900 dark:text-gray-100">2500/T&R</span>
+                                          </div>
+                                        )}
+                                        <div className="flex items-center gap-1">
+                                          <span className="text-gray-500 dark:text-gray-400 font-medium">状态:</span>
+                                          <div className="flex items-center gap-1">
+                                            <div className="w-1 h-1 bg-green-500 rounded-full"></div>
+                                            <span className="font-bold text-green-600 dark:text-green-400">{orderDetail.lifecycle}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
                               </div>
                             </div>
-                          </div>
-                        )}
+                          );
+                        })()}
                       </div>
                       ))}
                     </div>

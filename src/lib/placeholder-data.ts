@@ -1,5 +1,5 @@
 
-import type { Chip, AlternativeChip, ReferenceDesign, TechnicalDocument, ApplicationGuide, IndustryNews } from './types';
+import type { Chip, AlternativeChip, ReferenceDesign, TechnicalDocument, ApplicationGuide, IndustryNews, OrderDetail } from './types';
 import type { ChipFilters } from '@/components/shared/filter-panel'; // Import ChipFilters
 
 export const placeholderChips: Chip[] = [
@@ -924,4 +924,73 @@ export function searchSilkscreen(query: string): SilkscreenData[] {
     // 按丝印长度排序（越短越相关）
     return a.silkscreen.length - b.silkscreen.length;
   });
+}
+
+// 订购详情模拟数据
+export const placeholderOrderDetails: OrderDetail[] = [
+  // TPS563201 的订购详情
+  {
+    id: 'TPS563201DDCR',
+    model: 'TPS563201DDCR',
+    chipId: 'TPS563201',
+    package: 'SOT-23-THN (DDC)',
+    pins: 6,
+    silkscreen: '3201',
+    packagingQuantity: '3,000',
+    carrier: '大型 T&R',
+    workTemp: '-40°C至125°C',
+    lifecycle: '量产',
+    rohs: '2',
+    suppliers: [
+      {
+        name: '立创商城',
+        price: '¥3.6015',
+        stock: '2800',
+        delivery: '现货',
+        moq: '1',
+        rating: 4.8
+      },
+      {
+        name: '得捷电子',
+        price: '¥3.8520',
+        stock: '1200',
+        delivery: '1-2天',
+        moq: '10',
+        rating: 4.7
+      }
+    ]
+  },
+  {
+    id: 'TPS563201DDCT',
+    model: 'TPS563201DDCT',
+    chipId: 'TPS563201',
+    package: 'SOT-23-THN (DDC)',
+    pins: 6,
+    silkscreen: '3201',
+    packagingQuantity: '250',
+    carrier: '小型 T&R',
+    workTemp: '-40°C至125°C',
+    lifecycle: '量产',
+    rohs: '2',
+    suppliers: [
+      {
+        name: '立创商城',
+        price: '¥3.4015',
+        stock: '2156',
+        delivery: '现货',
+        moq: '1',
+        rating: 4.8
+      }
+    ]
+  }
+];
+
+// 根据芯片ID查找订购详情
+export function findOrderDetailsByChipId(chipId: string): OrderDetail[] {
+  return placeholderOrderDetails.filter(order => order.chipId === chipId);
+}
+
+// 根据订购详情ID查找单个订购详情
+export function findOrderDetailById(orderId: string): OrderDetail | undefined {
+  return placeholderOrderDetails.find(order => order.id === orderId);
 }

@@ -92,6 +92,29 @@ export interface IndustryNews {
   readTime?: number; // 阅读时间（分钟）
 }
 
+// 订购详情数据类型
+export interface OrderDetail {
+  id: string;
+  model: string; // 订购型号，如 TPS563201DDCR
+  chipId: string; // 对应的芯片ID
+  package: string; // 封装类型
+  pins?: number; // 管脚数
+  silkscreen?: string; // 丝印
+  packagingQuantity?: string; // 包装数量
+  carrier?: string; // 承运商
+  workTemp: string; // 工作温度
+  lifecycle: string; // 生命周期状态
+  rohs?: string; // 环保等级
+  suppliers: {
+    name: string;
+    price: string;
+    stock: string;
+    delivery: string;
+    moq: string;
+    rating: number;
+  }[];
+}
+
 // 丝印反查数据类型
 export interface SilkscreenData {
   id: string;

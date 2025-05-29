@@ -1,6 +1,7 @@
 'use client';
 
-import type { Chip } from '@/lib/types';
+import type { Chip, OrderDetail } from '@/lib/types';
+import { findOrderDetailsByChipId } from '@/lib/placeholder-data';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,57 +40,12 @@ interface ChipPurchaseClientProps {
   chip: ProcessedChip;
 }
 
-// 模拟订购信息数据
-const mockPurchaseData = [
-  {
-    id: 'TPS563201DCT',
-    model: 'TPS563201DCT',
-    package: 'SOT23-6',
-    workTemp: '-40°C至125°',
-    lifecycle: '量产',
-    rohs: '2',
-    suppliers: [
-      {
-        name: '立创商城',
-        price: '¥3.2015',
-        stock: '3201',
-        delivery: '现货',
-        moq: '1',
-        rating: 4.8
-      },
-      {
-        name: '得捷电子',
-        price: '¥3.4520',
-        stock: '1500',
-        delivery: '1-2天',
-        moq: '10',
-        rating: 4.7
-      }
-    ]
-  },
-  {
-    id: 'TPS563201DDCT',
-    model: 'TPS563201DDCT',
-    package: 'SOT23-6',
-    workTemp: '-40°C至125°',
-    lifecycle: '量产',
-    rohs: '2',
-    suppliers: [
-      {
-        name: '立创商城',
-        price: '¥3.4015',
-        stock: '2156',
-        delivery: '现货',
-        moq: '1',
-        rating: 4.8
-      }
-    ]
-  }
-];
-
 export default function ChipPurchaseClient({ chip }: ChipPurchaseClientProps) {
   const { toast } = useToast();
   const [currentUrl, setCurrentUrl] = useState('');
+
+  // 获取该芯片的所有订购详情
+  const orderDetails = findOrderDetailsByChipId(chip.id);
   const [selectedBrand, setSelectedBrand] = useState('全部');
   const [selectedPackage, setSelectedPackage] = useState('全部');
   const [selectedTemp, setSelectedTemp] = useState('全部');
@@ -173,7 +129,7 @@ export default function ChipPurchaseClient({ chip }: ChipPurchaseClientProps) {
             </Button>
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            搜索结果：共 <span className="font-medium text-blue-600">4</span> 个型号
+            搜索结果：共 <span className="font-medium text-blue-600">{orderDetails.length}</span> 个型号
           </p>
         </div>
 
@@ -252,19 +208,19 @@ export default function ChipPurchaseClient({ chip }: ChipPurchaseClientProps) {
 
         {/* 产品列表 */}
         <div className="space-y-4">
-          {mockPurchaseData.map((product) => (
-            <Card key={product.id} className="bg-white dark:bg-gray-800 shadow-sm">
+          {orderDetails.map((orderDetail) => (
+            <Card key={orderDetail.id} className="bg-white dark:bg-gray-800 shadow-sm">
               <CardContent className="p-4">
                 {/* 产品标题 */}
                 <div className="flex items-start mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                        {product.model}
+                        {orderDetail.model}
                       </h3>
                       <div className="flex items-center gap-1">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-xs text-green-600 dark:text-green-400">量产</span>
+                        <span className="text-xs text-green-600 dark:text-green-400">{orderDetail.lifecycle}</span>
                       </div>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
@@ -276,55 +232,96 @@ export default function ChipPurchaseClient({ chip }: ChipPurchaseClientProps) {
                   </div>
                 </div>
 
-                <Separator className="my-3" />
-
-                {/* 参考设计 */}
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">参考设计</h4>
-                  <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Package className="h-4 w-4 text-blue-600" />
-                      <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                        {product.id}EVM-715
-                      </span>
+                {/* 订购详情 - 紧凑格式 */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-3 border border-blue-100 dark:border-blue-800/30 mb-4">
+                  <h5 className="text-xs font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-1.5">
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                    订购详情
+                    <span className="font-bold text-blue-600 dark:text-blue-400">{orderDetail.model}</span>
+                  </h5>
+                  <div className="space-y-2 text-xs">
+                    {/* 第一行：封装、管脚、工作温度 */}
+                    <div className="bg-white dark:bg-gray-800/50 rounded px-3 py-2 border border-white/50 dark:border-gray-700/50">
+                      <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 dark:text-gray-400 font-medium">封装:</span>
+                          <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.package}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 dark:text-gray-400 font-medium">管脚:</span>
+                          <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.pins}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 dark:text-gray-400 font-medium">工作温度:</span>
+                          <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.workTemp}</span>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                      品牌：{chip.displayManufacturer}
-                    </p>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">
-                      描述：{product.package} SWIFT 降压转换器评估模块
-                    </p>
+
+                    {/* 第二行：包装数量、承运商、状态 */}
+                    <div className="bg-white dark:bg-gray-800/50 rounded px-3 py-2 border border-white/50 dark:border-gray-700/50">
+                      <div className="flex items-center gap-6">
+                        {orderDetail.packagingQuantity ? (
+                          <>
+                            <div className="flex items-center gap-1">
+                              <span className="text-gray-500 dark:text-gray-400 font-medium">包装数量:</span>
+                              <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.packagingQuantity}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <span className="text-gray-500 dark:text-gray-400 font-medium">承运商:</span>
+                              <span className="font-bold text-gray-900 dark:text-gray-100">{orderDetail.carrier}</span>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex items-center gap-1">
+                            <span className="text-gray-500 dark:text-gray-400 font-medium">包装:</span>
+                            <span className="font-bold text-gray-900 dark:text-gray-100">2500/T&R</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 dark:text-gray-400 font-medium">状态:</span>
+                          <div className="flex items-center gap-1">
+                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                            <span className="font-bold text-green-600 dark:text-green-400">{orderDetail.lifecycle}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <Separator className="my-3" />
 
-                {/* 技术文档 */}
+                {/* 供应商信息 */}
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">技术文档</h4>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Keeping DC/DC solutions (super) simple for cost-sensitive applications
-                  </p>
-                </div>
-
-                <Separator className="my-3" />
-
-                {/* 应用指南 */}
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">应用指南</h4>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Keeping DC/DC solutions (super) simple for cost-sensitive applications
-                  </p>
-                </div>
-
-                <Separator className="my-3" />
-
-                {/* 行业资讯 */}
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">行业资讯</h4>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Keeping DC/DC solutions (super) simple for cost-sensitive applications
-                  </p>
+                  <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">供应商信息</h4>
+                  <div className="space-y-2">
+                    {orderDetail.suppliers.map((supplier, index) => (
+                      <div key={index} className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-medium text-gray-900 dark:text-gray-100">{supplier.name}</span>
+                            <div className="flex items-center gap-1">
+                              <Star className="h-3 w-3 text-yellow-500 fill-current" />
+                              <span className="text-xs text-gray-600 dark:text-gray-400">{supplier.rating}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
+                            <span>库存: {supplier.stock}</span>
+                            <span>交货: {supplier.delivery}</span>
+                            <span>MOQ: {supplier.moq}</span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{supplier.price}</div>
+                          <Button size="sm" className="mt-1">
+                            <ShoppingCart className="h-3 w-3 mr-1" />
+                            购买
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </CardContent>
             </Card>
