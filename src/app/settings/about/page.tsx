@@ -14,7 +14,7 @@ export default function AboutPage() {
       </Link>
       <Card>
         <CardHeader className="items-center text-center">
-          <Logo className="h-16 w-16 text-accent mb-4" />
+          <Logo className="h-16 w-16 mb-4" width={64} height={64} />
           <CardTitle className="text-2xl">Junction Magic</CardTitle>
           <CardDescription>版本 V2.5.1 (Build 20250510)</CardDescription>
         </CardHeader>
