@@ -32,12 +32,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from 'react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface ProcessedChip extends Chip {
   displayManufacturer: string;
@@ -344,34 +338,44 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                   </div>
                 </div>
 
-                {/* 数据手册下拉菜单 - 右上角 */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-primary-600 border-primary-200 hover:bg-primary-50 dark:hover:bg-primary-950/20 flex-shrink-0 ml-4 transition-all duration-300 hover:shadow-primary hover:-translate-y-0.5"
-                    >
-                      <FileText className="h-4 w-4 mr-1" />
-                      数据手册
-                      <ChevronDown className="h-3 w-3 ml-1" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-32">
-                    <DropdownMenuItem onClick={handleDatasheetOpen} className="cursor-pointer">
-                      <FileText className="h-4 w-4 mr-2" />
-                      打开
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleDatasheetDownload} className="cursor-pointer">
-                      <Download className="h-4 w-4 mr-2" />
-                      下载
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleDatasheetEmail} className="cursor-pointer">
-                      <Mail className="h-4 w-4 mr-2" />
-                      邮件
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {/* 数据手册按钮组 - 右上角垂直排列 */}
+                <div className="flex flex-col gap-2 flex-shrink-0 ml-4">
+                  {/* 打开按钮 - 蓝色主题 */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-700 bg-blue-50/50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 hover:shadow-lg hover:shadow-blue-200/50 dark:hover:shadow-blue-900/30 hover:-translate-y-0.5 px-3 py-2 h-auto min-w-[68px] backdrop-blur-sm"
+                    onClick={handleDatasheetOpen}
+                    title="在新窗口打开数据手册"
+                  >
+                    <FileText className="h-3.5 w-3.5" />
+                    <span className="text-xs ml-1.5 font-medium">打开</span>
+                  </Button>
+
+                  {/* 下载按钮 - 绿色主题 */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-green-600 dark:text-green-400 border-green-200 dark:border-green-700 bg-green-50/50 dark:bg-green-950/20 hover:bg-green-100 dark:hover:bg-green-900/30 hover:border-green-300 dark:hover:border-green-600 transition-all duration-300 hover:shadow-lg hover:shadow-green-200/50 dark:hover:shadow-green-900/30 hover:-translate-y-0.5 px-3 py-2 h-auto min-w-[68px] backdrop-blur-sm"
+                    onClick={handleDatasheetDownload}
+                    title="下载数据手册PDF"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    <span className="text-xs ml-1.5 font-medium">下载</span>
+                  </Button>
+
+                  {/* 邮件按钮 - 橙色主题 */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-700 bg-orange-50/50 dark:bg-orange-950/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 hover:border-orange-300 dark:hover:border-orange-600 transition-all duration-300 hover:shadow-lg hover:shadow-orange-200/50 dark:hover:shadow-orange-900/30 hover:-translate-y-0.5 px-3 py-2 h-auto min-w-[68px] backdrop-blur-sm"
+                    onClick={handleDatasheetEmail}
+                    title="通过邮件分享数据手册"
+                  >
+                    <Mail className="h-3.5 w-3.5" />
+                    <span className="text-xs ml-1.5 font-medium">邮件</span>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
