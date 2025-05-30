@@ -46,7 +46,7 @@ export default function ChipCard({ chip, isAlternative = false }: ChipCardProps)
     <Card className="flex flex-col h-full shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
         {chip.imageUrl && (
-          <div className="relative h-40 w-full mb-4 rounded-t-lg overflow-hidden">
+          <div className="relative h-24 w-full mb-4 rounded-t-lg overflow-hidden">
             <Image
               src={chip.imageUrl}
               alt={`${chip.model} 的图像`}
@@ -64,7 +64,7 @@ export default function ChipCard({ chip, isAlternative = false }: ChipCardProps)
       </CardHeader>
       <CardContent className="flex-grow space-y-3">
         <p className="text-sm text-muted-foreground line-clamp-3">{chip.description}</p>
-        
+
         <div className="space-y-1">
           {chip.lifecycleStatus && (
             <Badge variant={chip.lifecycleStatus === 'Active' ? 'default' : 'destructive'} className="text-xs">

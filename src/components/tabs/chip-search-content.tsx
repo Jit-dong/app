@@ -200,6 +200,10 @@ export default function ChipSearchContent({ initialQuery = '', initialMode = 'da
           // 这里可以调用专门的交叉查询API
           results = searchChips(query); // 暂时使用相同逻辑
           break;
+        case 'alternative':
+          // 这里应该调用专门的替代芯片搜索API
+          results = searchChips(query, { alternative: true }); // 添加替代芯片搜索参数
+          break;
         default:
           results = searchChips(query);
       }

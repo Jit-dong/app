@@ -1,167 +1,132 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search, ListChecks, FileText, Globe, Layers, Package, BookOpen, RefreshCw } from "lucide-react";
-import Image from "next/image";
+import React, { useState } from 'react';
+import SearchBar from "@/components/shared/search-bar";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { SearchX, RefreshCw } from "lucide-react";
+import LoadingSpinner from "@/components/shared/loading-spinner";
+import type { Chip } from "@/lib/types";
+import { searchChips } from "@/lib/placeholder-data";
 
-const mockData = [
-  {
-    original: {
-      model: "NVD5117PLT4G",
-      brand: "onsemi (安森美)",
-      logo: "/brands/ST.png",
-      img: "/brands/chip1.png",
-      datasheet: true,
-      category: "MOSFET",
-      lifecycle: "量产",
-      package: "DPAK-3"
-    },
-    alternative: {
-      model: "MCU50P06Y",
-      brand: "MCC (美微科)",
-      logo: "/brands/MAX.png",
-      img: "/brands/chip2.png",
-      datasheet: true,
-      category: "MOSFET",
-      lifecycle: "量产",
-      package: "DPAK"
-    }
-  }
-];
+export default function AlternativeSearchPage() {
+  const [searchResults, setSearchResults] = useState<Chip[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [currentQuery, setCurrentQuery] = useState('');
 
-const steps = [
-  "确定搜索型号",
-  "一级筛选（国内、国外、同品牌）",
-  "二级筛选（等级、封装、生命周期）",
-  "参数对比（勾选对比参数）"
-];
+  const handleSearch = async (query: string) => {
+    setIsLoading(true);
+    setHasSearched(true);
+    setCurrentQuery(query);
 
-export default function AlternativeSearchPage({ onBack }: { onBack?: () => void }) {
-  const [search, setSearch] = useState("");
+    // 模拟搜索延迟
+    setTimeout(() => {
+      // 这里应该调用实际的替代芯片搜索API
+      const results = searchChips(query);
+      setSearchResults(results);
+      setIsLoading(false);
+    }, 500);
+  };
 
   return (
-    <div className="max-w-2xl mx-auto pb-12">
-      {/* 顶部导航栏 */}
-      <div className="flex items-center justify-between py-4 px-2">
-        {/* <Button variant="ghost" size="icon" onClick={onBack}>
-          <ArrowLeft className="h-5 w-5" />
-        </Button> */}
-        <div className="text-lg font-bold text-gray-800">查替代料</div>
-        <Button variant="outline" className="rounded-xl px-4 py-1 text-sm font-semibold border-orange-200 text-orange-600">批量查询</Button>
+    <div className="space-y-6">
+      {/* 搜索栏 */}
+      <div className="flex justify-center">
+        <SearchBar
+          onSearch={handleSearch}
+          className="w-full max-w-2xl"
+          placeholder="输入芯片型号查找替代品"
+          initialQuery={currentQuery}
+        />
       </div>
 
-      {/* 主搜索框 */}
-      <form className="flex items-center justify-center mb-6" onSubmit={e => { e.preventDefault(); }}>
-        <div className="w-full max-w-xl flex items-center bg-white rounded-3xl shadow-lg border border-gray-100 px-6 py-3 relative" style={{boxShadow:'0 4px 24px 0 rgba(255,180,60,0.08),0 1.5px 8px 0 rgba(255,140,0,0.08)'}}>
-          <span className="absolute left-8 top-1/2 -translate-y-1/2 text-gray-300">
-            <Search className="h-5 w-5" />
-          </span>
-          <input
-            type="text"
-            className="flex-1 pl-12 pr-4 py-2 text-lg bg-transparent outline-none placeholder:text-gray-400 text-gray-800 font-semibold"
-            placeholder="原型号"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="ml-4 px-7 py-2 rounded-2xl text-base font-bold text-white shadow-md"
-            style={{background: 'linear-gradient(90deg, #ffb347 0%, #ff7b00 100%)', boxShadow:'0 2px 12px 0 rgba(255,180,60,0.18)'}}
-          >
-            搜索
-          </button>
+      {/* 搜索结果 */}
+      {isLoading ? (
+        <div className="flex justify-center py-12">
+          <LoadingSpinner label="正在查找替代芯片..." />
         </div>
-      </form>
+      ) : !hasSearched ? (
+        // 初始状态
+        <div className="py-8">
+          <div className="max-w-2xl mx-auto space-y-6">
+            {/* 搜索提示 */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-xl p-4 border border-blue-100 dark:border-blue-800/30">
+              <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                <RefreshCw className="h-4 w-4 text-blue-500" />
+                替代芯片搜索提示
+              </h4>
+              <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+                <p>• 输入完整型号：如 "STM32F407VGT6"</p>
+                <p>• 支持模糊搜索：如 "STM32F407"</p>
+                <p>• 支持参数搜索：如 "32位 ARM Cortex-M4"</p>
+              </div>
+            </div>
 
-      {/* 步骤说明 */}
-      <div className="flex flex-col gap-4 mb-8">
-        {steps.map((s, i) => (
-          <div key={i} className="flex items-start gap-3">
-            <div className="w-7 h-7 flex items-center justify-center rounded-full bg-orange-100 text-orange-600 font-bold text-base shadow-sm">{i+1}</div>
-            <div className="text-gray-700 text-base font-medium leading-7">{s}</div>
+            {/* 热门替代搜索 */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
+                🔥 热门替代搜索
+              </h3>
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                {['STM32F407', 'ESP32', 'TPS5430', 'LM358', 'AMS1117', 'ATmega328P'].map((term) => (
+                  <button
+                    key={term}
+                    className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:border-blue-300 dark:hover:border-blue-700 border border-gray-200 dark:border-gray-700 rounded-md transition-all duration-200 hover:shadow-sm truncate text-center"
+                    onClick={() => handleSearch(term)}
+                    title={term}
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
-
-      {/* 对比表格 */}
-      <div className="bg-white rounded-2xl shadow-lg p-4 mb-8">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-base font-bold text-gray-800">替代料（共 1 个）</span>
-          <Button variant="outline" size="sm" className="rounded px-2 py-1 text-xs ml-2">切换中文</Button>
-          <Button variant="outline" size="sm" className="rounded px-2 py-1 text-xs ml-2">隐藏相同</Button>
         </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-center border-separate border-spacing-y-2">
-            <thead>
-              <tr className="text-gray-500 text-xs">
-                <th></th>
-                <th className="px-4">原型号</th>
-                <th className="px-4 text-green-600">pin to pin</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mockData.map((row, idx) => (
-                <tr key={idx} className="bg-white rounded-xl shadow border">
-                  <td className="align-top pt-6">
-                    <input type="checkbox" checked readOnly className="accent-orange-500" />
-                  </td>
-                  <td className="bg-gray-50 rounded-xl p-3 align-top min-w-[140px]">
-                    <div className="font-bold text-base text-gray-800 mb-1">{row.original.model}</div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <Image src={row.original.logo} alt="logo" width={20} height={20} className="rounded bg-white border" />
-                      <span className="text-xs text-gray-500">{row.original.brand}</span>
+      ) : searchResults.length > 0 ? (
+        // 搜索结果
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {searchResults.map((chip) => (
+              <div key={chip.id} className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <img
+                      src={`/brands/image_cp/${chip.model}.png`}
+                      alt={chip.model}
+                      className="w-8 h-8 object-contain"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        target.nextElementSibling?.classList.remove('hidden');
+                      }}
+                    />
+                    <RefreshCw className="hidden h-5 w-5 text-blue-500" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">{chip.model}</h4>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{chip.description}</p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{chip.manufacturer}</span>
+                      <span className="text-xs text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
+                        兼容性: 95%
+                      </span>
                     </div>
-                    <div className="flex items-center justify-center mb-1">
-                      <Image src={row.original.img} alt="chip" width={36} height={24} className="object-contain" />
-                    </div>
-                    <div className="flex items-center gap-1 mb-1">
-                      <FileText className="h-4 w-4 text-orange-400" />
-                      <span className="text-xs text-blue-600 cursor-pointer">数据手册</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1 mb-1">
-                      <span className="bg-blue-50 text-blue-600 rounded px-2 py-0.5 text-xs font-medium">{row.original.category}</span>
-                    </div>
-                    <div className="flex items-center gap-1 mb-1">
-                      <BookOpen className="h-4 w-4 text-green-500" />
-                      <span className="text-xs text-green-600">{row.original.lifecycle}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Package className="h-4 w-4 text-gray-400" />
-                      <span className="text-xs text-gray-500">{row.original.package}</span>
-                    </div>
-                  </td>
-                  <td className="bg-green-50 rounded-xl p-3 align-top min-w-[140px]">
-                    <div className="font-bold text-base text-gray-800 mb-1">{row.alternative.model}</div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <Image src={row.alternative.logo} alt="logo" width={20} height={20} className="rounded bg-white border" />
-                      <span className="text-xs text-gray-500">{row.alternative.brand}</span>
-                    </div>
-                    <div className="flex items-center justify-center mb-1">
-                      <Image src={row.alternative.img} alt="chip" width={36} height={24} className="object-contain" />
-                    </div>
-                    <div className="flex items-center gap-1 mb-1">
-                      <FileText className="h-4 w-4 text-orange-400" />
-                      <span className="text-xs text-blue-600 cursor-pointer">数据手册</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1 mb-1">
-                      <span className="bg-blue-50 text-blue-600 rounded px-2 py-0.5 text-xs font-medium">{row.alternative.category}</span>
-                    </div>
-                    <div className="flex items-center gap-1 mb-1">
-                      <BookOpen className="h-4 w-4 text-green-500" />
-                      <span className="text-xs text-green-600">{row.alternative.lifecycle}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Package className="h-4 w-4 text-gray-400" />
-                      <span className="text-xs text-gray-500">{row.alternative.package}</span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        // 无结果提示
+        <Alert variant="default" className="shadow-md">
+          <SearchX className="h-5 w-5" />
+          <AlertTitle>未找到替代芯片</AlertTitle>
+          <AlertDescription>
+            没有找到与"{currentQuery}"相关的替代芯片。请尝试使用其他关键词或检查拼写。
+          </AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 } 

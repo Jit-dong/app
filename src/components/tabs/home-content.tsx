@@ -93,6 +93,14 @@ export default function HomeContent() {
         return;
       }
 
+      // 查替代跳转到替代结果页面
+      if (searchMode === 'alternative') {
+        const params = new URLSearchParams();
+        params.set('q', query);
+        router.push(`/alternatives/results?${params.toString()}`);
+        return;
+      }
+
       // 其他模式跳转到搜索结果页面
       const params = new URLSearchParams();
       params.set('q', query);
@@ -180,6 +188,11 @@ export default function HomeContent() {
                           // 丝印反查跳转到独立页面
                           if (key === 'silkscreen') {
                             router.push('/silkscreen');
+                            return;
+                          }
+                          // 查替代跳转到查替代主页
+                          if (key === 'alternative') {
+                            router.push('/alternatives');
                             return;
                           }
                           // 其他模式跳转到搜索页面

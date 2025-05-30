@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle as DeprecatedCardTitle } from "@/components/ui/card"; // DeprecatedCardTitle might be unused now
@@ -60,6 +59,7 @@ export interface ChipFilters {
   lowPower?: boolean;
   internalOscillator?: boolean;
   interfaceTypes?: string[];
+  alternative?: boolean;
 }
 
 interface FilterPanelProps {
@@ -111,6 +111,7 @@ export default function FilterPanel({ onApplyFilters, onClearFilters, initialFil
       lowPower: isLowPower || undefined,
       internalOscillator: hasInternalOsc || undefined,
       interfaceTypes: selectedInterfaces.length > 0 ? selectedInterfaces : undefined,
+      alternative: initialFilters.alternative || undefined,
     };
     onApplyFilters(filtersToApply);
     setSheetOpen(false); // Close the sheet on apply

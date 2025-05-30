@@ -1,5 +1,5 @@
 
-import type { Chip, AlternativeChip, ReferenceDesign, TechnicalDocument, ApplicationGuide, IndustryNews, OrderDetail } from './types';
+import type { Chip, AlternativeChip, ReferenceDesign, TechnicalDocument, ApplicationGuide, IndustryNews, OrderDetail, AlternativePart } from './types';
 import type { ChipFilters } from '@/components/shared/filter-panel'; // Import ChipFilters
 
 export const placeholderChips: Chip[] = [
@@ -1126,6 +1126,125 @@ export const placeholderSilkscreenData: SilkscreenData[] = [
   }
 ];
 
+// 查替代搜索结果接口
+export interface AlternativeSearchResult {
+  chip: Chip | null;           // 主芯片信息
+  orderDetails: OrderDetail[]; // 订购详情（子型号）
+  isExactMatch: boolean;       // 是否精确匹配
+  totalAlternatives: number;   // 总替代数量
+}
+
+// 查替代搜索函数 - 返回与查资料相同的格式
+export function searchAlternatives(query: string): AlternativeSearchResult {
+  if (!query.trim()) {
+    return {
+      chip: null,
+      orderDetails: [],
+      isExactMatch: false,
+      totalAlternatives: 0
+    };
+  }
+
+  const lowerQuery = query.toLowerCase().trim();
+
+  // 1. 尝试精确匹配芯片ID（父型号）
+  const exactChip = placeholderChips.find(chip =>
+    chip.id.toLowerCase() === lowerQuery
+  );
+
+  if (exactChip) {
+    // 找到父型号，返回该芯片及其所有子型号
+    const relatedOrderDetails = placeholderOrderDetails.filter(order =>
+      order.chipId.toLowerCase() === exactChip.id.toLowerCase()
+    );
+
+    return {
+      chip: exactChip,
+      orderDetails: relatedOrderDetails,
+      isExactMatch: true,
+      totalAlternatives: relatedOrderDetails.length
+    };
+  }
+
+  // 2. 尝试通过订购型号查找（子型号）
+  const orderDetail = placeholderOrderDetails.find(order =>
+    order.model.toLowerCase() === lowerQuery
+  );
+
+  if (orderDetail) {
+    // 找到子型号，返回对应的父芯片和这个具体的订购详情
+    const parentChip = placeholderChips.find(chip =>
+      chip.id.toLowerCase() === orderDetail.chipId.toLowerCase()
+    );
+
+    // 获取同系列的所有子型号数量
+    const allOrderDetails = placeholderOrderDetails.filter(order =>
+      order.chipId.toLowerCase() === orderDetail.chipId.toLowerCase()
+    );
+
+    return {
+      chip: parentChip || null,
+      orderDetails: [orderDetail], // 只返回这一个具体的订购详情
+      isExactMatch: true,
+      totalAlternatives: allOrderDetails.length
+    };
+  }
+
+  // 3. 模糊匹配
+  const fuzzyChips = placeholderChips.filter(chip =>
+    chip.id.toLowerCase().includes(lowerQuery) ||
+    chip.model.toLowerCase().includes(lowerQuery) ||
+    chip.manufacturer.toLowerCase().includes(lowerQuery)
+  );
+
+  if (fuzzyChips.length > 0) {
+    // 返回第一个匹配的芯片及其订购详情
+    const firstChip = fuzzyChips[0];
+    const relatedOrderDetails = placeholderOrderDetails.filter(order =>
+      order.chipId.toLowerCase() === firstChip.id.toLowerCase()
+    );
+
+    return {
+      chip: firstChip,
+      orderDetails: relatedOrderDetails,
+      isExactMatch: false,
+      totalAlternatives: relatedOrderDetails.length
+    };
+  }
+
+  // 4. 通过订购型号模糊匹配
+  const fuzzyOrderDetails = placeholderOrderDetails.filter(order =>
+    order.model.toLowerCase().includes(lowerQuery)
+  );
+
+  if (fuzzyOrderDetails.length > 0) {
+    // 按chipId分组，返回第一组
+    const firstOrder = fuzzyOrderDetails[0];
+    const parentChip = placeholderChips.find(chip =>
+      chip.id.toLowerCase() === firstOrder.chipId.toLowerCase()
+    );
+
+    const sameChipOrders = fuzzyOrderDetails.filter(order =>
+      order.chipId.toLowerCase() === firstOrder.chipId.toLowerCase()
+    );
+
+    return {
+      chip: parentChip || null,
+      orderDetails: sameChipOrders,
+      isExactMatch: false,
+      totalAlternatives: sameChipOrders.length
+    };
+  }
+
+  // 5. 没有找到任何匹配
+  return {
+    chip: null,
+    orderDetails: [],
+    isExactMatch: false,
+    totalAlternatives: 0
+  };
+}
+
 // 丝印反查搜索函数
 export function searchSilkscreen(query: string): SilkscreenData[] {
   if (!query.trim()) return [];
@@ -1335,4 +1454,142 @@ export function findOrderDetailsByChipIdAndQuery(chipId: string, searchQuery?: s
   }
 
   return results;
+}
+
+// TPS563201DDCR 的替代料数据
+export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
+  'TPS563201DDCR': [
+    {
+      id: 'AP62300TWU-7',
+      partNumber: 'AP62300TWU-7',
+      manufacturer: 'DIODES(美台)',
+      package: 'TSOT-26-6',
+      lifecycle: '量产',
+      availability: 'pin to pin',
+      description: 'DC/DC CONV HV BUCK,T',
+      imageUrl: '/brands/image_td/AP62300TWU-7.png',
+      datasheetUrl: '/docs/AP62300TWU-7-datasheet.pdf',
+      pinToPin: true,
+      functionalEquivalent: true,
+      notes: 'DCDC CONV HV BUCK,T'
+    },
+
+    {
+      id: 'RT6253B',
+      partNumber: 'RT6253B',
+      manufacturer: 'Richtek(立锜)',
+      package: 'TSOT-26(FC)/SOT-563(FC)',
+      lifecycle: '量产',
+      availability: '功能相似',
+      description: '17V Input, 3A, ACOT Buck Converter with Both FET Integrated',
+      imageUrl: '/brands/image_td/RT6253B.png',
+      datasheetUrl: '/docs/RT6253B-datasheet.pdf',
+      pinToPin: false,
+      functionalEquivalent: true,
+      notes: '中微半导'
+    },
+    {
+      id: 'RT6253A',
+      partNumber: 'RT6253A',
+      manufacturer: 'Richtek(立锜)',
+      package: 'TSOT-26(FC)/SOT-563(FC)',
+      lifecycle: '量产',
+      availability: '功能相似',
+      description: '17V Input, 3A, ACOT Buck Converter with Both FET Integrated',
+      imageUrl: '/brands/image_td/RT6253A.png',
+      datasheetUrl: '/docs/RT6253A-datasheet.pdf',
+      pinToPin: false,
+      functionalEquivalent: true,
+      notes: '中微半导'
+    },
+    {
+      id: 'STRG02TR',
+      partNumber: 'STRG02TR',
+      manufacturer: 'STR(意法)',
+      package: 'VFDFPN 12 3X3X0.9',
+      lifecycle: '立即供货',
+      availability: '功能相似',
+      description: 'Synchronous rectifier smart driver',
+      imageUrl: '/brands/image_td/STRG02TR.png',
+      datasheetUrl: '/docs/STRG02TR-datasheet.pdf',
+      pinToPin: false,
+      functionalEquivalent: false,
+      notes: '意大利'
+    },
+    {
+      id: 'LTC1266ACS#TRPBF',
+      partNumber: 'LTC1266ACS#TRPBF',
+      manufacturer: 'ADI(亚德诺)',
+      package: 'SO-16',
+      lifecycle: '立即供货',
+      availability: '功能相似',
+      description: 'IC REG CTRLR BUCK 16 SOIC',
+      imageUrl: '/brands/image_td/LTC1266ACS%23TRPBF.png',
+      datasheetUrl: '/docs/LTC1266ACS#TRPBF-datasheet.pdf',
+      pinToPin: false,
+      functionalEquivalent: true,
+      notes: '美国'
+    },
+    {
+      id: 'RT7250AZSP',
+      partNumber: 'RT7250AZSP',
+      manufacturer: 'Richtek(立锜)',
+      package: 'SOIC-8(EP-154mil)',
+      lifecycle: '立即供货',
+      availability: '功能相似',
+      description: 'IC REG BUCK ADJUSTABLE 8SOIC',
+      imageUrl: '/brands/image_td/RT7250AZSP.png',
+      datasheetUrl: '/docs/RT7250AZSP-datasheet.pdf',
+      pinToPin: false,
+      functionalEquivalent: true,
+      notes: '中国台湾'
+    },
+    {
+      id: 'LT1506IR-SYNC',
+      partNumber: 'LT1506IR-SYNC',
+      manufacturer: 'ADI(亚德诺)',
+      package: 'TO-263',
+      lifecycle: '立即供货',
+      availability: '功能相似',
+      description: 'Conv DC-DC 4V to 15V Synchronous Step Down Single-Out 4.5A 8-Pin DDPAK',
+      imageUrl: '/brands/image_td/LT1506IR-SYNC.png',
+      datasheetUrl: '/docs/LT1506IR-SYNC-datasheet.pdf',
+      pinToPin: false,
+      functionalEquivalent: true,
+      notes: '美国'
+    },
+    {
+      id: 'LT1506CR#PBF',
+      partNumber: 'LT1506CR#PBF',
+      manufacturer: 'ADI(亚德诺)',
+      package: 'DDPAK-7',
+      lifecycle: '停产',
+      availability: '功能相似',
+      description: 'IC REG BUCK ADJ 4.5A DDPAK-7',
+      imageUrl: '/brands/image_td/LT1506CR%23PBF.png',
+      datasheetUrl: '/docs/LT1506CR#PBF-datasheet.pdf',
+      pinToPin: false,
+      functionalEquivalent: true,
+      notes: '美国'
+    },
+    {
+      id: 'LT1507CN8',
+      partNumber: 'LT1507CN8',
+      manufacturer: 'ADI(亚德诺)',
+      package: 'DIP-8',
+      lifecycle: '停产',
+      availability: '功能相似',
+      description: 'Conv DC-DC 4V to 15V Synchronous Step Down Single-Out 1.5A 8-Pin PDIP',
+      imageUrl: '/brands/image_td/LT1507CN8.png',
+      datasheetUrl: '/docs/LT1507CN8-datasheet.pdf',
+      pinToPin: false,
+      functionalEquivalent: true,
+      notes: '美国'
+    }
+  ]
+};
+
+// 根据订购型号查找替代料
+export function findAlternativePartsByOrderModel(orderModel: string): AlternativePart[] {
+  return placeholderAlternativeParts[orderModel] || [];
 }

@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, CheckCircle2, Star, Download, Cpu } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Download, Cpu } from 'lucide-react';
 import { searchSilkscreen, type SilkscreenData } from '@/lib/placeholder-data';
 import Image from 'next/image';
 import LoadingSpinner from '@/components/shared/loading-spinner';
@@ -14,7 +14,6 @@ function SilkscreenResultsContent() {
   const query = searchParams.get('q') || '';
 
   const [results, setResults] = useState<SilkscreenData[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // 筛选状态
@@ -24,13 +23,7 @@ function SilkscreenResultsContent() {
     package: ''
   });
 
-  // 加载收藏列表
-  useEffect(() => {
-    const favs = localStorage.getItem('silkscreen-favorites');
-    if (favs) {
-      setFavorites(JSON.parse(favs));
-    }
-  }, []);
+
 
   // 执行搜索
   useEffect(() => {
@@ -56,14 +49,7 @@ function SilkscreenResultsContent() {
     router.push('/silkscreen');
   };
 
-  // 收藏功能
-  const toggleFavorite = (partNumber: string) => {
-    const newFavorites = favorites.includes(partNumber)
-      ? favorites.filter(f => f !== partNumber)
-      : [...favorites, partNumber];
-    setFavorites(newFavorites);
-    localStorage.setItem('silkscreen-favorites', JSON.stringify(newFavorites));
-  };
+
 
   // 简化分类名称
   const simplifyCategory = (category: string): string => {
@@ -278,8 +264,8 @@ function SilkscreenResultsContent() {
                           </div>
                         </div>
 
-                        {/* 数据手册按钮组 - 右上角垂直排列 */}
-                        <div className="flex flex-col gap-1.5 flex-shrink-0 ml-3">
+                        {/* 数据手册按钮 - 右上角 */}
+                        <div className="flex-shrink-0 ml-3">
                           {/* 数据手册按钮 - 红色主题 */}
                           {item.datasheetUrl && (
                             <Button
@@ -297,22 +283,6 @@ function SilkscreenResultsContent() {
                               <span className="text-xs ml-1 font-medium">数据手册</span>
                             </Button>
                           )}
-
-                          {/* 收藏按钮 */}
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className={`transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 px-2 py-1 h-auto min-w-[60px] backdrop-blur-sm ${
-                              favorites.includes(item.partNumber)
-                                ? 'text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-700 bg-yellow-50/50 dark:bg-yellow-950/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 hover:border-yellow-300 dark:hover:border-yellow-600 hover:shadow-yellow-200/50 dark:hover:shadow-yellow-900/30'
-                                : 'text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-950/20 hover:bg-gray-100 dark:hover:bg-gray-900/30 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-gray-200/50 dark:hover:shadow-gray-900/30'
-                            }`}
-                            onClick={() => toggleFavorite(item.partNumber)}
-                            title={favorites.includes(item.partNumber) ? '取消收藏' : '添加收藏'}
-                          >
-                            <Star className={`h-3 w-3 ${favorites.includes(item.partNumber) ? 'fill-current' : ''}`} />
-                            <span className="text-xs ml-1 font-medium">收藏</span>
-                          </Button>
                         </div>
                       </div>
                     </div>

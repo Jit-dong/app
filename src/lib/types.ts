@@ -145,3 +145,19 @@ export interface SilkscreenData {
   alternativeSilkscreens?: string[]; // 可能的其他丝印变体
 }
 
+// 替代料数据类型
+export interface AlternativePart {
+  id: string;
+  partNumber: string; // 替代料型号
+  manufacturer: string; // 品牌
+  package: string; // 封装
+  lifecycle: string; // 生命周期状态
+  availability: string; // 供货状态
+  description: string; // 产品描述
+  imageUrl?: string; // 产品图片
+  datasheetUrl?: string; // 数据手册链接
+  pinToPin: boolean; // 是否pin to pin兼容
+  functionalEquivalent: boolean; // 是否功能等效
+  notes?: string; // 备注信息
+}
+
