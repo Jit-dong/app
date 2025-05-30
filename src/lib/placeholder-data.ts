@@ -1471,7 +1471,12 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
       datasheetUrl: '/docs/AP62300TWU-7-datasheet.pdf',
       pinToPin: true,
       functionalEquivalent: true,
-      notes: 'DCDC CONV HV BUCK,T'
+      notes: 'DCDC CONV HV BUCK,T',
+      alternativeLevel: 'P2P',
+      brandCategory: 'FOREIGN',
+      compatibilityScore: 95,
+      similarities: ['相同的输入电压范围', '相同的输出电流', '相似的封装尺寸'],
+      keyDifferences: ['开关频率略有不同', '内部补偿网络差异']
     },
 
     {
@@ -1486,7 +1491,12 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
       datasheetUrl: '/docs/RT6253B-datasheet.pdf',
       pinToPin: false,
       functionalEquivalent: true,
-      notes: '中微半导'
+      notes: '中微半导',
+      alternativeLevel: 'FUNCTIONAL',
+      brandCategory: 'FOREIGN',
+      compatibilityScore: 85,
+      similarities: ['相同的输入电压范围', '相同的输出电流', '集成FET设计'],
+      keyDifferences: ['不同的控制架构', '封装略有差异', '补偿方式不同']
     },
     {
       id: 'RT6253A',
@@ -1500,7 +1510,70 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
       datasheetUrl: '/docs/RT6253A-datasheet.pdf',
       pinToPin: false,
       functionalEquivalent: true,
-      notes: '中微半导'
+      notes: '中微半导',
+      alternativeLevel: 'FUNCTIONAL',
+      brandCategory: 'FOREIGN',
+      compatibilityScore: 85,
+      similarities: ['相同的输入电压范围', '相同的输出电流', '集成FET设计'],
+      keyDifferences: ['不同的控制架构', '封装略有差异', '补偿方式不同']
+    },
+    // 添加国内品牌替代料
+    {
+      id: 'TPS563201DDCR-SAME',
+      partNumber: 'TPS563201DDCT',
+      manufacturer: 'TI(德州仪器)',
+      package: 'SOT-23-THN (DDC)',
+      lifecycle: '量产',
+      availability: '完全兼容',
+      description: '4.5V 至 17V 输入、3A 输出、Eco 模式下的同步降压转换器',
+      imageUrl: '/brands/image_td/TPS563201DDCT.png',
+      datasheetUrl: '/docs/TPS563201-datasheet.pdf',
+      pinToPin: true,
+      functionalEquivalent: true,
+      notes: '同品牌不同封装',
+      alternativeLevel: 'BOM2BOM',
+      brandCategory: 'SAME_BRAND',
+      compatibilityScore: 100,
+      similarities: ['完全相同的电气特性', '相同的管脚定义', '相同的控制逻辑'],
+      keyDifferences: ['封装形式不同 (THN vs 标准)']
+    },
+    {
+      id: 'CW3002',
+      partNumber: 'CW3002',
+      manufacturer: '中微半导体',
+      package: 'SOT-23-6',
+      lifecycle: '量产',
+      availability: 'pin to pin',
+      description: '4.5V-18V输入，3A同步降压转换器',
+      imageUrl: '/brands/image_td/CW3002.png',
+      datasheetUrl: '/docs/CW3002-datasheet.pdf',
+      pinToPin: true,
+      functionalEquivalent: true,
+      notes: '国产替代',
+      alternativeLevel: 'P2P',
+      brandCategory: 'DOMESTIC',
+      compatibilityScore: 92,
+      similarities: ['相同的管脚定义', '相似的输入电压范围', '相同的输出电流'],
+      keyDifferences: ['开关频率可调范围不同', '启动时序略有差异']
+    },
+    {
+      id: 'SGM6603',
+      partNumber: 'SGM6603',
+      manufacturer: '圣邦微电子',
+      package: 'SOT-23-6',
+      lifecycle: '量产',
+      availability: 'pin to pin',
+      description: '4.5V-18V输入，3A同步降压转换器',
+      imageUrl: '/brands/image_td/SGM6603.png',
+      datasheetUrl: '/docs/SGM6603-datasheet.pdf',
+      pinToPin: true,
+      functionalEquivalent: true,
+      notes: '国产替代',
+      alternativeLevel: 'P2P',
+      brandCategory: 'DOMESTIC',
+      compatibilityScore: 90,
+      similarities: ['相同的管脚定义', '相似的输入电压范围', '相同的输出电流'],
+      keyDifferences: ['内部补偿网络不同', '过温保护阈值差异']
     },
     {
       id: 'STRG02TR',
@@ -1514,7 +1587,12 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
       datasheetUrl: '/docs/STRG02TR-datasheet.pdf',
       pinToPin: false,
       functionalEquivalent: false,
-      notes: '意大利'
+      notes: '意大利',
+      alternativeLevel: 'PACKAGE',
+      brandCategory: 'FOREIGN',
+      compatibilityScore: 60,
+      similarities: ['相似的封装尺寸'],
+      keyDifferences: ['完全不同的功能', '不同的管脚定义', '不同的应用场景']
     },
     {
       id: 'LTC1266ACS#TRPBF',
@@ -1528,7 +1606,12 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
       datasheetUrl: '/docs/LTC1266ACS#TRPBF-datasheet.pdf',
       pinToPin: false,
       functionalEquivalent: true,
-      notes: '美国'
+      notes: '美国',
+      alternativeLevel: 'FUNCTIONAL',
+      brandCategory: 'FOREIGN',
+      compatibilityScore: 75,
+      similarities: ['降压转换器功能', '可调输出'],
+      keyDifferences: ['封装完全不同', '管脚定义不同', '控制方式差异较大']
     },
     {
       id: 'RT7250AZSP',
@@ -1542,7 +1625,12 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
       datasheetUrl: '/docs/RT7250AZSP-datasheet.pdf',
       pinToPin: false,
       functionalEquivalent: true,
-      notes: '中国台湾'
+      notes: '中国台湾',
+      alternativeLevel: 'FUNCTIONAL',
+      brandCategory: 'FOREIGN',
+      compatibilityScore: 80,
+      similarities: ['降压转换器功能', '可调输出', '相似的输入电压范围'],
+      keyDifferences: ['封装不同', '管脚定义不同', '输出电流能力差异']
     },
     {
       id: 'LT1506IR-SYNC',
@@ -1556,7 +1644,12 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
       datasheetUrl: '/docs/LT1506IR-SYNC-datasheet.pdf',
       pinToPin: false,
       functionalEquivalent: true,
-      notes: '美国'
+      notes: '美国',
+      alternativeLevel: 'FUNCTIONAL',
+      brandCategory: 'FOREIGN',
+      compatibilityScore: 78,
+      similarities: ['同步降压转换器', '相似的输出电流', '相似的输入电压范围'],
+      keyDifferences: ['封装完全不同', '管脚定义不同', '散热特性差异']
     },
     {
       id: 'LT1506CR#PBF',
@@ -1570,7 +1663,12 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
       datasheetUrl: '/docs/LT1506CR#PBF-datasheet.pdf',
       pinToPin: false,
       functionalEquivalent: true,
-      notes: '美国'
+      notes: '美国',
+      alternativeLevel: 'FUNCTIONAL',
+      brandCategory: 'FOREIGN',
+      compatibilityScore: 70,
+      similarities: ['降压转换器功能', '可调输出'],
+      keyDifferences: ['已停产', '封装不同', '管脚定义不同']
     },
     {
       id: 'LT1507CN8',
@@ -1584,7 +1682,12 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
       datasheetUrl: '/docs/LT1507CN8-datasheet.pdf',
       pinToPin: false,
       functionalEquivalent: true,
-      notes: '美国'
+      notes: '美国',
+      alternativeLevel: 'FUNCTIONAL',
+      brandCategory: 'FOREIGN',
+      compatibilityScore: 65,
+      similarities: ['同步降压转换器', '相似的输入电压范围'],
+      keyDifferences: ['已停产', '输出电流较小', '封装完全不同', 'DIP封装不适合现代设计']
     }
   ]
 };

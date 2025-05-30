@@ -3,6 +3,42 @@ import Image from 'next/image';
 import { Cpu } from 'lucide-react';
 import type { OrderDetail } from '@/lib/types';
 
+// 状态颜色配置
+const getLifecycleColor = (lifecycle: string) => {
+  switch (lifecycle) {
+    case '量产':
+      return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+    case '立即供货':
+      return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+    case '停产':
+      return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+    case '样品':
+      return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+    case '预生产':
+      return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
+    default:
+      return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400';
+  }
+};
+
+// 状态图标配置
+const getLifecycleIcon = (lifecycle: string) => {
+  switch (lifecycle) {
+    case '量产':
+      return '✅';
+    case '立即供货':
+      return '🚀';
+    case '停产':
+      return '❌';
+    case '样品':
+      return '🧪';
+    case '预生产':
+      return '⏳';
+    default:
+      return '📦';
+  }
+};
+
 interface OrderingDetailsLayoutProps {
   orderDetails: OrderDetail[];
   title?: string;
@@ -60,8 +96,8 @@ export default function OrderingDetailsLayout({
                 {orderDetail.model}
               </span>
             </div>
-            <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-full flex-shrink-0">
-              量产
+            <span className={`text-xs px-2 py-1 rounded-full flex-shrink-0 font-medium ${getLifecycleColor(orderDetail.lifecycle)}`}>
+              {getLifecycleIcon(orderDetail.lifecycle)} {orderDetail.lifecycle}
             </span>
           </div>
 

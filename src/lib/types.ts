@@ -145,6 +145,12 @@ export interface SilkscreenData {
   alternativeSilkscreens?: string[]; // 可能的其他丝印变体
 }
 
+// 替代等级枚举
+export type AlternativeLevel = 'BOM2BOM' | 'P2P' | 'FUNCTIONAL' | 'PACKAGE';
+
+// 品牌分类枚举
+export type BrandCategory = 'DOMESTIC' | 'FOREIGN' | 'SAME_BRAND';
+
 // 替代料数据类型
 export interface AlternativePart {
   id: string;
@@ -159,5 +165,11 @@ export interface AlternativePart {
   pinToPin: boolean; // 是否pin to pin兼容
   functionalEquivalent: boolean; // 是否功能等效
   notes?: string; // 备注信息
+  // 新增字段
+  alternativeLevel: AlternativeLevel; // 替代等级
+  brandCategory: BrandCategory; // 品牌分类
+  compatibilityScore: number; // 兼容性评分 (0-100)
+  keyDifferences?: string[]; // 主要差异点
+  similarities?: string[]; // 相同点
 }
 

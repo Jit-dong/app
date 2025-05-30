@@ -9,9 +9,12 @@ import {
   Filter
 } from "lucide-react";
 import { searchAlternatives, type AlternativeSearchResult, findAlternativePartsByOrderModel } from "@/lib/placeholder-data";
+import type { AlternativePart } from "@/lib/types";
 import ChipInfoDisplay from "@/components/shared/chip-info-display";
 import OrderingDetailsLayout from "@/components/shared/ordering-details-layout";
 import AlternativePartsTable from "@/components/shared/alternative-parts-table";
+import AlternativePartsFiltered from "@/components/shared/alternative-parts-filtered";
+import PartComparisonModal from "@/components/shared/part-comparison-modal";
 
 export default function AlternativeResultsPage() {
   const router = useRouter();
@@ -21,6 +24,8 @@ export default function AlternativeResultsPage() {
   const [searchResult, setSearchResult] = useState<AlternativeSearchResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [alternativeParts, setAlternativeParts] = useState<any[]>([]);
+  const [comparisonPart, setComparisonPart] = useState<AlternativePart | null>(null);
+  const [showComparison, setShowComparison] = useState(false);
 
   // 筛选状态 - 针对订购详情
   const [selectedPackage, setSelectedPackage] = useState<string>('全部');
@@ -78,6 +83,17 @@ export default function AlternativeResultsPage() {
     setSelectedTemp('全部');
   };
 
+  // 处理对比功能
+  const handleCompare = (part: AlternativePart) => {
+    setComparisonPart(part);
+    setShowComparison(true);
+  };
+
+  const handleCloseComparison = () => {
+    setShowComparison(false);
+    setComparisonPart(null);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
@@ -106,73 +122,131 @@ export default function AlternativeResultsPage() {
             </Button>
           </div>
 
-          {/* 标题区域 */}
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl border border-orange-200/60 dark:border-gray-700/50 p-4 shadow-lg shadow-orange-100/50 dark:shadow-gray-900/20">
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 leading-tight">
-              "{query}" 的替代方案
-            </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {searchResult?.chip ? (
-                searchResult.orderDetails.length === 1
-                  ? `找到 1 个具体型号，共有 ${alternativeParts.length} 个替代料`
-                  : `找到 ${filteredOrderDetails.length} 个替代选择`
-              ) : '未找到匹配结果'}
-            </p>
+          {/* 标题区域 - 美化设计 */}
+          <div className="bg-gradient-to-r from-white/95 to-orange-50/90 dark:from-gray-800/95 dark:to-orange-900/20 backdrop-blur-sm rounded-2xl border border-orange-200/60 dark:border-gray-700/50 p-5 shadow-xl shadow-orange-100/30 dark:shadow-gray-900/20">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">🔍</span>
+              </div>
+              <div className="flex-1">
+                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent mb-1 leading-tight">
+                  "{query}" 的替代方案
+                </h1>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {searchResult?.chip ? (
+                    searchResult.orderDetails.length === 1
+                      ? `找到 1 个具体型号，共有 ${alternativeParts.length} 个替代料`
+                      : `找到 ${filteredOrderDetails.length} 个替代选择`
+                  ) : '未找到匹配结果'}
+                </p>
+              </div>
+            </div>
+
+            {/* 查询类型指示器 */}
+            {searchResult?.chip && (
+              <div className="flex items-center gap-2">
+                <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  searchResult.orderDetails.length === 1
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                    : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                }`}>
+                  {searchResult.orderDetails.length === 1 ? '🎯 精确匹配' : '📦 系列查询'}
+                </div>
+                <div className="px-3 py-1 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 rounded-full text-xs font-medium">
+                  ⚡ 实时数据
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
 
 
-        {/* 筛选器 - 移动端优化 */}
+        {/* 筛选器 - 美化设计 */}
         {searchResult &&
          searchResult.orderDetails.length > 3 &&
          !(searchResult.isExactMatch && searchResult.orderDetails.length === searchResult.totalAlternatives) && (
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl border border-orange-200/60 dark:border-gray-700/50 p-3 mb-4 shadow-sm">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">筛选条件</span>
+          <div className="bg-gradient-to-r from-white/95 to-blue-50/90 dark:from-gray-800/95 dark:to-blue-900/20 backdrop-blur-sm rounded-2xl border border-blue-200/60 dark:border-gray-700/50 p-5 mb-6 shadow-xl shadow-blue-100/30 dark:shadow-gray-900/20">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-lg">
+                <Filter className="h-4 w-4 text-white" />
               </div>
+              <div>
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
+                  智能筛选
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  快速找到符合需求的型号
+                </p>
+              </div>
+            </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                  封装类型
+                </label>
                 <select
                   value={selectedPackage}
                   onChange={(e) => setSelectedPackage(e.target.value)}
-                  className="px-2 py-1.5 text-xs border border-orange-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="w-full px-3 py-2.5 text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-orange-500/20 focus:border-orange-500 transition-all duration-300 hover:border-orange-300"
                 >
                   {packages.map(pkg => (
-                    <option key={pkg} value={pkg}>封装: {pkg}</option>
+                    <option key={pkg} value={pkg}>{pkg === '全部' ? '全部封装' : pkg}</option>
                   ))}
                 </select>
+              </div>
 
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  管脚数量
+                </label>
                 <select
                   value={selectedPins}
                   onChange={(e) => setSelectedPins(e.target.value)}
-                  className="px-2 py-1.5 text-xs border border-orange-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="w-full px-3 py-2.5 text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-green-500/20 focus:border-green-500 transition-all duration-300 hover:border-green-300"
                 >
                   {pins.map(pin => (
-                    <option key={pin} value={pin}>管脚: {pin}</option>
+                    <option key={pin} value={pin}>{pin === '全部' ? '全部管脚' : `${pin} 管脚`}</option>
                   ))}
                 </select>
+              </div>
 
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                  工作温度
+                </label>
                 <select
                   value={selectedTemp}
                   onChange={(e) => setSelectedTemp(e.target.value)}
-                  className="px-2 py-1.5 text-xs border border-orange-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="w-full px-3 py-2.5 text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 hover:border-purple-300"
                 >
                   {temps.map(temp => (
-                    <option key={temp} value={temp}>温度: {temp}</option>
+                    <option key={temp} value={temp}>{temp === '全部' ? '全部温度' : temp}</option>
                   ))}
                 </select>
+              </div>
+            </div>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={resetFilters}
-                  className="text-xs h-8 bg-orange-50 dark:bg-gray-700 border-orange-200 dark:border-gray-600 hover:bg-orange-100 dark:hover:bg-gray-600"
-                >
-                  重置
-                </Button>
+            {/* 筛选结果统计和重置 */}
+            <div className="mt-4 pt-3 border-t border-gray-200/50 dark:border-gray-600/50">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  筛选结果: <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredOrderDetails.length}</span> 个型号
+                </span>
+                {(selectedPackage !== '全部' || selectedPins !== '全部' || selectedTemp !== '全部') && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={resetFilters}
+                    className="text-xs bg-orange-50 dark:bg-gray-700 border-orange-200 dark:border-gray-600 hover:bg-orange-100 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-400"
+                  >
+                    🔄 清除筛选
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -216,12 +290,23 @@ export default function AlternativeResultsPage() {
 
             {/* 替代料信息 - 仅在查询单个订购型号时显示 */}
             {searchResult.orderDetails.length === 1 && alternativeParts.length > 0 && (
-              <AlternativePartsTable
+              <AlternativePartsFiltered
                 parts={alternativeParts}
                 originalPart={query}
+                onCompare={handleCompare}
               />
             )}
           </div>
+        )}
+
+        {/* 对比模态框 */}
+        {comparisonPart && (
+          <PartComparisonModal
+            originalPart={query}
+            alternativePart={comparisonPart}
+            isOpen={showComparison}
+            onClose={handleCloseComparison}
+          />
         )}
       </div>
     </div>
