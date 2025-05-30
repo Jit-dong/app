@@ -183,35 +183,35 @@ export default function BrandListWithFilter() {
           </button>
         ))}
       </div>
-      {/* 筛选区 - 四个为一横 */}
-      <div className="flex flex-wrap gap-3 mb-6 px-2 justify-start">
+      {/* 筛选区 - 四个为一横，更紧凑的布局 */}
+      <div className="flex gap-2 mb-6 px-2 justify-start">
         <MultiSelect
           options={countryOptions}
           value={selectedCountries}
           onChange={setSelectedCountries}
           placeholder="国家地域"
-          className="flex-1 min-w-[120px] max-w-[200px] rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+          className="flex-1 min-w-[100px] max-w-[160px] rounded-lg text-sm bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/50 dark:to-amber-950/50 border-orange-200 dark:border-orange-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 dark:focus:ring-orange-800"
         />
         <MultiSelect
           options={typeOptions}
           value={selectedTypes}
           onChange={setSelectedTypes}
           placeholder="企业类型"
-          className="flex-1 min-w-[120px] max-w-[200px] rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+          className="flex-1 min-w-[100px] max-w-[160px] rounded-lg text-sm bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950/50 dark:to-yellow-950/50 border-amber-200 dark:border-amber-800 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 dark:focus:ring-amber-800"
         />
         <MultiSelect
           options={fieldOptions}
           value={selectedFields}
           onChange={setSelectedFields}
           placeholder="应用领域"
-          className="flex-1 min-w-[120px] max-w-[200px] rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+          className="flex-1 min-w-[100px] max-w-[160px] rounded-lg text-sm bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/50 dark:to-orange-950/50 border-yellow-200 dark:border-yellow-800 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 dark:focus:ring-yellow-800"
         />
         <MultiSelect
           options={categoryOptions}
           value={selectedCategories}
           onChange={setSelectedCategories}
-          placeholder="产品种类"
-          className="flex-1 min-w-[120px] max-w-[200px] rounded-xl text-sm bg-gray-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+          placeholder="产品类型"
+          className="flex-1 min-w-[100px] max-w-[160px] rounded-lg text-sm bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/50 dark:to-orange-950/50 border-red-200 dark:border-red-800 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-800"
         />
       </div>
       {/* 品牌列表 */}
@@ -224,10 +224,10 @@ export default function BrandListWithFilter() {
 
         {/* 品牌列表 - 每行一个品牌 */}
         <div className="divide-y divide-gray-100 dark:divide-gray-800">
-          {filtered.slice(0, showCount).map((brand, index) => (
+          {filtered.slice(0, showCount).map((brand) => (
             <div
               key={brand.name}
-              className="group cursor-pointer p-6 hover:bg-gradient-to-r hover:from-blue-50/30 hover:to-indigo-50/20 dark:hover:from-blue-950/20 dark:hover:to-indigo-950/10 transition-all duration-300"
+              className="group cursor-pointer p-6 hover:bg-gradient-to-r hover:from-orange-50/60 hover:to-amber-50/40 dark:hover:from-orange-950/30 dark:hover:to-amber-950/20 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/10 dark:hover:shadow-orange-900/20"
               onClick={() => {
                 // 这里可以添加点击品牌的处理逻辑
                 console.log('点击品牌:', brand.name);
@@ -236,7 +236,7 @@ export default function BrandListWithFilter() {
               <div className="flex items-start gap-6">
                 {/* 品牌Logo */}
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 group-hover:border-blue-300/60 dark:group-hover:border-blue-600/40 transition-all duration-300 group-hover:shadow-lg overflow-hidden">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-white via-orange-50/20 to-amber-50/15 dark:from-gray-800 dark:via-orange-950/15 dark:to-amber-950/10 rounded-xl border border-orange-200/60 dark:border-orange-700/60 group-hover:border-orange-400/80 dark:group-hover:border-orange-500/60 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-orange-500/20 dark:group-hover:shadow-orange-900/30 overflow-hidden">
                     <div className="w-full h-full flex items-center justify-center p-2">
                       <Image
                         src={brand.logo}
@@ -261,7 +261,7 @@ export default function BrandListWithFilter() {
                 {/* 品牌信息 */}
                 <div className="flex-1 min-w-0">
                   {/* 品牌名称 */}
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors duration-300">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
                     {brand.name}
                   </h3>
 
@@ -310,7 +310,7 @@ export default function BrandListWithFilter() {
           <div className="flex justify-center p-6 border-t border-gray-100 dark:border-gray-800">
             <Button
               variant="outline"
-              className="rounded-xl border-blue-200 text-blue-600 font-bold px-6 sm:px-8 py-2 sm:py-3 shadow hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 text-sm sm:text-base"
+              className="rounded-xl border-orange-200 text-orange-600 font-bold px-6 sm:px-8 py-2 sm:py-3 shadow hover:bg-orange-50 hover:border-orange-300 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-200 text-sm sm:text-base"
               onClick={() => setShowCount(showCount + 6)}
             >
               加载更多
@@ -323,7 +323,7 @@ export default function BrandListWithFilter() {
           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">
             点击品牌查看详细信息
           </p>
-          <div className="mt-2 sm:mt-3 w-16 sm:w-20 h-0.5 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mx-auto opacity-60"></div>
+          <div className="mt-2 sm:mt-3 w-16 sm:w-20 h-0.5 bg-gradient-to-r from-orange-400 to-amber-500 rounded-full mx-auto opacity-70"></div>
         </div>
       </div>
     </div>

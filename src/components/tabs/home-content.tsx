@@ -87,7 +87,13 @@ export default function HomeContent() {
 
   const handleSearch = (query: string) => {
     if (query.trim()) {
-      // 跳转到搜索结果页面
+      // 丝印反查跳转到独立页面
+      if (searchMode === 'silkscreen') {
+        router.push('/silkscreen');
+        return;
+      }
+
+      // 其他模式跳转到搜索结果页面
       const params = new URLSearchParams();
       params.set('q', query);
       params.set('mode', searchMode);
@@ -109,25 +115,20 @@ export default function HomeContent() {
   };
 
   return (
-    <div className="space-y-6 p-4 -mt-4">
-      {/* Slogan */}
-      <div className="text-center">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent mb-1">
-          发现新芯世界
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400 text-sm">
-          专业的芯片查询与技术支持平台
-        </p>
-      </div>
-
-      {/* 整体搜索功能卡片 */}
+    <div className="space-y-2 px-4 pt-1 pb-6">
+      {/* 标题和搜索区域 - 统一渐变背景 */}
       <div className="flex justify-center">
         <div className="w-full max-w-4xl">
-          <Card className="backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden relative transition-all duration-700 bg-gradient-to-br from-white via-blue-50/30 to-slate-50/20 dark:from-gray-900 dark:via-blue-950/20 dark:to-slate-950/10 border border-blue-200/30 dark:border-blue-800/20">
-            {/* 装饰背景 */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 via-slate-400/5 to-gray-400/5"></div>
-            <div className="absolute top-0 left-0 w-36 h-36 bg-gradient-to-br from-blue-400/8 to-transparent rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 right-0 w-28 h-28 bg-gradient-to-tl from-slate-400/8 to-transparent rounded-full blur-2xl"></div>
+          <Card className="backdrop-blur-lg shadow-lg rounded-3xl overflow-hidden relative transition-all duration-500 bg-gradient-to-br from-orange-50/40 via-amber-50/30 to-yellow-50/20 dark:from-orange-950/30 dark:via-amber-950/20 dark:to-yellow-950/10 border border-orange-200/40 dark:border-orange-800/30">
+
+            {/* Slogan - 集成到卡片内 */}
+            <div className="text-center pt-6 pb-2 px-4">
+              <div className="relative">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-700 via-amber-600 to-yellow-600 bg-clip-text text-transparent drop-shadow-md">
+                  发现新芯世界
+                </h1>
+              </div>
+            </div>
 
             <CardContent className="relative p-5 space-y-3">
               {/* 搜索框区域 */}
@@ -149,23 +150,23 @@ export default function HomeContent() {
                     const IconComponent = mode.icon;
                     const isActive = searchMode === key;
 
-                    // 为每个按钮定义独特的颜色
+                    // 统一橙色系按钮颜色
                     const buttonColors = {
                       precise: {
-                        active: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30',
-                        inactive: 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50 text-blue-600 dark:text-blue-400 hover:from-blue-100 hover:to-blue-200 dark:hover:from-blue-900/70 dark:hover:to-blue-800/70 border border-blue-200/50 dark:border-blue-800/30'
+                        active: 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30',
+                        inactive: 'bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-950/50 dark:to-orange-900/50 text-orange-600 dark:text-orange-400 hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-900/70 dark:hover:to-orange-800/70 border border-orange-200/50 dark:border-orange-800/30'
                       },
                       silkscreen: {
-                        active: 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30',
-                        inactive: 'bg-gradient-to-r from-green-50 to-emerald-100 dark:from-green-950/50 dark:to-emerald-900/50 text-green-600 dark:text-green-400 hover:from-green-100 hover:to-emerald-200 dark:hover:from-green-900/70 dark:hover:to-emerald-800/70 border border-green-200/50 dark:border-green-800/30'
+                        active: 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg shadow-amber-500/30',
+                        inactive: 'bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-950/50 dark:to-amber-900/50 text-amber-600 dark:text-amber-400 hover:from-amber-100 hover:to-amber-200 dark:hover:from-amber-900/70 dark:hover:to-amber-800/70 border border-amber-200/50 dark:border-amber-800/30'
                       },
                       alternative: {
-                        active: 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/30',
+                        active: 'bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg shadow-orange-600/30',
                         inactive: 'bg-gradient-to-r from-orange-50 to-red-100 dark:from-orange-950/50 dark:to-red-900/50 text-orange-600 dark:text-orange-400 hover:from-orange-100 hover:to-red-200 dark:hover:from-orange-900/70 dark:hover:to-red-800/70 border border-orange-200/50 dark:border-orange-800/30'
                       },
                       cross: {
-                        active: 'bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-lg shadow-purple-500/30',
-                        inactive: 'bg-gradient-to-r from-purple-50 to-violet-100 dark:from-purple-950/50 dark:to-violet-900/50 text-purple-600 dark:text-purple-400 hover:from-purple-100 hover:to-violet-200 dark:hover:from-purple-900/70 dark:hover:to-violet-800/70 border border-purple-200/50 dark:border-purple-800/30'
+                        active: 'bg-gradient-to-r from-yellow-600 to-orange-600 text-white shadow-lg shadow-yellow-600/30',
+                        inactive: 'bg-gradient-to-r from-yellow-50 to-orange-100 dark:from-yellow-950/50 dark:to-orange-900/50 text-yellow-600 dark:text-yellow-400 hover:from-yellow-100 hover:to-orange-200 dark:hover:from-yellow-900/70 dark:hover:to-orange-800/70 border border-yellow-200/50 dark:border-yellow-800/30'
                       }
                     };
 
@@ -176,7 +177,12 @@ export default function HomeContent() {
                         key={key}
                         onClick={() => {
                           handleModeChange(key as SearchMode);
-                          // 跳转到对应的搜索页面
+                          // 丝印反查跳转到独立页面
+                          if (key === 'silkscreen') {
+                            router.push('/silkscreen');
+                            return;
+                          }
+                          // 其他模式跳转到搜索页面
                           const params = new URLSearchParams();
                           params.set('mode', key);
                           router.push(`/search?${params.toString()}`);
@@ -206,18 +212,18 @@ export default function HomeContent() {
 
       {/* 默认内容：热门品牌广告位 */}
       <div className="space-y-6">
-        {/* 热门品牌 - 国际化专业设计 */}
-        <Card className="shadow-2xl bg-gradient-to-br from-white via-blue-50/20 to-slate-50/15 dark:from-gray-900 dark:via-blue-950/15 dark:to-slate-950/10 border border-blue-100/40 dark:border-blue-900/20 backdrop-blur-md rounded-3xl">
-          <CardHeader className="py-5 px-6 border-b border-blue-100/40 dark:border-blue-900/20">
+        {/* 热门品牌 - 轻奢质感设计 */}
+        <Card className="shadow-sm bg-gradient-to-br from-white/60 via-orange-50/20 to-amber-50/10 dark:from-gray-900/60 dark:via-orange-950/10 dark:to-amber-950/5 border border-orange-100/30 dark:border-orange-900/20 backdrop-blur-lg rounded-3xl">
+          <CardHeader className="py-4 px-5">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-xl flex items-center gap-3 bg-gradient-to-r from-blue-600 to-slate-700 bg-clip-text text-transparent font-bold">
-                <Star className="h-6 w-6 text-blue-500" />
+              <CardTitle className="text-lg flex items-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent font-bold">
+                <Star className="h-5 w-5 text-orange-500" />
                 热门品牌
               </CardTitle>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all duration-500 rounded-xl"
+                className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-all duration-300 rounded-lg"
                 onClick={() => {
                   const params = new URLSearchParams();
                   params.set('mode', 'brand');
@@ -229,41 +235,59 @@ export default function HomeContent() {
             </div>
           </CardHeader>
           <CardContent className="p-4">
-            <div className="grid grid-cols-4 gap-1">
-              {chipVendors.map((vendor, index) => (
+            <div className="grid grid-cols-4 gap-2 border border-orange-200/50 dark:border-orange-800/30 rounded-2xl p-3 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
+              {chipVendors.map((vendor) => (
                 <div
                   key={vendor.name}
                   onClick={() => handleVendorClick(vendor)}
-                  className="group cursor-pointer"
+                  className="group cursor-pointer flex justify-center"
                 >
-                  <div className="aspect-square flex items-center justify-center bg-gradient-to-br from-white via-blue-50/15 to-slate-50/10 dark:from-gray-800 dark:via-blue-950/10 dark:to-slate-950/5 rounded-lg border border-blue-100/40 dark:border-blue-900/20 hover:border-blue-300/60 dark:hover:border-blue-600/40 transition-all duration-500 hover:shadow-2xl group-hover:scale-110 hover:-translate-y-2 backdrop-blur-sm">
-                    <div className="w-full h-full rounded-md flex items-center justify-center shadow-lg bg-white dark:bg-gray-700 overflow-hidden border border-gray-100/60 dark:border-gray-600/60 group-hover:shadow-xl transition-all duration-500">
-                      <Image
-                        src={vendor.image}
-                        alt={vendor.name}
-                        width={80}
-                        height={80}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                          // 如果图片加载失败，显示品牌名称缩写
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          const parent = target.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `<span class="text-blue-600 font-bold text-lg">${vendor.shortName}</span>`;
-                          }
-                        }}
-                      />
-                    </div>
+                  <div className="w-18 h-14 flex items-center justify-center relative group-hover:scale-110 transition-all duration-300 rounded-xl hover:bg-gradient-to-br hover:from-orange-100/80 hover:to-amber-100/60 dark:hover:from-orange-800/50 dark:hover:to-amber-800/40 hover:shadow-lg hover:shadow-orange-500/20 dark:hover:shadow-orange-900/30 border border-transparent hover:border-orange-300/50 dark:hover:border-orange-600/40 p-2">
+                    <Image
+                      src={vendor.image}
+                      alt={vendor.name}
+                      width={52}
+                      height={40}
+                      className="max-w-[80%] max-h-[80%] object-contain group-hover:scale-105 transition-transform duration-300 relative z-10 drop-shadow-md group-hover:drop-shadow-lg"
+                      style={{
+                        // 智能缩放：根据品牌特点调整显示大小，实现视觉平衡
+                        transform: (() => {
+                          const brandScales: Record<string, string> = {
+                            'STMicroelectronics': 'scale(1.15)',  // ST logo较小，需要放大
+                            'Texas Instruments': 'scale(0.85)',   // TI logo较大，需要缩小
+                            'Microchip': 'scale(0.95)',          // 略微缩小
+                            'Infineon': 'scale(0.9)',            // 缩小
+                            'NXP': 'scale(1.1)',                 // 放大
+                            'Maxim': 'scale(1.0)',               // 标准大小
+                            'Vishay': 'scale(0.85)',             // 较大，需要缩小
+                            'Intersil': 'scale(1.05)',           // 略微放大
+                            'Fujitsu': 'scale(0.9)',             // 缩小
+                            'Toshiba': 'scale(0.95)',            // 略微缩小
+                            'JRC': 'scale(1.2)',                 // 较小，需要放大
+                            'NTE': 'scale(1.1)'                  // 放大
+                          };
+                          return brandScales[vendor.name] || 'scale(1.0)';
+                        })()
+                      }}
+                      onError={(e) => {
+                        // 如果图片加载失败，显示品牌名称缩写
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          parent.innerHTML = `<span class="text-orange-600 dark:text-orange-400 font-bold text-sm relative z-10 drop-shadow-sm">${vendor.shortName}</span>`;
+                        }
+                      }}
+                    />
                   </div>
                 </div>
               ))}
             </div>
-            <div className="text-center mt-8">
+            <div className="text-center mt-6">
               <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                 点击品牌logo快速搜索相关产品
               </p>
-              <div className="mt-3 w-20 h-0.5 bg-gradient-to-r from-blue-300 to-slate-400 rounded-full mx-auto opacity-60"></div>
+              <div className="mt-3 w-16 h-0.5 bg-gradient-to-r from-orange-300 to-amber-400 rounded-full mx-auto opacity-70"></div>
             </div>
           </CardContent>
         </Card>

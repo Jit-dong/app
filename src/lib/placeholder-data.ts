@@ -983,32 +983,71 @@ export interface SilkscreenData {
 export const placeholderSilkscreenData: SilkscreenData[] = [
   {
     id: 'silk-1',
-    silkscreen: '5430',
-    partNumber: 'TPS5430',
-    package: 'SOIC-8',
-    manufacturer: 'TI（德州仪器）',
-    category: '电源管理 → 降压转换器',
-    description: '5.5V至36V输入、2A、500kHz降压转换器',
-    pins: 8,
-    imageUrl: '/brands/image_cp/TPS5430.png',
-    datasheetUrl: '/docs/TPS5430-datasheet.pdf',
-    alternativeSilkscreens: ['T5430', 'TPS5430']
+    silkscreen: '3201',
+    partNumber: 'TPS563201DDCT',
+    package: 'DDC-6',
+    manufacturer: 'TI(德州仪器)',
+    category: 'Buck降压开关稳压器',
+    description: '采用Eco-mode的4.5V至17V输入电压、3A输出电流、同步降压转换器',
+    pins: 6,
+    imageUrl: '/brands/image_sy/TPS563201DDCT.png',
+    datasheetUrl: '/docs/TPS563201DDCT-datasheet.pdf',
+    alternativeSilkscreens: ['563201', 'T3201']
   },
   {
     id: 'silk-2',
     silkscreen: '3201',
-    partNumber: 'TPS563201',
-    package: 'SOT583',
-    manufacturer: 'TI（德州仪器）',
-    category: '电源管理 → 同步降压转换器',
-    description: '4.2V至17V、3A同步降压转换器',
+    partNumber: 'TPS563201DDCR',
+    package: 'TSOT-23-6',
+    manufacturer: 'TI(德州仪器)',
+    category: '采用分离开关稳压器(DC/DC转换器)',
+    description: '采用Eco-mode的4.5V至17V输入电压、3A输出电流、同步降压转换器',
     pins: 6,
-    imageUrl: '/brands/image_cp/TPS563201.png',
-    datasheetUrl: '/docs/TPS563201-datasheet.pdf',
+    imageUrl: '/brands/image_sy/TPS563201DDCR.png',
+    datasheetUrl: '/docs/TPS563201DDCR-datasheet.pdf',
     alternativeSilkscreens: ['563201', 'T3201']
   },
   {
     id: 'silk-3',
+    silkscreen: '3201',
+    partNumber: 'TPS563201DDCR',
+    package: 'DDC-6',
+    manufacturer: 'TI(德州仪器)',
+    category: '采用分离开关稳压器(DC/DC转换器)',
+    description: '采用Eco-mode的4.5V至17V输入电压、3A输出电流、同步降压转换器',
+    pins: 6,
+    imageUrl: '/brands/image_sy/TPS563201DDCR.png',
+    datasheetUrl: '/docs/TPS563201DDCR-datasheet.pdf',
+    alternativeSilkscreens: ['563201', 'T3201']
+  },
+  {
+    id: 'silk-4',
+    silkscreen: '3201',
+    partNumber: 'THS3201D',
+    package: 'SOIC-8',
+    manufacturer: 'TI(德州仪器)',
+    category: '运算放大器',
+    description: 'IC OPAMP CFA 1 CIRCUIT 8SOIC',
+    pins: 8,
+    imageUrl: '/brands/image_sy/TI THS3201D.png',
+    datasheetUrl: '/docs/THS3201D-datasheet.pdf',
+    alternativeSilkscreens: ['THS3201', 'HS3201']
+  },
+  {
+    id: 'silk-5',
+    silkscreen: '3201',
+    partNumber: 'AW33201CSR',
+    package: 'WLCSP-9',
+    manufacturer: 'AWINIC(艾为)',
+    category: '负载开关',
+    description: 'Over-Voltage Protection Load Switch',
+    pins: 9,
+    imageUrl: '/brands/image_sy/AW33201CSR.png',
+    datasheetUrl: '/docs/AW33201CSR-datasheet.pdf',
+    alternativeSilkscreens: ['AW3201', '33201']
+  },
+  {
+    id: 'silk-6',
     silkscreen: 'ALL',
     partNumber: 'AMS1117-3.3',
     package: 'SOT-223',
@@ -1021,7 +1060,7 @@ export const placeholderSilkscreenData: SilkscreenData[] = [
     alternativeSilkscreens: ['1117', 'AMS1117']
   },
   {
-    id: 'silk-4',
+    id: 'silk-7',
     silkscreen: '358',
     partNumber: 'LM358',
     package: 'SOIC-8',
@@ -1034,7 +1073,7 @@ export const placeholderSilkscreenData: SilkscreenData[] = [
     alternativeSilkscreens: ['LM358', 'L358']
   },
   {
-    id: 'silk-5',
+    id: 'silk-8',
     silkscreen: '2596',
     partNumber: 'LM2596',
     package: 'TO-263',
@@ -1047,7 +1086,7 @@ export const placeholderSilkscreenData: SilkscreenData[] = [
     alternativeSilkscreens: ['LM2596', 'L2596']
   },
   {
-    id: 'silk-6',
+    id: 'silk-9',
     silkscreen: '555',
     partNumber: 'NE555',
     package: 'SOIC-8',
@@ -1060,7 +1099,7 @@ export const placeholderSilkscreenData: SilkscreenData[] = [
     alternativeSilkscreens: ['NE555', 'N555']
   },
   {
-    id: 'silk-7',
+    id: 'silk-10',
     silkscreen: '595',
     partNumber: '74HC595',
     package: 'SOIC-16',
@@ -1073,7 +1112,7 @@ export const placeholderSilkscreenData: SilkscreenData[] = [
     alternativeSilkscreens: ['74HC595', 'HC595']
   },
   {
-    id: 'silk-8',
+    id: 'silk-11',
     silkscreen: '317',
     partNumber: 'LM317',
     package: 'TO-220',

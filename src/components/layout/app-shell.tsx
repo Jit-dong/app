@@ -3,15 +3,11 @@ import Header from "./header";
 
 export default function AppShell({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 dark:from-gray-900 dark:via-gray-800 dark:to-orange-950/20">
       <Header />
-      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-grow">
         {children}
       </main>
-      {/* You can add a global footer here if needed */}
-      {/* <footer className="py-6 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} 芯智 AI 助手。保留所有权利。
-      </footer> */}
     </div>
   );
 }

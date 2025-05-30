@@ -1,33 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Search,
   Camera,
   Info,
-  CheckCircle2,
   Upload,
   History,
-  Star,
-  Package,
-  Cpu,
-  Download,
   ChevronDown,
   ChevronUp,
-  Loader2
+  CheckCircle2
 } from "lucide-react";
-import { searchSilkscreen, type SilkscreenData } from "@/lib/placeholder-data";
-import Image from "next/image";
 
 export default function SilkscreenReversePage({ onBack }: { onBack?: () => void }) {
+  const router = useRouter();
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState<SilkscreenData[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
 
   // 加载搜索历史
   useEffect(() => {
@@ -35,29 +27,21 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
     if (history) {
       setSearchHistory(JSON.parse(history));
     }
-    const favs = localStorage.getItem('silkscreen-favorites');
-    if (favs) {
-      setFavorites(JSON.parse(favs));
-    }
   }, []);
 
-  // 执行搜索
-  const handleSearch = async () => {
+  // 执行搜索 - 跳转到结果页面
+  const handleSearch = () => {
     if (!search.trim()) return;
-
-    setIsLoading(true);
-
-    // 模拟搜索延迟
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    const searchResults = searchSilkscreen(search);
-    setResults(searchResults);
-    setIsLoading(false);
 
     // 保存搜索历史
     const newHistory = [search, ...searchHistory.filter(h => h !== search)].slice(0, 10);
     setSearchHistory(newHistory);
     localStorage.setItem('silkscreen-search-history', JSON.stringify(newHistory));
+
+    // 跳转到结果页面
+    const params = new URLSearchParams();
+    params.set('q', search);
+    router.push(`/silkscreen/results?${params.toString()}`);
   };
 
   // 处理回车搜索
@@ -65,15 +49,6 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
     if (e.key === 'Enter') {
       handleSearch();
     }
-  };
-
-  // 添加到收藏
-  const toggleFavorite = (partNumber: string) => {
-    const newFavorites = favorites.includes(partNumber)
-      ? favorites.filter(f => f !== partNumber)
-      : [...favorites, partNumber];
-    setFavorites(newFavorites);
-    localStorage.setItem('silkscreen-favorites', JSON.stringify(newFavorites));
   };
 
   // 使用历史搜索
@@ -120,20 +95,11 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
             <div className="flex flex-col sm:flex-row items-center gap-4">
               <Button
                 onClick={handleSearch}
-                disabled={!search.trim() || isLoading}
+                disabled={!search.trim()}
                 className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 text-lg rounded-2xl shadow-lg transition-all duration-300 disabled:opacity-50 font-semibold"
               >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 mr-3 animate-spin" />
-                    识别中...
-                  </>
-                ) : (
-                  <>
-                    <Search className="h-5 w-5 mr-3" />
-                    开始识别
-                  </>
-                )}
+                <Search className="h-5 w-5 mr-3" />
+                开始识别
               </Button>
 
               <div className="flex items-center gap-3">
@@ -265,144 +231,6 @@ export default function SilkscreenReversePage({ onBack }: { onBack?: () => void 
             </div>
           )}
         </div>
-
-        {/* Search Results */}
-        {results.length > 0 && (
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/30 dark:border-gray-700/30 p-8">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-4">
-                <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl shadow-lg">
-                  <CheckCircle2 className="h-6 w-6 text-white" />
-                </div>
-                识别结果 ({results.length})
-              </h3>
-            </div>
-
-            <div className="grid gap-6">
-              {results.map((item) => (
-                <div key={item.id} className="bg-white/60 dark:bg-gray-700/60 backdrop-blur-sm rounded-2xl p-6 border border-white/50 dark:border-gray-600/50 hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
-                  <div className="flex items-start gap-6">
-                    {/* Product Image */}
-                    <div className="flex-shrink-0">
-                      <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-600 dark:to-gray-700 rounded-2xl border-2 border-white/50 dark:border-gray-500/50 flex items-center justify-center overflow-hidden shadow-lg">
-                        {item.imageUrl ? (
-                          <Image
-                            src={item.imageUrl}
-                            alt={item.partNumber}
-                            width={80}
-                            height={80}
-                            className="object-contain"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                              target.nextElementSibling?.classList.remove('hidden');
-                            }}
-                          />
-                        ) : (
-                          <Cpu className="h-10 w-10 text-gray-400" />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Product Information */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h4 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                            {item.partNumber}
-                          </h4>
-                          <div className="flex items-center gap-3 mb-3">
-                            <Badge className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 px-3 py-1">
-                              丝印: {item.silkscreen}
-                            </Badge>
-                            <Badge variant="secondary" className="bg-gray-100 dark:bg-gray-700 px-3 py-1">
-                              {item.package}
-                            </Badge>
-                            <Badge variant="secondary" className="bg-gray-100 dark:bg-gray-700 px-3 py-1">
-                              {item.pins}脚
-                            </Badge>
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => toggleFavorite(item.partNumber)}
-                          className="p-3 hover:bg-white/50 dark:hover:bg-gray-600/50 rounded-xl transition-all duration-200"
-                        >
-                          <Star
-                            className={`h-6 w-6 ${
-                              favorites.includes(item.partNumber)
-                                ? 'text-yellow-500 fill-current'
-                                : 'text-gray-400'
-                            }`}
-                          />
-                        </button>
-                      </div>
-
-                      <div className="grid md:grid-cols-3 gap-4 mb-4 text-sm">
-                        <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
-                          <span className="font-semibold text-gray-700 dark:text-gray-300">制造商:</span>
-                          <br />
-                          <span className="text-gray-600 dark:text-gray-400">{item.manufacturer}</span>
-                        </div>
-                        <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
-                          <span className="font-semibold text-gray-700 dark:text-gray-300">分类:</span>
-                          <br />
-                          <span className="text-gray-600 dark:text-gray-400">{item.category}</span>
-                        </div>
-                        <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
-                          <span className="font-semibold text-gray-700 dark:text-gray-300">描述:</span>
-                          <br />
-                          <span className="text-gray-600 dark:text-gray-400">{item.description}</span>
-                        </div>
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex items-center gap-3">
-                        <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white border-0 rounded-xl px-6 py-2 shadow-lg">
-                          <Package className="h-4 w-4 mr-2" />
-                          查看详情
-                        </Button>
-                        {item.datasheetUrl && (
-                          <Button variant="outline" className="border-2 rounded-xl px-6 py-2 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <Download className="h-4 w-4 mr-2" />
-                            数据手册
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* No Results */}
-        {search && !isLoading && results.length === 0 && (
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/30 dark:border-gray-700/30 p-12 text-center">
-            <div className="space-y-6">
-              <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                <Search className="h-12 w-12 text-gray-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                未找到匹配结果
-              </h3>
-              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
-                未匹配到丝印 "<span className="font-bold text-blue-600 dark:text-blue-400">{search}</span>" 的结果。
-                <br />
-                请尝试修改输入内容或查看上方的搜索技巧。
-              </p>
-              <div className="pt-4">
-                <Button
-                  variant="outline"
-                  onClick={() => setSearch('')}
-                  className="border-2 rounded-xl px-8 py-3 text-lg hover:bg-gray-50 dark:hover:bg-gray-700"
-                >
-                  重新搜索
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
 
       </div>
     </div>
