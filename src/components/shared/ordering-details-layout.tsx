@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Cpu, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { OrderDetail } from '@/lib/types';
+import ExpandableAlternatives from './expandable-alternatives';
 
 // 状态颜色配置
 const getLifecycleColor = (lifecycle: string) => {
@@ -112,11 +113,19 @@ export default function OrderingDetailsLayout({
                 variant="outline"
                 size="sm"
                 onClick={() => handleSearchAlternatives(orderDetail.model)}
-                className="flex items-center gap-1 h-7 px-2 text-xs bg-blue-50/80 dark:bg-blue-950/20 border-blue-200 dark:border-blue-700 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-200"
+                className="group relative flex items-center gap-1 h-7 px-3 text-xs bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 border-0 text-white font-medium rounded-full shadow-lg shadow-orange-200/50 dark:shadow-orange-900/30 hover:shadow-xl hover:shadow-orange-300/60 dark:hover:shadow-orange-800/40 transition-all duration-300 hover:scale-105 overflow-hidden"
                 title={`查找 ${orderDetail.model} 的替代料`}
               >
-                <Search className="h-3 w-3" />
-                查替代
+                {/* 光泽扫过效果 */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+
+                <Search className="h-3 w-3 relative z-10" />
+                <span className="relative z-10">查替代</span>
+
+                {/* 小箭头暗示跳转 */}
+                <div className="relative z-10 w-0 group-hover:w-3 transition-all duration-200 overflow-hidden">
+                  <span className="text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
+                </div>
               </Button>
               <span className={`text-xs px-2 py-1 rounded-full font-medium ${getLifecycleColor(orderDetail.lifecycle)}`}>
                 {getLifecycleIcon(orderDetail.lifecycle)} {orderDetail.lifecycle}
@@ -164,6 +173,9 @@ export default function OrderingDetailsLayout({
                 </span>
               </div>
             </div>
+
+            {/* 伸缩替代料组件 */}
+            <ExpandableAlternatives orderPartNumber={orderDetail.model} />
           </div>
         </div>
       ))}
