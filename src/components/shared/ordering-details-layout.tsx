@@ -1,6 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import { Cpu } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Cpu, Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import type { OrderDetail } from '@/lib/types';
 
 // 状态颜色配置
@@ -50,6 +52,13 @@ export default function OrderingDetailsLayout({
   title = "订购详情",
   showImage = false
 }: OrderingDetailsLayoutProps) {
+  const router = useRouter();
+
+  // 处理查替代按钮点击
+  const handleSearchAlternatives = (orderModel: string) => {
+    router.push(`/alternatives/results?q=${encodeURIComponent(orderModel)}`);
+  };
+
   if (!orderDetails || orderDetails.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500 dark:text-gray-400">
@@ -65,7 +74,7 @@ export default function OrderingDetailsLayout({
           key={orderDetail.id}
           className="bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-950/20 dark:to-orange-900/10 backdrop-blur-sm rounded-xl border border-orange-200/60 dark:border-orange-700/50 shadow-lg shadow-orange-100/50 dark:shadow-orange-900/20 overflow-hidden"
         >
-          {/* 头部：型号名称和状态 - 移动端优化 */}
+          {/* 头部：型号名称、状态和查替代按钮 - 移动端优化 */}
           <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-100 to-orange-50 dark:from-orange-950/30 dark:to-orange-900/20 border-b border-orange-200/60 dark:border-orange-700/50">
             <div className="flex items-center gap-2 min-w-0 flex-1">
               {/* 图片 - 仅在单个订购详情且showImage为true时显示 */}
@@ -96,9 +105,23 @@ export default function OrderingDetailsLayout({
                 {orderDetail.model}
               </span>
             </div>
-            <span className={`text-xs px-2 py-1 rounded-full flex-shrink-0 font-medium ${getLifecycleColor(orderDetail.lifecycle)}`}>
-              {getLifecycleIcon(orderDetail.lifecycle)} {orderDetail.lifecycle}
-            </span>
+
+            {/* 右侧：状态和查替代按钮 */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleSearchAlternatives(orderDetail.model)}
+                className="flex items-center gap-1 h-7 px-2 text-xs bg-blue-50/80 dark:bg-blue-950/20 border-blue-200 dark:border-blue-700 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-200"
+                title={`查找 ${orderDetail.model} 的替代料`}
+              >
+                <Search className="h-3 w-3" />
+                查替代
+              </Button>
+              <span className={`text-xs px-2 py-1 rounded-full font-medium ${getLifecycleColor(orderDetail.lifecycle)}`}>
+                {getLifecycleIcon(orderDetail.lifecycle)} {orderDetail.lifecycle}
+              </span>
+            </div>
           </div>
 
           {/* 详细信息：移动端优化的紧密布局 */}

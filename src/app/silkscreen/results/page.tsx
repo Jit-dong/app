@@ -107,102 +107,149 @@ function SilkscreenResultsContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* 顶部导航 */}
-      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-        <div className="container mx-auto px-4 py-3 flex items-center gap-4">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="max-w-4xl mx-auto px-3 py-6 md:px-6 lg:px-8">
+        {/* 返回按钮 - 移动端优化 */}
+        <div className="mb-4">
           <Button
-            variant="ghost"
-            size="sm"
             onClick={handleBack}
-            className="flex-shrink-0"
+            variant="ghost"
+            className="flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:text-orange-400 dark:hover:text-orange-300 dark:hover:bg-orange-900/20 p-2 rounded-lg transition-all duration-200"
           >
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            返回
+            <ArrowLeft className="h-4 w-4" />
+            <span className="text-sm font-medium">返回</span>
           </Button>
-          <h1 className="text-lg font-bold text-gray-800 dark:text-gray-200">
-            丝印反查结果
-          </h1>
         </div>
-      </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-6 md:px-6 lg:px-8">
+        {/* 标题区域 - 美化设计 */}
+        <div className="bg-gradient-to-r from-white/95 to-orange-50/90 dark:from-gray-800/95 dark:to-orange-900/20 backdrop-blur-sm rounded-2xl border border-orange-200/60 dark:border-gray-700/50 p-5 shadow-xl shadow-orange-100/30 dark:shadow-gray-900/20 mb-6">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-lg">🔍</span>
+            </div>
+            <div className="flex-1">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent mb-1 leading-tight">
+                丝印 "{query}" 的查找结果
+              </h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {results.length > 0 ? (
+                  <>找到 {results.length} 个匹配结果{filteredResults.length !== results.length && (
+                    <span>，筛选后 {filteredResults.length} 个</span>
+                  )}</>
+                ) : '未找到匹配结果'}
+              </p>
+            </div>
+          </div>
+
+          {/* 查询类型指示器 */}
+          {results.length > 0 && (
+            <div className="flex items-center gap-2">
+              <div className="px-3 py-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full text-xs font-medium">
+                🎯 丝印匹配
+              </div>
+              <div className="px-3 py-1 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 rounded-full text-xs font-medium">
+                ⚡ 实时数据
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* 搜索结果 */}
         {results.length > 0 ? (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                丝印 "<span className="text-blue-600 dark:text-blue-400">{query}</span>" 找到 {results.length} 个结果
-                {filteredResults.length !== results.length && (
-                  <span className="text-gray-500 dark:text-gray-400">
-                    ，筛选后 {filteredResults.length} 个
-                  </span>
-                )}
-              </h3>
-            </div>
-
-            {/* 筛选栏 */}
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-white/30 dark:border-gray-700/30 p-4 mb-4">
-              <div className="flex flex-wrap items-center gap-4">
-                {/* 品牌筛选 */}
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">品牌:</label>
-                  <select
-                    value={filters.manufacturer}
-                    onChange={(e) => setFilters(prev => ({ ...prev, manufacturer: e.target.value }))}
-                    className="w-32 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="">全部</option>
-                    {getFilterOptions().manufacturers.map(manufacturer => (
-                      <option key={manufacturer} value={manufacturer}>{manufacturer}</option>
-                    ))}
-                  </select>
+          <div className="space-y-4">
+            {/* 筛选器 - 美化设计 */}
+            {results.length > 3 && (
+              <div className="bg-gradient-to-r from-white/90 to-blue-50/80 dark:from-gray-800/90 dark:to-blue-900/20 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-gray-700/50 p-4 shadow-xl shadow-blue-100/30 dark:shadow-gray-900/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-lg">
+                    <span className="text-white font-bold text-sm">🔧</span>
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
+                      智能筛选
+                    </h3>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      快速找到符合需求的芯片
+                    </p>
+                  </div>
                 </div>
 
-                {/* 分类筛选 */}
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">分类:</label>
-                  <select
-                    value={filters.category}
-                    onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                    className="w-32 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="">全部</option>
-                    {getFilterOptions().categories.map(category => (
-                      <option key={category} value={category}>{category}</option>
-                    ))}
-                  </select>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {/* 品牌筛选 */}
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                      品牌
+                    </label>
+                    <select
+                      value={filters.manufacturer}
+                      onChange={(e) => setFilters(prev => ({ ...prev, manufacturer: e.target.value }))}
+                      className="w-full px-3 py-2 text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-orange-500/20 focus:border-orange-500 transition-all duration-300 hover:border-orange-300"
+                    >
+                      <option value="">全部品牌</option>
+                      {getFilterOptions().manufacturers.map(manufacturer => (
+                        <option key={manufacturer} value={manufacturer}>{manufacturer}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 分类筛选 */}
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                      分类
+                    </label>
+                    <select
+                      value={filters.category}
+                      onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
+                      className="w-full px-3 py-2 text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-green-500/20 focus:border-green-500 transition-all duration-300 hover:border-green-300"
+                    >
+                      <option value="">全部分类</option>
+                      {getFilterOptions().categories.map(category => (
+                        <option key={category} value={category}>{category}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 封装筛选 */}
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                      封装
+                    </label>
+                    <select
+                      value={filters.package}
+                      onChange={(e) => setFilters(prev => ({ ...prev, package: e.target.value }))}
+                      className="w-full px-3 py-2 text-sm border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 hover:border-purple-300"
+                    >
+                      <option value="">全部封装</option>
+                      {getFilterOptions().packages.map(packageType => (
+                        <option key={packageType} value={packageType}>{packageType}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
-                {/* 封装筛选 */}
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">封装:</label>
-                  <select
-                    value={filters.package}
-                    onChange={(e) => setFilters(prev => ({ ...prev, package: e.target.value }))}
-                    className="w-32 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="">全部</option>
-                    {getFilterOptions().packages.map(packageType => (
-                      <option key={packageType} value={packageType}>{packageType}</option>
-                    ))}
-                  </select>
+                {/* 筛选结果统计和重置 */}
+                <div className="mt-4 pt-3 border-t border-gray-200/50 dark:border-gray-600/50">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      筛选结果: <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredResults.length}</span> 个芯片
+                    </span>
+                    {(filters.manufacturer || filters.category || filters.package) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={resetFilters}
+                        className="text-xs bg-orange-50 dark:bg-gray-700 border-orange-200 dark:border-gray-600 hover:bg-orange-100 dark:hover:bg-gray-600 text-orange-600 dark:text-orange-400"
+                      >
+                        🔄 清除筛选
+                      </Button>
+                    )}
+                  </div>
                 </div>
-
-                {/* 重置按钮 */}
-                {(filters.manufacturer || filters.category || filters.package) && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={resetFilters}
-                    className="text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
-                  >
-                    重置筛选
-                  </Button>
-                )}
               </div>
-            </div>
+            )}
 
             <div className="grid gap-3">
               {filteredResults.map((item) => (
