@@ -235,16 +235,35 @@ export default function CategoryQueryContent() {
           </div>
 
           <div className="p-4 border-t border-gray-200/60 dark:border-gray-700/60 bg-gradient-to-r from-gray-50/80 to-blue-50/40 dark:from-gray-800/50 dark:to-blue-950/20">
-            {/* 只有选择了二级分类但没有三级分类时才显示新版分类筛选按钮 */}
-            {selectedL2 && !selectedL3 && l3Categories.length === 0 && (
+            {/* 显示新版分类筛选按钮的条件：
+                1. 选择了二级分类但没有三级分类时
+                2. 选择了三级分类时
+                3. 选择了一级分类但没有二级分类时（对于没有子分类的一级分类）
+            */}
+            {((selectedL2 && !selectedL3 && l3Categories.length === 0) ||
+              selectedL3 ||
+              (selectedL1 && !selectedL2 && l2Categories.length === 0)) && (
               <div className="flex justify-center">
                 <Button
                   variant="outline"
                   onClick={() => {
-                    const categoryPath = `${selectedL1?.name}/${selectedL2?.name}`;
+                    let categoryPath = '';
+                    let description = '';
+
+                    if (selectedL3) {
+                      categoryPath = `${selectedL1?.name}/${selectedL2?.name}/${selectedL3?.name}`;
+                      description = selectedL3?.name || '';
+                    } else if (selectedL2) {
+                      categoryPath = `${selectedL1?.name}/${selectedL2?.name}`;
+                      description = selectedL2?.name || '';
+                    } else if (selectedL1) {
+                      categoryPath = selectedL1?.name;
+                      description = selectedL1?.name || '';
+                    }
+
                     const params = new URLSearchParams();
                     params.set('name', categoryPath);
-                    params.set('description', selectedL2?.name || '');
+                    params.set('description', description);
                     router.push(`/category?${params.toString()}`);
                   }}
                   size="sm"

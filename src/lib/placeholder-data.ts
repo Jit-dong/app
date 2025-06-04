@@ -32,7 +32,7 @@ export const placeholderChips: Chip[] = [
   {
     id: 'TPS5430-2',
     model: 'TPS5430',
-    manufacturer: '德州仪器',
+    manufacturer: '德州仪器-TI',
     series: false,
     category: '电源管理/开关稳压器/DC-DC转换器/Buck(降压)开关稳压器',
     description: '采用 SOT583 封装且具有 1% 精度、PG/SS 和 PFM/强制 PWM 的 4.2V 至 17V、3A 同步降压转换器',
@@ -57,7 +57,7 @@ export const placeholderChips: Chip[] = [
     {
     id: 'TPS5430-3',
     model: 'TPS5430',
-    manufacturer: '德州仪器',
+    manufacturer: '德州仪器-TI',
     series: false,
     category: '电源管理/开关稳压器/DC-DC转换器/Buck(降压)开关稳压器',
     description: '采用 SOT583 封装且具有 1% 精度、PG/SS 和 PFM/强制 PWM 的 4.2V 至 17V、3A 同步降压转换器',
@@ -79,7 +79,7 @@ export const placeholderChips: Chip[] = [
   {
     id: 'TPS5430-4',
     model: 'TPS5430',
-    manufacturer: '德州仪器',
+    manufacturer: '德州仪器-TI',
     series: false,
     category: '开关稳压器-DC/DC转换器',
     description: '采用 SOT583 封装且具有 1% 精度、PG/SS 和 PFM/强制 PWM 的 4.2V 至 17V、3A 同步降压转换器',
@@ -1292,70 +1292,260 @@ export interface CategoryFilterData {
   };
 }
 
-// Buck(降压)开关稳压器分类筛选数据
-export const buckConverterFilterData: CategoryFilterData = {
-  brands: [
-    'TI(德州仪器)',
-    'TOREX(特瑞仕)',
-    'ADI(亚德诺)',
-    'Nisshinbo(日清纺)',
-    'Rochester(罗彻斯特)',
-    'DIODES(美台)',
-    'onsemi(安森美)',
-    'Renesas(瑞萨)',
-    'MPS(芯源)',
-    'ROHM(罗姆)',
-    'ST(意法)',
-    'UTC(友顺)',
-    'ABLIC(艾普凌科)',
-    'Infineon(英飞凌)'
-  ],
-  packages: [
-    'BGA', 'CFP', 'DCB', 'DFN',
-    'DFP', 'DIE', 'DIP', 'DMA',
-    'LGA', 'QFF', 'QFN', 'QFP',
-    'SFM', 'SIP', 'SOT-23', 'SOIC'
-  ],
+// 三级分类筛选数据结构
+export interface ThreeLevelFilterData {
+  brand: {
+    region: {
+      name: string;
+      options: string[];
+    };
+    manufacturer: {
+      name: string;
+      options: string[];
+    };
+  };
+  package: {
+    type: {
+      name: string;
+      options: string[];
+    };
+    size: {
+      name: string;
+      options: string[];
+    };
+    pins: {
+      name: string;
+      options: string[];
+    };
+  };
   parameters: {
-    '生命周期': {
+    application: {
+      name: string;
+      subcategories: Record<string, {
+        name: string;
+        options: string[];
+      }>;
+    };
+    topology: {
+      name: string;
+      subcategories: Record<string, {
+        name: string;
+        options: string[];
+      }>;
+    };
+    electrical: {
+      name: string;
+      subcategories: Record<string, {
+        name: string;
+        options: string[];
+      }>;
+    };
+    special: {
+      name: string;
+      subcategories: Record<string, {
+        name: string;
+        options: string[];
+      }>;
+    };
+    protection: {
+      name: string;
+      subcategories: Record<string, {
+        name: string;
+        options: string[];
+      }>;
+    };
+  };
+}
+
+// Buck(降压)开关稳压器三级筛选数据
+export const buckConverterThreeLevelData: ThreeLevelFilterData = {
+  // 🏢 品牌类别
+  brand: {
+    region: {
+      name: '按地域',
+      options: ['美国', '日本', '韩国', '台湾', '欧洲', '中国', '印度', '其他']
+    },
+    manufacturer: {
+      name: '按厂商',
+      options: [
+        // 美国
+        'TI(德州仪器)', 'ADI(亚德诺)', 'MPS(芯源)', 'onsemi(安森美)',
+        'Maxim(美信)', 'Linear(凌特)', 'Intersil(英特矽)',
+        // 日本
+        'TOREX(特瑞仕)', 'Nisshinbo(日清纺)', 'Renesas(瑞萨)', 'ROHM(罗姆)',
+        'ABLIC(艾普凌科)', 'Ricoh(理光)', 'Panasonic(松下)',
+        // 韩国
+        'Samsung(三星)', 'LG Innotek(LG)', 'Fairchild(仙童)',
+        // 台湾
+        'DIODES(美台)', 'UTC(友顺)', 'Richtek(立锜)', 'Anpec(茂达)', 'GMT(致新)',
+        // 欧洲
+        'ST(意法)', 'Infineon(英飞凌)', 'NXP(恩智浦)', 'Dialog(戴乐格)',
+        // 中国
+        'Rochester(罗彻斯特)', '中微半导体', '圣邦微电子', '芯海科技', '思瑞浦', '晶丰明源',
+        // 印度
+        'Cosmic(宇宙)',
+        // 其他
+        '其他品牌'
+      ]
+    }
+  },
+
+  // 📦 封装类别
+  package: {
+    type: {
+      name: '封装类型',
+      options: [
+        'SOT-23', 'SOT-23-6', 'SOT-23-8',
+        'SOIC-8', 'SOIC-14', 'SOIC-16',
+        'MSOP-8', 'MSOP-10', 'MSOP-12',
+        'QFN-16', 'QFN-20', 'QFN-24',
+        'LQFP-48', 'LQFP-64', 'LQFP-100',
+        'DFN-6', 'DFN-8', 'DFN-10',
+        'WLCSP', 'BGA-64', 'BGA-100'
+      ]
+    },
+    size: {
+      name: '封装尺寸',
+      options: [
+        '1x1mm', '2x2mm', '3x3mm', '4x4mm',
+        '5x5mm', '6x6mm', '7x7mm', '8x8mm',
+        '10x10mm', '12x12mm', '14x14mm', '16x16mm'
+      ]
+    },
+    pins: {
+      name: '引脚数',
+      options: ['4', '6', '8', '10', '12', '14', '16', '20', '24', '32', '48', '64', '100']
+    }
+  },
+
+  // 📊 参数类别
+  parameters: {
+    application: {
+      name: '应用场景',
+      subcategories: {
+        automotive: {
+          name: '车规级',
+          options: ['是(符合功能安全标准)', '是(不涉及功能安全)', '否']
+        },
+        industrial: {
+          name: '工业级',
+          options: ['是', '否']
+        },
+        consumer: {
+          name: '消费级',
+          options: ['是', '否']
+        }
+      }
+    },
+    topology: {
+      name: '拓扑架构',
+      subcategories: {
+        powerConfig: {
+          name: '功率配置',
+          options: ['单管集成(异步)', '双管集成(同步)', '外置(控制器)']
+        },
+        deviceType: {
+          name: '器件类型',
+          options: ['MOSFET', 'GAN', 'SIC']
+        },
+        phaseNumber: {
+          name: '相位数',
+          options: ['1', '2', '3', '4', '5', '6', '8', '12', '16', '20']
+        }
+      }
+    },
+    electrical: {
+      name: '电气参数',
+      subcategories: {
+        voltage: {
+          name: '电压参数',
+          options: [
+            '最高输入电压: 4V', '最高输入电压: 6V', '最高输入电压: 12V', '最高输入电压: 18V',
+            '最高输入电压: 24V', '最高输入电压: 36V', '最高输入电压: 60V', '最高输入电压: 100V',
+            '最低输入电压: 1V', '最低输入电压: 2V', '最低输入电压: 3V', '最低输入电压: 4V',
+            '最小输出电压: 0.1V', '最小输出电压: 0.5V', '最小输出电压: 0.8V', '最小输出电压: 1V',
+            '最高输出电压: 4V', '最高输出电压: 6V', '最高输出电压: 12V', '最高输出电压: 18V'
+          ]
+        },
+        current: {
+          name: '电流参数',
+          options: [
+            '最大输出电流: 0.5A', '最大输出电流: 1A', '最大输出电流: 2A', '最大输出电流: 3A',
+            '最大输出电流: 5A', '最大输出电流: 10A', '最大输出电流: 20A', '最大输出电流: 50A',
+            '静态电流: <10uA', '静态电流: <50uA', '静态电流: <100uA', '静态电流: <500uA'
+          ]
+        },
+        frequency: {
+          name: '频率参数',
+          options: [
+            '开关频率: 0.05MHz', '开关频率: 0.1MHz', '开关频率: 0.5MHz', '开关频率: 1MHz',
+            '开关频率: 2MHz', '开关频率: 5MHz', '开关频率: 10MHz'
+          ]
+        },
+        accuracy: {
+          name: '精度参数',
+          options: ['输出精度: ±0.5%', '输出精度: ±1%', '输出精度: ±2%', '输出精度: ±3%', '输出精度: ±5%']
+        }
+      }
+    },
+    special: {
+      name: '特殊功能',
+      subcategories: {
+        operation: {
+          name: '工作模式',
+          options: ['同步', '异步', '输出电压固定', '输出电压可调']
+        },
+        communication: {
+          name: '通信接口',
+          options: ['I2C', 'PMBus', 'VID', 'AVSBUS', '无通信接口']
+        },
+        control: {
+          name: '控制功能',
+          options: ['使能功能', '软启动', '输出放电', '集成LDO', '频率同步', '电压跟随', '动态调压', '电源指示']
+        }
+      }
+    },
+    protection: {
+      name: '保护功能',
+      subcategories: {
+        voltage: {
+          name: '电压保护',
+          options: ['输入过压保护', '输入欠压保护', '输出过压保护', '输出欠压保护']
+        },
+        current: {
+          name: '电流保护',
+          options: ['输出过载保护', '输出短路保护']
+        },
+        thermal: {
+          name: '热保护',
+          options: ['过温保护']
+        }
+      }
+    }
+  }
+};
+
+// 保留原有的buckConverterFilterData以兼容现有代码
+export const buckConverterFilterData: CategoryFilterData = {
+  brands: buckConverterThreeLevelData.brand.manufacturer.options,
+  packages: buckConverterThreeLevelData.package.type.options,
+  parameters: {
+    // 将三级结构转换为原有的扁平结构以保持兼容性
+    '品牌地域': {
       type: 'multiple',
-      options: ['量产', '试产', '停产', '售后市场', '逐步淘汰']
+      options: buckConverterThreeLevelData.brand.region.options
     },
-    '极性': {
-      type: 'multiple',
-      options: ['正', '正极', '正或负', '正,可提供隔离']
-    },
-    '通道数量': {
+    '车规级': {
       type: 'single',
-      options: ['1', '2', '3', '4', '8']
+      options: buckConverterThreeLevelData.parameters.application.subcategories.automotive.options
     },
-    '输出电流': {
-      type: 'range',
-      options: ['0.5A', '1A', '2A', '3A', '5A', '10A']
-    },
-    '开关频率': {
+    '工业级': {
       type: 'single',
-      options: ['100kHz', '500kHz', '580kHz', '1MHz', '2MHz']
+      options: buckConverterThreeLevelData.parameters.application.subcategories.industrial.options
     },
-    '静态电流': {
-      type: 'range',
-      options: ['<10µA', '<50µA', '<100µA', '<1mA']
-    },
-    '效率': {
-      type: 'range',
-      options: ['85%', '90%', '95%', '98%']
-    },
-    '是否带同步整流器': {
+    '消费级': {
       type: 'single',
-      options: ['是', '否']
-    },
-    'AEC-Q': {
-      type: 'single',
-      options: ['AEC-Q100', 'AEC-Q200', '无']
-    },
-    '工作温度': {
-      type: 'range',
-      options: ['-40°C至85°C', '-40°C至125°C', '-55°C至150°C']
+      options: buckConverterThreeLevelData.parameters.application.subcategories.consumer.options
     }
   }
 };
@@ -1775,4 +1965,173 @@ export const placeholderAlternativeParts: Record<string, AlternativePart[]> = {
 // 根据订购型号查找替代料
 export function findAlternativePartsByOrderModel(orderModel: string): AlternativePart[] {
   return placeholderAlternativeParts[orderModel] || [];
+}
+
+// 通用分类筛选数据配置
+export const categoryFilterConfigs: Record<string, CategoryFilterData> = {
+  // Buck(降压)开关稳压器
+  'Buck(降压)开关稳压器': buckConverterFilterData,
+
+  // LDO低压差线性稳压器
+  'LDO低压差线性稳压器': {
+    brands: [
+      'TI(德州仪器)', 'ADI(亚德诺)', 'ST(意法)', 'Infineon(英飞凌)',
+      'ROHM(罗姆)', 'Renesas(瑞萨)', 'MPS(芯源)', 'onsemi(安森美)',
+      'Maxim(美信)', 'Linear(凌特)', 'TOREX(特瑞仕)', 'Nisshinbo(日清纺)',
+      'DIODES(美台)', 'UTC(友顺)', 'Rochester(罗彻斯特)', '圣邦微电子'
+    ],
+    packages: [
+      'SOT-23', 'SOT-23-5', 'SOT-89', 'TO-220', 'TO-252', 'TO-263',
+      'SOIC-8', 'MSOP-8', 'DFN-6', 'QFN-16', 'WLCSP'
+    ],
+    parameters: {
+      '输出电压类型': {
+        type: 'single',
+        options: ['固定', '可调']
+      },
+      '输出电压范围': {
+        type: 'range',
+        options: ['1.2V', '1.8V', '2.5V', '3.3V', '5V', '12V', '15V']
+      },
+      '最大输出电流': {
+        type: 'range',
+        options: ['100mA', '300mA', '500mA', '1A', '3A', '5A', '10A']
+      },
+      '压差电压': {
+        type: 'range',
+        options: ['100mV', '200mV', '300mV', '500mV', '1V', '2V']
+      },
+      '静态电流': {
+        type: 'range',
+        options: ['1µA', '10µA', '50µA', '100µA', '1mA', '10mA']
+      },
+      '工作温度': {
+        type: 'single',
+        options: ['-40°C至85°C', '-40°C至125°C', '-55°C至150°C']
+      }
+    }
+  },
+
+  // 32位微控制器
+  '32位微控制器': {
+    brands: [
+      'STMicroelectronics', 'NXP(恩智浦)', 'Infineon(英飞凌)', 'TI(德州仪器)',
+      'Microchip', 'Renesas(瑞萨)', 'Cypress', 'Silicon Labs',
+      'Espressif Systems', 'Nordic', 'Realtek', '兆易创新',
+      '华大半导体', '中颖电子', '航顺芯片', '灵动微电子'
+    ],
+    packages: [
+      'LQFP-48', 'LQFP-64', 'LQFP-100', 'LQFP-144', 'LQFP-176',
+      'QFN-32', 'QFN-48', 'QFN-64', 'BGA-64', 'BGA-100', 'BGA-144',
+      'WLCSP', 'Module'
+    ],
+    parameters: {
+      '内核架构': {
+        type: 'single',
+        options: ['ARM Cortex-M0', 'ARM Cortex-M0+', 'ARM Cortex-M3', 'ARM Cortex-M4', 'ARM Cortex-M7', 'RISC-V', 'Xtensa']
+      },
+      '主频范围': {
+        type: 'range',
+        options: ['48MHz', '72MHz', '100MHz', '168MHz', '200MHz', '400MHz', '600MHz']
+      },
+      'Flash容量': {
+        type: 'range',
+        options: ['32KB', '64KB', '128KB', '256KB', '512KB', '1MB', '2MB', '4MB']
+      },
+      'RAM容量': {
+        type: 'range',
+        options: ['8KB', '16KB', '32KB', '64KB', '128KB', '256KB', '512KB', '1MB']
+      },
+      '无线连接': {
+        type: 'multiple',
+        options: ['Wi-Fi', 'Bluetooth', 'Zigbee', 'LoRa', 'NB-IoT', '2.4GHz']
+      },
+      '特殊功能': {
+        type: 'multiple',
+        options: ['USB', 'CAN', 'Ethernet', 'LCD控制器', 'DSP', 'FPU', '加密引擎']
+      }
+    }
+  },
+
+  // 运算放大器
+  '运算放大器': {
+    brands: [
+      'TI(德州仪器)', 'ADI(亚德诺)', 'Linear(凌特)', 'Maxim(美信)',
+      'ST(意法)', 'onsemi(安森美)', 'Intersil(英特矽)', 'Microchip',
+      'ROHM(罗姆)', 'Renesas(瑞萨)', '圣邦微电子', '芯海科技',
+      '思瑞浦', '艾为电子', '矽力杰', '钰泰半导体'
+    ],
+    packages: [
+      'SOT-23-5', 'SOT-23-6', 'SOIC-8', 'MSOP-8', 'DFN-6', 'QFN-16',
+      'TSSOP-14', 'WLCSP', 'SC-70'
+    ],
+    parameters: {
+      '通道数': {
+        type: 'single',
+        options: ['单通道', '双通道', '四通道']
+      },
+      '增益带宽积': {
+        type: 'range',
+        options: ['1MHz', '10MHz', '50MHz', '100MHz', '500MHz', '1GHz']
+      },
+      '输入偏置电流': {
+        type: 'range',
+        options: ['1pA', '10pA', '100pA', '1nA', '10nA', '100nA', '1µA']
+      },
+      '输入失调电压': {
+        type: 'range',
+        options: ['10µV', '100µV', '500µV', '1mV', '5mV', '10mV']
+      },
+      '电源电压': {
+        type: 'range',
+        options: ['1.8V', '2.7V', '5V', '12V', '15V', '30V', '36V']
+      },
+      '特殊类型': {
+        type: 'multiple',
+        options: ['低噪声', '高速', '精密', '低功耗', '轨到轨', '仪表放大器']
+      }
+    }
+  }
+};
+
+// 根据分类名称获取筛选配置
+export function getCategoryFilterData(categoryName: string): CategoryFilterData | null {
+  // 尝试精确匹配
+  if (categoryFilterConfigs[categoryName]) {
+    return categoryFilterConfigs[categoryName];
+  }
+
+  // 尝试部分匹配
+  for (const [key, config] of Object.entries(categoryFilterConfigs)) {
+    if (categoryName.includes(key) || key.includes(categoryName)) {
+      return config;
+    }
+  }
+
+  // 返回默认配置
+  return {
+    brands: [
+      'TI(德州仪器)', 'ADI(亚德诺)', 'ST(意法)', 'Infineon(英飞凌)',
+      'NXP(恩智浦)', 'Renesas(瑞萨)', 'Microchip', 'onsemi(安森美)',
+      'Maxim(美信)', 'ROHM(罗姆)', 'Cypress', 'Silicon Labs'
+    ],
+    packages: [
+      'SOT-23', 'SOIC-8', 'QFN-16', 'QFP-32', 'BGA-64', 'LQFP-48',
+      'DFN-8', 'MSOP-8', 'TSSOP-14', 'WLCSP'
+    ],
+    parameters: {
+      '生命周期': {
+        type: 'single',
+        options: ['量产', '试产', '停产', '逐步淘汰']
+      },
+      '工作温度': {
+        type: 'single',
+        options: ['-40°C至85°C', '-40°C至125°C', '-55°C至150°C']
+      },
+      '认证标准': {
+        type: 'multiple',
+        options: ['RoHS', 'AEC-Q100', 'AEC-Q200', 'REACH']
+      }
+    }
+  };
 }

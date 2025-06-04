@@ -225,82 +225,94 @@ export default function HomeContent() {
 
       {/* 默认内容：热门品牌广告位 */}
       <div className="space-y-6">
-        {/* 热门品牌 - 轻奢质感设计 */}
-        <Card className="shadow-sm bg-gradient-to-br from-white/60 via-orange-50/20 to-amber-50/10 dark:from-gray-900/60 dark:via-orange-950/10 dark:to-amber-950/5 border border-orange-100/30 dark:border-orange-900/20 backdrop-blur-lg rounded-3xl">
-          <CardHeader className="py-4 px-5">
+        {/* 热门品牌 - 精致卡片设计 */}
+        <Card className="shadow-lg bg-gradient-to-br from-white/80 via-orange-50/30 to-amber-50/20 dark:from-gray-900/80 dark:via-orange-950/20 dark:to-amber-950/10 border border-orange-200/40 dark:border-orange-800/30 backdrop-blur-lg rounded-2xl overflow-hidden">
+          <CardHeader className="py-3 px-4 bg-gradient-to-r from-orange-50/50 to-amber-50/30 dark:from-orange-950/30 dark:to-amber-950/20 border-b border-orange-200/30 dark:border-orange-800/20">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg flex items-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent font-bold">
-                <Star className="h-5 w-5 text-orange-500" />
+              <CardTitle className="text-base flex items-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent font-bold">
+                <Star className="h-4 w-4 text-orange-500 drop-shadow-sm" />
                 热门品牌
               </CardTitle>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-all duration-300 rounded-lg"
+                className="text-orange-600 hover:text-orange-700 hover:bg-orange-100/60 dark:hover:bg-orange-900/40 transition-all duration-300 rounded-lg text-xs px-2 py-1"
                 onClick={() => {
                   const params = new URLSearchParams();
                   params.set('mode', 'brand');
                   router.push(`/search?${params.toString()}`);
                 }}
               >
-                查看更多 <ChevronRight className="ml-1 h-4 w-4" />
+                查看更多 <ChevronRight className="ml-1 h-3 w-3" />
               </Button>
             </div>
           </CardHeader>
           <CardContent className="p-4">
-            <div className="grid grid-cols-4 gap-2 border border-orange-200/50 dark:border-orange-800/30 rounded-2xl p-3 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
-              {chipVendors.map((vendor) => (
+            <div className="grid grid-cols-3 gap-3 border border-orange-200/50 dark:border-orange-800/30 rounded-2xl p-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
+              {chipVendors.slice(0, 12).map((vendor) => (
                 <div
                   key={vendor.name}
                   onClick={() => handleVendorClick(vendor)}
-                  className="group cursor-pointer flex justify-center"
+                  className="group cursor-pointer"
                 >
-                  <div className="w-18 h-14 flex items-center justify-center relative group-hover:scale-110 transition-all duration-300 rounded-xl hover:bg-gradient-to-br hover:from-orange-100/80 hover:to-amber-100/60 dark:hover:from-orange-800/50 dark:hover:to-amber-800/40 hover:shadow-lg hover:shadow-orange-500/20 dark:hover:shadow-orange-900/30 border border-transparent hover:border-orange-300/50 dark:hover:border-orange-600/40 p-2">
-                    <Image
-                      src={vendor.image}
-                      alt={vendor.name}
-                      width={52}
-                      height={40}
-                      className="max-w-[80%] max-h-[80%] object-contain group-hover:scale-105 transition-transform duration-300 relative z-10 drop-shadow-md group-hover:drop-shadow-lg"
-                      style={{
-                        // 智能缩放：根据品牌特点调整显示大小，实现视觉平衡
-                        transform: (() => {
-                          const brandScales: Record<string, string> = {
-                            'STMicroelectronics': 'scale(1.15)',  // ST logo较小，需要放大
-                            'Texas Instruments': 'scale(0.85)',   // TI logo较大，需要缩小
-                            'Microchip': 'scale(0.95)',          // 略微缩小
-                            'Infineon': 'scale(0.9)',            // 缩小
-                            'NXP': 'scale(1.1)',                 // 放大
-                            'Maxim': 'scale(1.0)',               // 标准大小
-                            'Vishay': 'scale(0.85)',             // 较大，需要缩小
-                            'Intersil': 'scale(1.05)',           // 略微放大
-                            'Fujitsu': 'scale(0.9)',             // 缩小
-                            'Toshiba': 'scale(0.95)',            // 略微缩小
-                            'JRC': 'scale(1.2)',                 // 较小，需要放大
-                            'NTE': 'scale(1.1)'                  // 放大
-                          };
-                          return brandScales[vendor.name] || 'scale(1.0)';
-                        })()
-                      }}
-                      onError={(e) => {
-                        // 如果图片加载失败，显示品牌名称缩写
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        const parent = target.parentElement;
-                        if (parent) {
-                          parent.innerHTML = `<span class="text-orange-600 dark:text-orange-400 font-bold text-sm relative z-10 drop-shadow-sm">${vendor.shortName}</span>`;
-                        }
-                      }}
-                    />
+                  <div className="flex flex-col items-center space-y-1.5 p-2.5 rounded-xl transition-all duration-300 hover:bg-gradient-to-br hover:from-orange-100/90 hover:to-amber-100/70 dark:hover:from-orange-800/60 dark:hover:to-amber-800/50 hover:shadow-xl hover:shadow-orange-500/25 dark:hover:shadow-orange-900/40 border border-orange-200/30 dark:border-orange-800/20 hover:border-orange-300/60 dark:hover:border-orange-600/50 group-hover:scale-110 group-hover:-translate-y-1 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm">
+                    {/* Logo区域 */}
+                    <div className="w-14 h-10 flex items-center justify-center relative">
+                      <Image
+                        src={vendor.image}
+                        alt={vendor.name}
+                        width={56}
+                        height={40}
+                        className="max-w-full max-h-full object-contain group-hover:scale-115 transition-transform duration-300 relative z-10 drop-shadow-md group-hover:drop-shadow-xl filter group-hover:brightness-110"
+                        style={{
+                          // 智能缩放：根据品牌特点调整显示大小，实现视觉平衡
+                          transform: (() => {
+                            const brandScales: Record<string, string> = {
+                              'STMicroelectronics': 'scale(1.2)',   // ST logo较小，需要放大
+                              'Texas Instruments': 'scale(0.8)',    // TI logo较大，需要缩小
+                              'Microchip': 'scale(0.9)',           // 略微缩小
+                              'Infineon': 'scale(0.85)',           // 缩小
+                              'NXP': 'scale(1.1)',                 // 放大
+                              'Maxim': 'scale(1.0)',               // 标准大小
+                              'Vishay': 'scale(0.8)',              // 较大，需要缩小
+                              'Intersil': 'scale(1.0)',            // 标准大小
+                              'Fujitsu': 'scale(0.85)',            // 缩小
+                              'Toshiba': 'scale(0.9)',             // 略微缩小
+                              'JRC': 'scale(1.3)',                 // 较小，需要放大
+                              'NTE': 'scale(1.15)'                 // 放大
+                            };
+                            return brandScales[vendor.name] || 'scale(1.0)';
+                          })()
+                        }}
+                        onError={(e) => {
+                          // 如果图片加载失败，显示品牌名称缩写
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `<span class="text-orange-600 dark:text-orange-400 font-bold text-lg relative z-10 drop-shadow-sm">${vendor.shortName}</span>`;
+                          }
+                        }}
+                      />
+                    </div>
+
+                    {/* 品牌名称 */}
+                    <div className="text-center w-full">
+                      <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-all duration-300 truncate max-w-full group-hover:scale-105 drop-shadow-sm">
+                        {vendor.shortName}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="text-center mt-6">
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-                点击品牌logo快速搜索相关产品
+
+            {/* 底部提示信息 */}
+            <div className="text-center mt-4">
+              <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                点击品牌快速搜索相关产品
               </p>
-              <div className="mt-3 w-16 h-0.5 bg-gradient-to-r from-orange-300 to-amber-400 rounded-full mx-auto opacity-70"></div>
+              <div className="mt-2 w-12 h-0.5 bg-gradient-to-r from-orange-300 to-amber-400 rounded-full mx-auto opacity-70"></div>
             </div>
           </CardContent>
         </Card>
