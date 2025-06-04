@@ -59,11 +59,7 @@ export default function ProductListItem({ chip }: ProductListItemProps) {
               {chip.model}
             </button>
 
-            {chip.series && (
-              <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs rounded-md font-medium">
-                系列
-              </span>
-            )}
+
 
             {chip.automotiveGrade && (
               <div className="flex items-center gap-1 px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs rounded-md font-medium">
