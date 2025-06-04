@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, Search, Filter, X } from 'lucide-react';
+import { ArrowLeft, Filter, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { buckConverterFilterData, placeholderChips } from '@/lib/placeholder-data';
 import { useCategoryFilter, type FilterDimension } from '@/hooks/use-category-filter';
@@ -50,13 +49,7 @@ export default function CategoryPage() {
   // 当前激活的筛选维度
   const [activeFilter, setActiveFilter] = useState<FilterDimension | null>(null);
 
-  // 搜索输入状态
-  const [searchInput, setSearchInput] = useState('');
 
-  // 处理搜索
-  const handleSearch = () => {
-    updateSearchQuery(searchInput);
-  };
 
   // 查看结果
   const viewResults = () => {
@@ -317,27 +310,7 @@ export default function CategoryPage() {
         </div>
       )}
 
-      {/* 搜索框 - 在Buck分类下显示 */}
-      {isBuckCategory && (
-        <div className="p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="请输入关键词"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              className="pr-12 h-12 text-base"
-            />
-            <Button
-              onClick={handleSearch}
-              className="absolute right-1 top-1 h-10 w-10 p-0 bg-orange-500 hover:bg-orange-600"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      )}
+
 
       {/* Buck分类产品列表 */}
       {isBuckCategory && (
