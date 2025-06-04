@@ -28,7 +28,7 @@ export default async function ChipDetailPage({ params }: ChipDetailPageProps) {
   const isTPS563201 = chip.model === 'TPS563201';
 
   const displayManufacturer = (isTPS5430 || isTPS563201) ? '德州仪器-TI' : chip.manufacturer;
-  const displayCategory = (isTPS5430 || isTPS563201) ? '开关稳压器-DC/DC转换器' : chip.category;
+  const displayCategory = (isTPS5430 || isTPS563201) ? '电源管理/开关稳压器/DC-DC转换器/Buck(降压)开关稳压器' : chip.category;
   const displayDescription = isTPS5430
     ? '5.5V 至 36V 输入、2A、500kHz 降压转换器'
     : isTPS563201

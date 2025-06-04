@@ -8,7 +8,7 @@ export const placeholderChips: Chip[] = [
     model: 'TPS5430',
     manufacturer: '德州仪器-TI',
     series: true,
-    category: '开关稳压器-DC/DC转换器',
+    category: '电源管理/开关稳压器/DC-DC转换器/Buck(降压)开关稳压器',
     description: '采用 SOT583 封装且具有 1% 精度、PG/SS 和 PFM/强制 PWM 的 4.2V 至 17V、3A 同步降压转换器',
     applications: ['大功率LED电源', 'DVD显示屏'],
     datasheetUrl: 'https://www.ti.com/lit/ds/symlink/tps5430.pdf',
@@ -34,7 +34,7 @@ export const placeholderChips: Chip[] = [
     model: 'TPS5430',
     manufacturer: '德州仪器',
     series: false,
-    category: '开关稳压器-DC/DC转换器',
+    category: '电源管理/开关稳压器/DC-DC转换器/Buck(降压)开关稳压器',
     description: '采用 SOT583 封装且具有 1% 精度、PG/SS 和 PFM/强制 PWM 的 4.2V 至 17V、3A 同步降压转换器',
     applications: ['大功率LED电源', 'DVD显示屏'],
     datasheetUrl: 'https://www.ti.com/lit/ds/symlink/tps5430.pdf',
@@ -59,7 +59,7 @@ export const placeholderChips: Chip[] = [
     model: 'TPS5430',
     manufacturer: '德州仪器',
     series: false,
-    category: '开关稳压器-DC/DC转换器',
+    category: '电源管理/开关稳压器/DC-DC转换器/Buck(降压)开关稳压器',
     description: '采用 SOT583 封装且具有 1% 精度、PG/SS 和 PFM/强制 PWM 的 4.2V 至 17V、3A 同步降压转换器',
     applications: ['大功率LED电源', 'DVD显示屏'],
     datasheetUrl: 'https://www.ti.com/lit/ds/symlink/tps5430.pdf',
@@ -103,7 +103,7 @@ export const placeholderChips: Chip[] = [
     model: 'TPS563201',
     manufacturer: '德州仪器-TI',
     series: true,
-    category: '开关稳压器-DC/DC转换器',
+    category: '电源管理/开关稳压器/DC-DC转换器/Buck(降压)开关稳压器',
     description: '4.5V 至 17V 输入、3A 输出、Eco 模式下的同步降压转换器',
     applications: ['数字电视 (DTV) 电源', '高清蓝光™播放器', '网络家庭终端', '数字机顶盒 (STB)', '安防监控'],
     datasheetUrl: 'https://www.ti.com/lit/ds/symlink/tps563201.pdf',
@@ -337,7 +337,7 @@ export const placeholderAlternativeChips: Record<string, AlternativeChip[]> = {
       alternativeLevel: 'Similar Functionality',
       keyDifferences: ['更高输出电流 (5A vs 3A)', '不同封装'],
       similarityScore: 0.8,
-      category: '开关稳压器-DC/DC转换器',
+      category: '电源管理/开关稳压器/DC-DC转换器/Buck(降压)开关稳压器',
       applications: ['工业电源', '服务器电源'],
       automotiveGrade: true,
     }
@@ -1279,6 +1279,86 @@ export function searchSilkscreen(query: string): SilkscreenData[] {
     return a.silkscreen.length - b.silkscreen.length;
   });
 }
+
+// 产品分类筛选数据
+export interface CategoryFilterData {
+  brands: string[];
+  packages: string[];
+  parameters: {
+    [category: string]: {
+      type: 'single' | 'multiple' | 'range';
+      options: string[];
+    };
+  };
+}
+
+// Buck(降压)开关稳压器分类筛选数据
+export const buckConverterFilterData: CategoryFilterData = {
+  brands: [
+    'TI(德州仪器)',
+    'TOREX(特瑞仕)',
+    'ADI(亚德诺)',
+    'Nisshinbo(日清纺)',
+    'Rochester(罗彻斯特)',
+    'DIODES(美台)',
+    'onsemi(安森美)',
+    'Renesas(瑞萨)',
+    'MPS(芯源)',
+    'ROHM(罗姆)',
+    'ST(意法)',
+    'UTC(友顺)',
+    'ABLIC(艾普凌科)',
+    'Infineon(英飞凌)'
+  ],
+  packages: [
+    'BGA', 'CFP', 'DCB', 'DFN',
+    'DFP', 'DIE', 'DIP', 'DMA',
+    'LGA', 'QFF', 'QFN', 'QFP',
+    'SFM', 'SIP', 'SOT-23', 'SOIC'
+  ],
+  parameters: {
+    '生命周期': {
+      type: 'multiple',
+      options: ['量产', '试产', '停产', '售后市场', '逐步淘汰']
+    },
+    '极性': {
+      type: 'multiple',
+      options: ['正', '正极', '正或负', '正,可提供隔离']
+    },
+    '通道数量': {
+      type: 'single',
+      options: ['1', '2', '3', '4', '8']
+    },
+    '输出电流': {
+      type: 'range',
+      options: ['0.5A', '1A', '2A', '3A', '5A', '10A']
+    },
+    '开关频率': {
+      type: 'single',
+      options: ['100kHz', '500kHz', '580kHz', '1MHz', '2MHz']
+    },
+    '静态电流': {
+      type: 'range',
+      options: ['<10µA', '<50µA', '<100µA', '<1mA']
+    },
+    '效率': {
+      type: 'range',
+      options: ['85%', '90%', '95%', '98%']
+    },
+    '是否带同步整流器': {
+      type: 'single',
+      options: ['是', '否']
+    },
+    'AEC-Q': {
+      type: 'single',
+      options: ['AEC-Q100', 'AEC-Q200', '无']
+    },
+    '工作温度': {
+      type: 'range',
+      options: ['-40°C至85°C', '-40°C至125°C', '-55°C至150°C']
+    }
+  }
+};
 
 // 订购详情模拟数据
 export const placeholderOrderDetails: OrderDetail[] = [

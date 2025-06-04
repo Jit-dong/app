@@ -69,6 +69,12 @@ export default function CategoryQueryContent() {
 
   const handleSelectL3 = (category: Category) => {
     setSelectedL3(category);
+    // 选择三级分类后自动跳转到筛选页面
+    const categoryPath = `${selectedL1?.name}/${selectedL2?.name}/${category.name}`;
+    const params = new URLSearchParams();
+    params.set('name', categoryPath);
+    params.set('description', category.name);
+    router.push(`/category?${params.toString()}`);
   };
 
   const handleBreadcrumbClick = (level: 0 | 1 | 2) => {
@@ -228,25 +234,27 @@ export default function CategoryQueryContent() {
             />
           </div>
 
-          <div className="p-4 border-t border-gray-200/60 dark:border-gray-700/60 flex justify-between items-center bg-gradient-to-r from-gray-50/80 to-blue-50/40 dark:from-gray-800/50 dark:to-blue-950/20">
-            <Button
-              variant="outline"
-              onClick={handleReset}
-              size="sm"
-              className="border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 bg-white/80 dark:bg-gray-800/80 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium shadow-sm hover:shadow-md transition-all duration-200"
-            >
-              <RotateCcw className="mr-2 h-4 w-4" />
-              重置选择
-            </Button>
-            <Button
-              onClick={handleApply}
-              size="sm"
-              disabled={!selectedL1}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold shadow-lg hover:shadow-xl disabled:shadow-sm transition-all duration-200 border-0"
-            >
-              <CheckCircle2 className="mr-2 h-4 w-4" />
-              {getButtonText()}
-            </Button>
+          <div className="p-4 border-t border-gray-200/60 dark:border-gray-700/60 bg-gradient-to-r from-gray-50/80 to-blue-50/40 dark:from-gray-800/50 dark:to-blue-950/20">
+            {/* 只有选择了二级分类但没有三级分类时才显示新版分类筛选按钮 */}
+            {selectedL2 && !selectedL3 && l3Categories.length === 0 && (
+              <div className="flex justify-center">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    const categoryPath = `${selectedL1?.name}/${selectedL2?.name}`;
+                    const params = new URLSearchParams();
+                    params.set('name', categoryPath);
+                    params.set('description', selectedL2?.name || '');
+                    router.push(`/category?${params.toString()}`);
+                  }}
+                  size="sm"
+                  className="border-2 border-orange-300 dark:border-orange-600 hover:border-orange-400 dark:hover:border-orange-500 bg-gradient-to-r from-orange-50 to-amber-50 hover:from-orange-100 hover:to-amber-100 dark:from-orange-950/30 dark:to-amber-950/30 text-orange-700 dark:text-orange-300 font-medium shadow-sm hover:shadow-md transition-all duration-200"
+                >
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  🚀 体验新版分类筛选
+                </Button>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

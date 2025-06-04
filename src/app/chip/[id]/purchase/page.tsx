@@ -27,7 +27,7 @@ export default async function ChipPurchasePage({ params }: ChipPurchasePageProps
   const isTPS563201 = chip.model === 'TPS563201';
 
   const displayManufacturer = (isTPS5430 || isTPS563201) ? 'TI(德州仪器)' : chip.manufacturer;
-  const displayCategory = (isTPS5430 || isTPS563201) ? '开关稳压器-DC/DC转换器' : chip.category;
+  const displayCategory = (isTPS5430 || isTPS563201) ? 'Buck(降压)开关稳压器' : chip.category;
   const displayDescription = isTPS5430
     ? '采用 Eco-mode 的 4.5V 至 17V 输入电压、3A、500kHz 降压转换器'
     : isTPS563201

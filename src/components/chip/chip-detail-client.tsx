@@ -337,7 +337,7 @@ export default function ChipDetailClient({ chip, featuresList }: ChipDetailClien
                         ))}
                       </div>
                     </div>
-                    <div>分类: <span className="font-medium text-gray-900 dark:text-gray-100">电源管理芯片\直流直流变换器\降压型稳压器</span></div>
+                    <div>分类: <span className="font-medium text-gray-900 dark:text-gray-100">{chip.displayCategory}</span></div>
                   </div>
                 </div>
 

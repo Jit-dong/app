@@ -29,26 +29,25 @@ export const productCategories: Category[] = [
         ],
       },
       {
-        name: "DC-DC稳压器",
+        name: "开关稳压器/DC-DC转换器",
         subCategories: [
-          { name: "降压型控制器" },
-          { name: "降压型转换器" },
-          { name: "升压型控制器" },
-          { name: "升压型转换器" },
-          { name: "升降压控制器" },
-          { name: "升降压转换器" },
-          { name: "多路输出转换器" },
-          { name: "多路输出控制器" },
-          { name: "反向调节器" },
-          { name: "数字电源控制器" },
-          { name: "隔离DC-DC控制器" },
-          { name: "隔离DC-DC转换器" },
-          { name: "开关稳压器模块" },
-          { name: "电荷泵转换器" },
+          { name: "Buck(降压)开关稳压器" },
+          { name: "Boost(升压)开关稳压器" },
+          { name: "Buck-Boost(升降压)开关稳压器" },
+          { name: "Forward(正激式)开关稳压器" },
+          { name: "Flyback(反激式)开关稳压器" },
+          { name: "Charge Pump(电荷泵)" },
+          { name: "未细分开关稳压器(DC/DC转换器)" },
+          { name: "线性稳压器控制器" },
+          { name: "RMS至DC转换器" },
+          { name: "反馈回路功率控制器" },
+          { name: "以太网供电-PoE控制器" },
+          { name: "照明/镇流器控制器" },
+          { name: "AC/DC控制器" },
         ],
       },
       {
-        name: "LDO稳压器",
+        name: "LDO低压差线性稳压器",
         subCategories: [
             { name: "正可调LDO" },
             { name: "正固定LDO" },
@@ -106,7 +105,7 @@ export const productCategories: Category[] = [
     ]
   },
   {
-    name: "处理器",
+    name: "嵌入式处理器和控制器",
     subCategories: [
         { name: "DSP数字信号处理器" },
         { name: "MPU微处理器" },
@@ -130,7 +129,7 @@ export const productCategories: Category[] = [
     ]
   },
   {
-    name: "无线芯片",
+    name: "射频和无线",
     subCategories: [
         { name: "射频收发器" },
         { name: "射频放大器" },
@@ -164,7 +163,7 @@ export const productCategories: Category[] = [
     ]
   },
   {
-    name: "专用芯片",
+    name: "专用集成电路",
     subCategories: [
         { name: "汽车电子芯片" },
         { name: "电机驱动芯片" },
@@ -175,7 +174,7 @@ export const productCategories: Category[] = [
     ]
   },
   {
-    name: "芯片式传感器",
+    name: "传感器",
     subCategories: [
         { name: "温度传感器" },
         { name: "湿度传感器" },
@@ -188,11 +187,6 @@ export const productCategories: Category[] = [
         { name: "MEMS麦克风" },
         { name: "传感器融合芯片" },
         { name: "传感器评估板" },
-    ]
-  },
-  {
-    name: "机电式传感器",
-    subCategories: [
         { name: "位置传感器" },
         { name: "编码器" },
         { name: "流量传感器" },
@@ -289,17 +283,23 @@ export const productCategories: Category[] = [
     ]
   },
   {
-    name: "其他器件",
+    name: "时钟和计时",
     subCategories: [
         { name: "晶振/振荡器" },
-        { name: "电阻器" },
-        { name: "电容器" },
-        { name: "电感器/磁珠" },
-        { name: "变压器" },
-        { name: "连接器" },
-        { name: "开关/按键" },
-        { name: "继电器" },
-        { name: "散热器件" },
+        { name: "时钟发生器" },
+        { name: "时钟缓冲器" },
+        { name: "实时时钟RTC" },
+    ]
+  },
+  {
+    name: "逻辑器件",
+    subCategories: [
+        { name: "逻辑门" },
+        { name: "触发器" },
+        { name: "计数器" },
+        { name: "编码器/解码器" },
+        { name: "多路复用器" },
+        { name: "缓冲器/驱动器" },
     ]
   },
 ];
