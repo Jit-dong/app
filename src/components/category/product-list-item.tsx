@@ -15,37 +15,6 @@ export default function ProductListItem({ chip }: ProductListItemProps) {
     router.push(`/chip/${chip.id}`);
   };
 
-  // 格式化参数显示
-  const formatParameter = (key: string, value: string | number | undefined) => {
-    if (value === undefined) return null;
-    return `${key}: ${value}`;
-  };
-
-  // 获取关键参数
-  const getKeyParameters = () => {
-    const params = [];
-
-    if (chip.parameters?.['Input Voltage Min'] && chip.parameters?.['Input Voltage Max']) {
-      params.push(`输入电压: ${chip.parameters['Input Voltage Min']}V-${chip.parameters['Input Voltage Max']}V`);
-    }
-
-    if (chip.parameters?.['Output Current Max']) {
-      params.push(`输出电流: ${chip.parameters['Output Current Max']}A`);
-    }
-
-    if (chip.parameters?.['Switching Frequency']) {
-      params.push(`开关频率: ${chip.parameters['Switching Frequency']}`);
-    }
-
-    if (chip.packageTypes && chip.packageTypes.length > 0) {
-      params.push(`封装: ${chip.packageTypes.join(', ')}`);
-    }
-
-    return params;
-  };
-
-  const keyParameters = getKeyParameters();
-
   return (
     <div className="border-b border-gray-200 dark:border-gray-700 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
       <div className="space-y-2">
@@ -58,8 +27,6 @@ export default function ProductListItem({ chip }: ProductListItemProps) {
             >
               {chip.model}
             </button>
-
-
 
             {chip.automotiveGrade && (
               <div className="flex items-center gap-1 px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs rounded-md font-medium">
@@ -87,35 +54,8 @@ export default function ProductListItem({ chip }: ProductListItemProps) {
           {chip.description}
         </p>
 
-        {/* 关键参数 */}
-        {keyParameters.length > 0 && (
-          <div className="flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400">
-            {keyParameters.map((param, index) => (
-              <span key={index} className="flex items-center">
-                {param}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* 应用领域和操作按钮 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {chip.applications && chip.applications.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                <span className="text-xs text-gray-500 dark:text-gray-400">应用:</span>
-                {chip.applications.slice(0, 3).map((app, index) => (
-                  <span key={index} className="text-xs text-gray-600 dark:text-gray-400">
-                    {app}{index < Math.min(chip.applications!.length, 3) - 1 ? '、' : ''}
-                  </span>
-                ))}
-                {chip.applications.length > 3 && (
-                  <span className="text-xs text-gray-500 dark:text-gray-400">等</span>
-                )}
-              </div>
-            )}
-          </div>
-
+        {/* 操作按钮 */}
+        <div className="flex justify-end">
           <div className="flex items-center gap-2">
             {chip.datasheetUrl && chip.datasheetUrl !== '#' && (
               <button
